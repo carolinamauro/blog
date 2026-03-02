@@ -35,27 +35,20 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   viewport?: any
 }
 
-
 // Validate ../../app/page.tsx
 {
-  type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
-  const handler = {} as typeof import("../src/app/page.tsx")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
+  type __IsExpected<Specific extends AppPageConfig<"/">> = Specific;
+  type Handler = typeof import("../src/app/(site)/page.js");
+  type __check = __IsExpected<Handler>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Unused = __check;
 }
-
-
-
-
-
-
 
 // Validate ../../app/layout.tsx
 {
-  type __IsExpected<Specific extends LayoutConfig<"/">> = Specific
-  const handler = {} as typeof import("../src/app/layout.tsx")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
+  type __IsExpected<Specific extends LayoutConfig<"/">> = Specific;
+  type Handler = typeof import("../src/app/(site)/layout.js");
+  type __Check = __IsExpected<Handler>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Unused = __Check;
 }
