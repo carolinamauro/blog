@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-zinc-100 via-white to-zinc-200 dark:from-black dark:via-zinc-950 dark:to-zinc-900 font-sans">
@@ -42,12 +44,12 @@ export default function Home() {
           </p>
         </div>
 
-        <a
+        <Link
           href="/blog"
           className="mt-4 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-500"
         >
           Ver lo que estoy aprendiendo →
-        </a>
+        </Link>
       </div>
     </div>
   );
