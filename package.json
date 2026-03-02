@@ -10,6 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.2.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -25,7 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^28.1.0",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.2.1",
     "typescript": "^5",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.1.1",
