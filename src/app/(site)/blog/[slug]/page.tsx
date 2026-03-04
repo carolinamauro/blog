@@ -25,7 +25,7 @@ export default async function BlogPostPage({
   const tags = post.meta.tags ?? [];
 
   return (
-    <div className="relative overflow-hidden bg-zinc-50 dark:bg-black">
+    <div className="relative overflow-hidden bg-zinc-50 dark:bg-black pt-5">
 
       <div className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/15 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-pink-500/15 blur-3xl" />
