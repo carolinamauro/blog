@@ -25,12 +25,34 @@ seria como el cerebro del dispositivo, justamente empieza con HARD- porque es la
 
 Con esta imagen podemos entender un poco mejor como funciona un sistema operativo:
 
+![Sitema Operativo](/images/operating-system.png)
 
 En la imagen vemos cómo el sistema operativo se encuentra en el medio, entre el hardware y el software. El hardware de cada computadora puede ser distinto: varía según el modelo, la marca o los componentes que tenga. Ahora imaginemos que para cada tipo de hardware hubiera que programar software diferente para poder comunicarse con esos componentes específicos. Sería un caos, ¿no?
-Antes del auge de los sistemas operativos modernos, el software estaba mucho más ligado al hardware. Esto hacía que fuera muy difícil para los programadores crear programas que funcionaran en distintas computadoras. En esa época se utilizaba algo llamado lenguaje ensamblador, que es un conjunto de instrucciones de muy bajo nivel específicas para cada arquitectura de procesador. Eso significa que cada tipo de CPU tiene su propio lenguaje ensamblador. Como consecuencia, hacer que una misma aplicación funcionara en más de una computadora muchas veces implicaba reescribir el programa para cada arquitectura, nuevamente en ensamblador.
+
+Antes del auge de los sistemas operativos modernos, el software estaba mucho más ligado al hardware. Esto hacía que fuera muy difícil para los programadores crear programas que funcionaran en distintas computadoras.
+
+En esa época se utilizaba algo llamado **[lenguaje ensamblador](https://es.wikipedia.org/wiki/Lenguaje_ensamblador)**, que es un conjunto de instrucciones de muy bajo nivel específicas para cada arquitectura de procesador. Este lenguaje proporciona una representación simbólica del código máquina, es decir, una forma más legible para los programadores de escribir las instrucciones binarias que entiende la computadora (recordemos que la máquina solo interpreta 0 y 1). Eso significa que Cada arquitectura de procesador tiene su propio lenguaje ensamblador. Como consecuencia, hacer que una misma aplicación funcionara en más de una computadora muchas veces implicaba reescribir el programa para cada arquitectura, nuevamente en ensamblador.
 
 ## **¿Quién creo Linux?**
 
+### Historia de UNIX, su antecesor
+
+En 1969 nace la primer versión de Unix, un sistema operativo desarrollado por un grupo de programadores en los laboratorios Bell de AT&T, desarrollado por Ken Thompson, Dennis Ritchie y otros. Surge tras el fracaso de un fracaso de un proyecto anterior llamado MULTICS, un sistema operativo muy avanzado que termino siendo demasiado complejo. Thompson decide crear un sistema **más simple y elegante**, y así nace la primer versión de Unix. 
+
+Entre 1971 y 1973, Dennis Ritchie crea https://es.wikipedia.org/wiki/C_(lenguaje_de_programaci%C3%B3n)C, un lenguaje de alto nivel orientado a la implementación de sistemas operativos. En 1973, Unix es reescrito en C, lo que facilita su portabilidad a diferentes arquitecturas de hardware. Esto permitió que Unix se convirtiera en un sistema operativo muy popular en universidades y empresas, y sentó las bases para el desarrollo de muchos otros sistemas operativos.
+
+Las **bases de Unix** se convirtieron en un estándar para el desarrollo de sistemas operativos y su influencia se puede ver en muchos sistemas operativos modernos, incluyendo Linux. De hecho, Linux se considera un sistema operativo "Unix-like" porque sigue los principios y la filosofía de diseño de Unix.
+
+1. ***Todo es un archivo***: Todo se representa como un archivo, incluyendo dispositivos de hardware, procesos y recursos del sistema. Esto simplifica la interacción con el sistema operativo y permite una mayor flexibilidad. Ejemplo:
+
+
+| Recurso                 | Archivo                 |
+|-------------------------|-------------------------|
+| Teclado                 | `/dev/tty`              |
+| Disco duro              | `/dev/sda`              |
+| Impresora               | `/dev/lp0`              |
+| Información del sistema | `/proc`                 |
+| Archivo normal          | `/home/user/documento.txt` |
 
 
 Unix (1969)
