@@ -1,7 +1,7 @@
 ---
 title: "Universo Linux"
 date: "2026-03-02"
-tags: ["linux", "sistemas operativos", "linus torvalds"]
+tags: ["linux", "sistemas operativos", "linus torvalds", "minux", "unix"]
 summary: "El creador de Linux esta vivo y es un finlandes llamado Linus Torvalds.
 Linux es un sistema operativo Open Source que se ha convertido en uno de los mas populares
 del mundo y es utilizado por millones de personas en todo el mundo. 
@@ -39,12 +39,12 @@ En esa época se utilizaba algo llamado **[lenguaje ensamblador](https://es.wiki
 
 En 1969 nace la primer versión de Unix, un sistema operativo desarrollado por un grupo de programadores en los laboratorios Bell de AT&T, desarrollado por Ken Thompson, Dennis Ritchie y otros. Surge tras el fracaso de un fracaso de un proyecto anterior llamado MULTICS, un sistema operativo muy avanzado que termino siendo demasiado complejo. Thompson decide crear un sistema **más simple y elegante**, y así nace la primer versión de Unix. 
 
-Entre 1971 y 1973, Dennis Ritchie crea https://es.wikipedia.org/wiki/C_(lenguaje_de_programaci%C3%B3n)C, un lenguaje de alto nivel orientado a la implementación de sistemas operativos. En 1973, Unix es reescrito en C, lo que facilita su portabilidad a diferentes arquitecturas de hardware. Esto permitió que Unix se convirtiera en un sistema operativo muy popular en universidades y empresas, y sentó las bases para el desarrollo de muchos otros sistemas operativos.
+Entre 1971 y 1973, Dennis Ritchie crea [C](https://es.wikipedia.org/wiki/C_(lenguaje_de_programaci%C3%B3n)), un lenguaje de alto nivel orientado a la implementación de sistemas operativos. 
+En 1973, Unix es reescrito en C, lo que facilita su portabilidad a diferentes arquitecturas de hardware. Esto permitió que Unix se convirtiera en un sistema operativo muy popular en universidades y empresas, y sentó las bases para el desarrollo de muchos otros sistemas operativos.
 
-Las **bases de Unix** se convirtieron en un estándar para el desarrollo de sistemas operativos y su influencia se puede ver en muchos sistemas operativos modernos, incluyendo Linux. De hecho, Linux se considera un sistema operativo "Unix-like" porque sigue los principios y la filosofía de diseño de Unix.
+Las **[bases de Unix](https://es.wikipedia.org/wiki/Filosof%C3%ADa_de_Unix#Las_17_Reglas_de_Unix_de_Eric_Raymond)** se convirtieron en un estándar para el desarrollo de sistemas operativos y su influencia se puede ver en muchos sistemas operativos modernos, incluyendo Linux. De hecho, Linux se considera un sistema operativo "Unix-like" porque sigue los principios y la filosofía de diseño de Unix.
 
 1. ***Todo es un archivo***: Todo se representa como un archivo, incluyendo dispositivos de hardware, procesos y recursos del sistema. Esto simplifica la interacción con el sistema operativo y permite una mayor flexibilidad. Ejemplo:
-
 
 | Recurso                 | Archivo                 |
 |-------------------------|-------------------------|
@@ -54,6 +54,23 @@ Las **bases de Unix** se convirtieron en un estándar para el desarrollo de sist
 | Información del sistema | `/proc`                 |
 | Archivo normal          | `/home/user/documento.txt` |
 
+2. ***Modularidad = "Haz una sola cosa y hazla bien"***: Enfocarse en herramientas pequeñas en lugar de programas grandes y complejos que hacen todo (KISS = Keep It Simple Stupid). Unix provee cientos de "miny tools"
+como `grep`, `ls`, `sort`, entre otras. 
+
+3. ***Escribe programas que trabajen juntos***: El output de cada programa deberia de convertirse en el input de otro. Unix introdujo el concepto de [`pipe`](https://www.geeksforgeeks.org/linux-unix/piping-in-unix-or-linux/), que permite tomar el output de un programa y usarlo como input de otro programa,
+lo que facilita la creación de flujos de trabajo complejos utilizando herramientas simples. 
+
+4. ***Escribe programas que manejen stream de texto, porque esa es la interfaz universal***: Los programas deben estar diseñados para funcionar con entrada y salida de texto, que pueden ser fácilmente generados y consumidos por otros programas.
+
+Obviamente hay unos pares mas de conceptos y principios que Unix introdujo pero se puede decir que estos fueron los mas influyentes para el desarrollo de Linux.
+
+### Minix ###
+
+En el año 1987 Stuart Tanenbaum, un profesor holandés apasionado por la enseñanza y la informática se encontro ante los problemas prácticos y legales para 
+enseñar sistemas operativos basándose en Unix, que en ese momento era el estándar, pero un código cerrado. Por eso Tanenbaum, decidió crear un sistema operativo pequeño, sencillo y abierto que
+pudiera ser estudiado línea por línea en las aulas.
+
+Así nació Minix, el mini Unix que estaba diseñado para ser accesible, fácil de entender y utilizable en ordenadores no muy potentes.
 
 Unix (1969)
    ↓
