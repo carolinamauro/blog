@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getPostBySlug, getPostSlugs } from "../../../../lib/posts";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Footer from "@/src/components/ui/footer";
+import Image from "next/image";
+import remarkGfm from "remark-gfm"
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug: string) => ({ slug }));
@@ -25,7 +27,7 @@ export default async function BlogPostPage({
   const tags = post.meta.tags ?? [];
 
   return (
-    <div className="relative overflow-hidden bg-zinc-50 dark:bg-black pt-5">
+    <div className="relative min-h-screen overflow-hidden bg-zinc-50 dark:bg-black pt-5">
 
       <div className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/15 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-pink-500/15 blur-3xl" />
@@ -80,7 +82,19 @@ export default async function BlogPostPage({
         <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-black/15 to-transparent dark:via-white/15" />
 
         <div className="prose prose-zinc max-w-none dark:prose-invert prose-headings:scroll-mt-24 prose-pre:rounded-xl prose-pre:border prose-pre:border-black/10 dark:prose-pre:border-white/10">
-          <MDXRemote source={post.content} />
+          <MDXRemote 
+          source={post.content}
+          components={{
+            img: (props) => (
+              <Image {...props} alt={props.alt} width={400} height={200} />
+            ),
+          }} 
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+            },
+          }}
+          />
         </div>
 
         <Footer />

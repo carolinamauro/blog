@@ -5,7 +5,7 @@ export default function BlogIndex() {
   const posts = getAllPostsMeta();
 
   return (
-    <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+    <main className="min-h-screen mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-20 pb-16">
       
       <div className="mb-10">
         <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
