@@ -1,6 +1,6 @@
 ---
 title: "Universo Linux"
-date: "2026-03-02"
+date: "2026-03-18"
 tags: ["linux", "sistemas operativos", "linus torvalds", "minux", "unix"]
 summary: "El creador de Linux esta vivo y es un finlandes llamado Linus Torvalds.
 Linux es un sistema operativo Open Source que se ha convertido en uno de los mas populares
@@ -70,10 +70,30 @@ En el año 1987 Stuart Tanenbaum, un profesor holandés apasionado por la enseñ
 enseñar sistemas operativos basándose en Unix, que en ese momento era el estándar, pero un código cerrado. Por eso Tanenbaum, decidió crear un sistema operativo pequeño, sencillo y abierto que
 pudiera ser estudiado línea por línea en las aulas.
 
-Así nació Minix, el mini Unix que estaba diseñado para ser accesible, fácil de entender y utilizable en ordenadores no muy potentes.
+Para resolver esto, decidió crear su propio sistema: *MINIX* (Mini Unix).
 
-Unix (1969)
-   ↓
-MINIX (1987)
-   ↓
-Linux (1991)
+![Minix](/images/minix.jpg)
+
+Minix fue diseñado con un objetivo claro:
+> ser un sistema operativo educativo, fácil de entender y de modificar por los estudiantes.
+
+Sus principales características fueron:
+- Implementaba la filosofía de UNIX (todo es un archivo, modularidad, etc.)
+- Tenia un *microkernel*, lo que significa que el núcleo del sistema operativo era muy pequeño y la mayoría de las funciones 
+se ejecutaban en espacio de usuario, lo que facilitaba su comprensión y modificación.
+- Era lo suficientemente simple para ser estudiado en su totalidad por los estudiantes, con un código fuente de aproximadamente 12,000 líneas.
+- Corria en computadoras personales con recusos limitados.
+
+A diferencia de Unix, MINIX no estaba pensado para producción, sino para enseñar cómo funciona un sistema operativo por dentro.
+
+#### Por qué fue importante MINIX?
+
+MINIX desempeñó un papel fundamental en el desarrollo inicial de Linux, tanto de forma directa como indirecta. 
+Linus Torvalds lo utilizó como punto de partida para escribir su propio núcleo de sistema operativo en 1991. 
+Si bien Torvalds no copió directamente el código de MINIX en Linux, este proporcionó un modelo de cómo estructurar un sistema operativo tipo Unix 
+en ordenadores personales económicos.
+
+### Linux: just a hobby ###
+
+Just a hobby, won't be big and professional like gnu..
+![Linux](/images/linus-torvald-first-linux-email.webp)
