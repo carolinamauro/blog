@@ -66,7 +66,7 @@ Obviamente hay unos pares mas de conceptos y principios que Unix introdujo pero 
 
 ### Minix ###
 
-En el año 1987 Stuart Tanenbaum, un profesor holandés apasionado por la enseñanza y la informática se encontro ante los problemas prácticos y legales para 
+En el año 1987 Andrew Tanenbaum, un profesor holandés apasionado por la enseñanza y la informática se encontró ante los problemas prácticos y legales para 
 enseñar sistemas operativos basándose en Unix, que en ese momento era el estándar, pero un código cerrado. Por eso Tanenbaum, decidió crear un sistema operativo pequeño, sencillo y abierto que
 pudiera ser estudiado línea por línea en las aulas.
 
@@ -79,10 +79,10 @@ Minix fue diseñado con un objetivo claro:
 
 Sus principales características fueron:
 - Implementaba la filosofía de UNIX (todo es un archivo, modularidad, etc.)
-- Tenia un *microkernel*, lo que significa que el núcleo del sistema operativo era muy pequeño y la mayoría de las funciones 
+- Tenía un *microkernel*, lo que significa que el núcleo del sistema operativo era muy pequeño y la mayoría de las funciones 
 se ejecutaban en espacio de usuario, lo que facilitaba su comprensión y modificación.
 - Era lo suficientemente simple para ser estudiado en su totalidad por los estudiantes, con un código fuente de aproximadamente 12,000 líneas.
-- Corria en computadoras personales con recusos limitados.
+- Corría en computadoras personales con recursos limitados.
 
 A diferencia de Unix, MINIX no estaba pensado para producción, sino para enseñar cómo funciona un sistema operativo por dentro.
 
@@ -93,7 +93,58 @@ Linus Torvalds lo utilizó como punto de partida para escribir su propio núcleo
 Si bien Torvalds no copió directamente el código de MINIX en Linux, este proporcionó un modelo de cómo estructurar un sistema operativo tipo Unix 
 en ordenadores personales económicos.
 
-### Linux: just a hobby ###
+### Linux: “just a hobby” ###
 
-Just a hobby, won't be big and professional like gnu..
+En 1991, Linus Torvalds publicó un mensaje en un grupo de usuarios de MINIX que hoy es histórico.
+
+En ese mensaje escribió:
 ![Linux](/images/linus-torvald-first-linux-email.webp)
+
+La imagen muestra ese primer email, enviado a la comunidad de MINIX, donde Linus anunciaba su proyecto. El estaba utilizando MINIX 
+para aprender sobre sistemas operativos, pero quería crear algo nuevo, algo que fuera completamente libre y abierto. Entonces decidió hacer
+algo bastante ambicioso: escribir un sistema operativo desde cero, inspirado en Unix pero sin copiar el código de MINIX.
+
+#### El primer paso
+
+Linus comenzó escribiendo el **kernel**, es decir, el núcleo del sistema operativo encargado de:
+
+- manejar la memoria  
+- controlar procesos  
+- interactuar con el hardware  
+
+Al principio, Linux:
+
+- corría solo en procesadores Intel 80386  
+- usaba herramientas de MINIX para desarrollarse  
+- incluso utilizaba el sistema de archivos de MINIX  
+
+Era algo muy básico, pero funcional. Por eso, en lugar de guardarse el proyecto, Linus tomó una decisión clave:
+
+> publicó el código en internet y permitió que cualquiera pudiera usarlo, modificarlo y mejorarlo.
+
+Ese fue el punto de inflexión ya que desarrolladores de todo el mundo empezaron a colaborar:
+
+- agregando funcionalidades  
+- corrigiendo errores  
+- adaptándolo a nuevas arquitecturas  
+
+Linux dejó de ser un proyecto individual y se convirtió en un proyecto colaborativo global. 
+
+Linux por sí solo es solo el **kernel**, es decir, el núcleo del sistema operativo.  
+Para que sea un sistema completo, se combina con herramientas del proyecto GNU, iniciado por [Richard Stallman](https://es.wikipedia.org/wiki/Richard_Stallman).
+Por eso muchas veces se habla de **GNU/Linux**.
+
+Entonces ¿Por qué Linux fue tan importante? Porque tomó las ideas de UNIX y las llevó más lejos:
+
+- es libre y open source  
+- es portable (corre en múltiples arquitecturas)  
+- es modular y flexible  
+- puede usarse desde una computadora personal hasta un supercomputador  
+
+Lo que empezó como un proyecto personal terminó siendo:
+
+- la base de servidores en internet  
+- el corazón de Android  
+- el sistema dominante en cloud y supercomputadoras  
+
+En otras palabras, Unix sentó las bases, MINIX enseñó cómo funcionaban… y Linux las llevó al mundo real.
