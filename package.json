@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "spellcheck": "cspell \"src/**/*.mdx\" \"content/**/*.mdx\""
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -23,6 +24,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@cspell/dict-es-es": "^3.0.8",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
@@ -31,6 +33,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.4",
+    "cspell": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^28.1.0",

@@ -25,5 +25,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Spellcheck
+        run: npm run spellcheck
+
     #   - name: Unit tests
     #     run: npm run test
