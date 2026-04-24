@@ -1,0 +1,54 @@
+{
+    "version": "0.2",
+    "language": "en,es-ES",
+    "import": [
+        "@cspell/dict-es-es/cspell-ext.json"
+    ],
+    "files": [
+        "src/content/**/*.mdx"
+    ],
+    "ignorePaths": [
+        "node_modules/**",
+        ".next/**",
+        "dist/**",
+        "build/**",
+        "package-lock.json"
+    ],
+    "words": [
+        "backend",
+        "chipa",
+        "chusmear",
+        "DHCP",
+        "DNS",
+        "Ethernet",
+        "frontend",
+        "IP",
+        "iPhone",
+        "Mac",
+        "Mandale",
+        "MDX",
+        "microkernel",
+        "mier",
+        "Minix",
+        "MINIX",
+        "minux",
+        "miny",
+        "modularidad",
+        "Modularidad",
+        "NAT",
+        "Ritchie",
+        "router",
+        "routers",
+        "sneakernet",
+        "Stallman",
+        "supercomputador",
+        "supercomputadoras",
+        "switch",
+        "switches",
+        "Tanenbaum",
+        "TCP",
+        "Turismocity",
+        "UNIX",
+        "Wi-Fi"
+    ]
+}
