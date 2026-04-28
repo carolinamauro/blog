@@ -8,7 +8,7 @@ otra habitación, pero como es esto posible? En este post voy a contarles un poc
 
 # **Mandale un wpp avisándole que en 5 min llegamos**
 
-**"Mandale un mensaje a mamá avisándole que en 5 minutos llegamos y tenemos chipa calentito, asi prepara el mate".** Tan simple, tan cotidiano, una conversación
+**"Mandale un mensaje a mamá avisándole que en 5 minutos llegamos y tenemos chipa calentitos, asi prepara el mate".** Tan simple, tan cotidiano, una conversación
 que hoy vemos como parte de nuestra vida pero es **INCREÍBLE!!** Lo damos tan por sentado (o quizás yo) porque prácticamente nací con esta tecnología, pero 
 es algo que hace 30 años atrás era impensado. Y probablemente cuando llegaba a casa el mate no estaba listo y los chipa un poquito se enfriaron... Mandar un mensaje 
 a alguien a unos km de distancia quizás ni existía, postergabas lo que tenias que decir hasta que te vieras con esa persona o hasta que pudieras hablar por teléfono. 
@@ -28,3 +28,43 @@ las personas tenían que transferirla manualmente usando un medio físico: tarje
 datos e instrucciones de computadoras
 
 ![Transferencia de datos](/images/early-computing-data-transfer.png)
+
+Pero a medida que las computadoras se volvieron mas comunes, la necesidad de compartir información entre ellas se hizo evidente: compartir archivos,
+recursos (porque iban a tener una impresora cada una?) o simplemente comunicarse. Esto llevó al desarrollo de las primeras redes de computadoras ("Computer
+Networking"): sistemas que permiten a computadoras y otros dispositivos conectarse y comunicarse entre sí.
+
+## Qué es una "Computer Network"?
+> Una "Computer Network" es un conjunto de dispositivos (computadoras, celulares, routers, etc..) conectados entre sí, de tal forma 
+que pueden comunicarse y compartir recursos.
+
+Una red le permite a los dispositivos:
+- Enviar y recibir data;
+- Compartir archivos
+- Usar recursos comunes (como impresoras, internet, etc..);
+- Comunicarse con otros dispositivos local o remotamente.
+
+El Internet no es una sola maquina, es una red de redes: el dispositivo con el que estas leyendo esto se conecta a un proveedor de servicios de Internet 
+(ISP), que a su vez se conecta a otros ISP, y así sucesivamente, formando una red global de computadoras interconectadas. Entonces cuando hablamos de "Computer Networking" 
+nos referimos como lso dispositivos se comunican: como se encuentran, como se envían los datos, como se aseguran que lleguen correctamente, etc..
+
+# LANs: Local Area Networks and Ethernet
+
+> Una LAN o "Local Area Network" conecta dispositivos en un area física limitada como una casa, oficina o universidad. 
+
+Antes las redes de computadoras eran LANs, creadas en las organizaciones para hacer la comunicación más rápida. Quizás alguna vez escucharon hablar
+de "Ethernet": un cable que conectabas a la computadora desde el router para tener internet. Eso es una LAN, una red local que conecta tus dispositivos 
+a un router, y el router a su vez se conecta a Internet.
+
+## Ethernet y el cable compartido: no fue al jardín, no aprendió a compartir
+
+Al principio de las redes Ethernet, muchas computadoras eran conectadas al mismo cable compartido. Cuando una computadora quería enviar datos,
+transmitía una señal eléctrica a través del cable. El problema era que cada computadora conectada a ese cable podía oír la transmisión. Entonces 
+la red necesitaba poder responder la pregunta: _"Es este mensaje para mi?"_. Y aca nace la dirección **MAC (Media Access Control)**
+
+## MAC addresses
+
+> Una dirección MAC es un identificador único asignado a cada dispositivo de red. Es como el DNI de tu computadora, cada dispositivo tiene su propia dirección MAC.
+
+En Ethernet, el "sender" incluye la dirección MAC del destinatario en el mensaje. Cuando una computadora recibe un mensaje, compara la dirección MAC 
+del destinatario con su propia dirección MAC: si hay match, procesa el mensaje; si no, lo ignora. Esto permite que múltiples computadoras compartan el 
+mismo cable sin interferir entre sí.
