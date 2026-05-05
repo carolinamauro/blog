@@ -1,0 +1,286 @@
+---
+title: "Qué es Computer Networking?"
+date: "2026-04-24"
+tags: ["computer Networking", "redes de computadoras", "internet", "lan", "Ethernet", "wifi"]
+summary: "Que fácil es mandarle un mensaje a quien se encuentra a kilómetros de distancia o imprimir un documento en una impresora que esta en
+otra habitación, pero como es esto posible? En este post voy a contarles un poco sobre Computer Networking, que es y como funciona."
+---
+
+# **Mandale un wpp avisándole que en 5 min llegamos**
+
+**"Mandale un mensaje a mamá avisándole que en 5 minutos llegamos y tenemos chipa calentitos, asi prepara el mate".** Tan simple, tan cotidiano, una conversación
+que hoy vemos como parte de nuestra vida pero es **INCREÍBLE!!** Lo damos tan por sentado (o quizás yo) porque prácticamente nací con esta tecnología, pero 
+es algo que hace 30 años atrás era impensado. Y probablemente cuando llegaba a casa el mate no estaba listo y los chipa un poquito se enfriaron... Mandar un mensaje 
+a alguien a unos km de distancia quizás ni existía, postergabas lo que tenias que decir hasta que te vieras con esa persona o hasta que pudieras hablar por teléfono. 
+Imagínense mandarle un mensaje a alguien que estaba a unos 1000km, eso si que podría llegar a tardar semanas o meses. Cartas, barcos y los trenes fueron mejorando
+los tiempos de llegada pero la comunicación seguía siendo lenta, muy limitada a la infraestructura física de esos tiempos.
+
+Yo vivo en Quilmes (hello Quilmes people), pero tengo dos amigas que actualmente están viajando por Europa y me encanta poder hablar con ellas, 
+chusmear en que país andan, que me cuenten como fue su día o simplemente decirles que las extraño. Y todo esto lo puedo hacer en tiempo real, 
+sin importar los kilómetros que tenemos de distancia. Me imagino que quienes vivieron en la era pre-internet se hubieran sorprendido mucho al ver como nos comunicamos 
+hoy en día. Es algo que damos por sentado y hasta nos pone de mal humor si el mensaje que mandamos por wpp tarda mas de 5 segundos en llegar, pero nos olvidamos que 
+
+> `5 segundos <<<<<<<<<<< 2 semanas <<<<<<<<<<<<<<<<<< 1 mes`
+
+Al principio de todo las computadoras eran maquinas aisladas, diseñadas para hacer tareas especificas: correr un algoritmo, guardar información o ejecutar 
+un programa localmente. Cada computadora trabajando en su propio mundo, en su propio sistema independiente. Si se quería compartir información entre dos computadoras,
+las personas tenían que transferirla manualmente usando un medio físico: tarjetas perforadas, cintas o discos. Estos fueron los primeros medios físicos para almacenar 
+datos e instrucciones de computadoras
+
+![Transferencia de datos](/images/early-computing-data-transfer.png)
+
+Pero a medida que las computadoras se volvieron mas comunes, la necesidad de compartir información entre ellas se hizo evidente: compartir archivos,
+recursos (porque iban a tener una impresora cada una?) o simplemente comunicarse. Esto llevó al desarrollo de las primeras redes de computadoras ("Computer
+Networking"): sistemas que permiten a computadoras y otros dispositivos conectarse y comunicarse entre sí.
+
+## Qué es una "Computer Network"?
+> Una "Computer Network" es un conjunto de dispositivos (computadoras, celulares, routers, etc..) conectados entre sí, de tal forma 
+que pueden comunicarse y compartir recursos.
+
+Una red le permite a los dispositivos:
+- Enviar y recibir data;
+- Compartir archivos
+- Usar recursos comunes (como impresoras, internet, etc..);
+- Comunicarse con otros dispositivos local o remotamente.
+
+El Internet no es una sola maquina, es una red de redes: el dispositivo con el que estas leyendo esto se conecta a un proveedor de servicios de Internet 
+(ISP), que a su vez se conecta a otros ISP, y así sucesivamente, formando una red global de computadoras interconectadas. Entonces cuando hablamos de "Computer Networking" 
+nos referimos como lso dispositivos se comunican: como se encuentran, como se envían los datos, como se aseguran que lleguen correctamente, etc..
+
+# LANs: Local Area Networks and Ethernet
+
+> Una LAN o "Local Area Network" conecta dispositivos en un area física limitada como una casa, oficina o universidad. 
+
+Antes las redes de computadoras eran LANs, creadas en las organizaciones para hacer la comunicación más rápida. Quizás alguna vez escucharon hablar
+de "Ethernet": un cable que conectabas a la computadora desde el router para tener internet. Eso es una LAN, una red local que conecta tus dispositivos 
+a un router, y el router a su vez se conecta a Internet.
+
+## Ethernet y el cable compartido
+
+Al principio de las redes Ethernet, muchas computadoras eran conectadas al mismo cable compartido. Cuando una computadora quería enviar datos,
+transmitía una señal eléctrica a través del cable. El problema era que cada computadora conectada a ese cable podía oír la transmisión. Entonces 
+la red necesitaba poder responder la pregunta: _"Es este mensaje para mi?"_. Y aca nace la dirección **MAC (Media Access Control)**
+
+## MAC addresses
+
+> Una dirección MAC es un identificador único asignado a cada dispositivo de red. Es como el DNI de tu computadora, cada dispositivo tiene su propia dirección MAC.
+
+En Ethernet, el "sender" incluye la dirección MAC del destinatario en el mensaje. Cuando una computadora recibe un mensaje, compara la dirección MAC 
+del destinatario con su propia dirección MAC: si hay match, procesa el mensaje; si no, lo ignora. Esto permite que múltiples computadoras compartan el 
+mismo cable sin interferir entre sí.
+
+## El problema del cable compartido: que pasa si todos quieren hablar al mismo tiempo?
+
+La dirección MAC resolvió el problema de identificar a quien iba dirigido el mensaje, pero quedaba otro problema:
+si todas las computadoras estaban conectadas al mismo cable compartido, que pasa si dos computadoras tratan de enviarse información al mismo tiempo?
+
+Pensemos en una situación cotidiana: dos personas en una misma habitación, si solo una de ellas habla, todos vamos a entender que esta comunicando. Pero
+si las dos comienzan a hablar al mismo tiempo, el mensaje se vuelve confuso y difícil de entender. Algo similar sucedía en las primeras redes Ethernet. Cuando 
+dos dispositivos transmitían al mismo tiempo por el mismo cable, sus señales interferían entre sí. Esto se llamaba **colisión**.
+
+Para manejar esto Ethernet usaba un método llamado **CSMA/CD**, que significa:
+> Carrier Sense Multiple Access with Collision Detection = "Escuchar antes de hablar, muchas personas pueden compartir el mismo espacio, y si dos personas hablan al mismo tiempo, se dan cuenta de la colisión y dejan de hablar".
+
+- **Carrier Sense**: antes de enviar información, un dispositivo escucha el cable para verificar si alguien más ya está transmitiendo.
+- **Multiple Access**: multiples dispositivos comparten el mismo medio de comunicación (mismo cable)
+- **Collision Detection**: si dos dispositivos envían datos al mismo tiempo, detectan la colisión y dejan de transmitir.
+
+Podríamos decir que era una política muy "educada" para compartir el mismo cable, cada dispositivo se aseguraba de no interrumpir 
+a los demás y si ocurría una colisión, esperaban su turno para volver a intentarlo.
+
+## Backoff exponencial: esperar antes de intentar de nuevo
+
+Cuando una colisión ocurría, los dispositivos no intentaban enviar el mensaje de nuevo inmediatamente. Si lo hicieran, podrían chocar de nuevo.
+Cada dispositivo esperaba un tiempo aleatorio antes de volver a intentar. Si las colisiones seguían ocurriendo, el tiempo de espera aumentaba. 
+Este mecanismo se llama **backoff exponencial**.
+Por ejemplo:
+
+```txt
+Primera colisión  → espero 1 segundo + un número aleatorio entre 0 y 1 segundos
+Segunda colisión → espero 2 segundos + un número aleatorio entre 0 y 1 segundos
+Tercera colisión  → espero 4 segundos + un número aleatorio entre 0 y 1 segundos
+Cuarta colisión → espero 8 segundos + un número aleatorio entre 0 y 1 segundos
+```
+Esto ayudaba a reducir la probabilidad de colisiones repetidas, ya que los dispositivos esperaban más tiempo antes de volver a intentar enviar su mensaje.
+
+![Backoff exponencial](/images/exponential-backoff.png)
+
+## Switches: una red un poco más inteligente
+
+El modelo del cable compartido funcionaba, pero tenía un problema claro: no escalaba demasiado bien.
+
+Si todas las computadoras compartían el mismo medio físico, cada mensaje podía ser escuchado por todos los dispositivos. Esto generaba más tráfico innecesario y aumentaba la posibilidad de colisiones. A medida que las redes crecían, esta forma de comunicación se volvía cada vez menos eficiente.
+
+Para resolver este problema aparecen los **switches**.
+
+Un **switch** es un dispositivo de red que conecta varios dispositivos dentro de una LAN y decide hacia dónde reenviar cada mensaje. A diferencia del cable compartido, un switch no necesita enviar todo a todos. Puede aprender qué dispositivo está conectado a cada puerto usando las direcciones MAC.
+
+Por ejemplo:
+
+```txt
+Puerto 1 → Notebook
+Puerto 2 → Impresora
+Puerto 3 → Computadora de escritorio
+Puerto 4 → Servidor local
+
+### Ejemplo
+
+Supongamos que tenemos seis computadoras conectadas a un switch: A, B, C, D, E y F.
+
+La computadora **A** quiere enviarle un mensaje a la computadora **C**. En una red con cable compartido, 
+ese mensaje podría ser escuchado por todos los dispositivos. Pero con un **switch**, la red se vuelve más inteligente.
+El switch aprende qué computadora está conectada a cada puerto usando sus direcciones MAC. Entonces, cuando A envía un mensaje para C,
+ el switch revisa su tabla interna y dice:
+
+> “Este mensaje viene de A y va para C. C está conectada en este puerto, así que solo se lo envío a C.”
+
+Por eso, en la imagen, el mensaje verde llega desde **A** hasta **C**, pero no se entrega a **B**. El switch filtra el tráfico y 
+evita enviar información a dispositivos que no son el destinatario. Lo mismo pasa abajo: si **E** quiere enviarle un mensaje a **F**, 
+el switch reenvía ese mensaje únicamente hacia **F**, no hacia **D**.
+
+En resumen, el switch no grita el mensaje a toda la red. Lo dirige al dispositivo correcto.
+
+![Switch](/images/Switch.png)
+
+## Frames: los mensajes dentro de una red local
+
+En una red local, los mensajes se envían en unidades llamadas **frames**. Un frame es como un sobre que contiene la información que queremos enviar,
+junto con la dirección MAC del destinatario y del remitente.
+
+[ MAC destino ][ MAC origen ][ Datos ][ Verificación de errores ]
+
+Dentro de una LAN las direcciones MAC son fundamentales porque permiten entregar mensajes entre diferentes dispositivos. Pero encontramos
+un fuerte limite: las direcciones MAC solo funcionan dentro de la misma red local, no nos permite conectarnos a dispositivos fuera de esa
+red (ejemplo: llegar a un servidor en otro país). 
+
+Para eso necesitamos otro tipo de dirección: **las direcciones IP**, Para eso necesitamos otro tipo de dirección: **las direcciones IP**. Para entender por qué son necesarias, 
+primero tenemos que pasar de las redes locales a una idea mucho más grande: enviar información en paquetes a través de muchas redes conectadas entre sí.
+
+# Packet Switching: dividir los datos para que viajen mejor
+
+Antes de la era de Internet, las comunicaciones a larga distancia se basaban en circuitos dedicados (**circuit switching**). Esto significa que cuando dos computadoras querían comunicarse,
+se establecía una conexión directa entre ellas, y esa conexión se mantenía durante toda la comunicación. Era como si dos personas se tomaran de la mano para hablar, y nadie más podía interrumpir esa conversación.
+
+Este enfoque funcionaba, pero era ineficiente. Si una computadora quería enviar un mensaje largo, la conexión se mantenía ocupada durante todo el tiempo que durara la transmisión, incluso si no se estaba enviando información constantemente.
+Además, si la conexión se interrumpía por cualquier motivo, toda la comunicación se perdía.
+
+Entonces, para poder comunicarnos entre diferentes redes, necesitábamos una forma de enviar información sin depender de una conexión dedicada. 
+Aquí es donde entra el concepto de **packet switching**: dividir los datos en pequeños paquetes que pueden viajar de forma independiente a través de la red.
+Cada paquete contiene parte de la información, junto con la dirección del destinatario y del remitente.
+
+Cada paquetito puede tomar un camino diferente a través de la red, y cuando llegan al destino, se vuelven a ensamblar para reconstruir el mensaje original. 
+Esto es como enviar varias cartas por correo: cada carta puede tomar una ruta diferente, pero al final todas llegan a su destino y 
+se pueden juntar para entender el mensaje completo.
+
+Checklist:
+
+- **Circuit switching** reserva un camino dedicado.
+- **Packet switching** divide los datos en paquetes y comparte la infraestructura.
+
+# Routers: conectar distintas redes
+
+Un **switch** conecta varios dispositivos dentro de una misma red local, pero ¿qué pasa si queremos conectar diferentes redes entre sí? 
+Para eso necesitamos un dispositivo llamado **router**: conecta distintas redes y dirige el tráfico entre ellas.
+
+Un router es como un director de tráfico que decide por dónde enviar cada paquete de datos para que llegue a su destino. Utiliza
+direcciones IP en lugar de direcciones MAC para tomar decisiones de enrutamiento. Cuando un paquete llega al router, este revisa la dirección IP 
+del destinatario y decide a qué red enviar el paquete para que siga su camino hacia el destino final.
+
+## IP addresses: direcciones para comunicarnos entre redes
+
+> Una **dirección IP** es un identificador único asignado a cada dispositivo en una red que permite identificarlo y comunicarse con 
+otros dispositivos a través de la red.
+
+Pensemos en una red doméstica:
+
+```txt
+Router:   192.168.0.1
+Celular:  192.168.0.10
+Notebook: 192.168.0.11
+````
+
+Estas direcciones son **privadas**. Esto significa que solo tienen sentido dentro de mi casa. Mi celular puede ser `192.168.0.10` en mi red, 
+pero otra persona en otra casa también podría tener un celular con esa misma IP privada. No hay problema, porque esas direcciones no se usan 
+directamente en Internet.
+
+Dentro de mi casa, el router funciona como la puerta de salida. Si mi celular quiere comunicarse con mi notebook, ambos están en la misma red local, 
+entonces el mensaje puede quedarse dentro de la LAN.
+
+```txt
+Celular 192.168.0.10 → Notebook 192.168.0.11
+```
+
+Pero si mi celular quiere abrir una página web, por ejemplo:
+
+```txt
+google.com
+```
+ese servidor no está dentro de mi red local. Entonces el celular envía el paquete al router:
+
+```txt
+Celular → Router → Internet
+```
+
+El router mira la dirección IP de destino y reenvía el paquete hacia la siguiente red, normalmente la red de mi proveedor de Internet. 
+A partir de ahí, otros routers van haciendo lo mismo: cada uno mira la IP de destino y decide cuál es el próximo salto para acercar el paquete al servidor final.
+
+De forma simplificada:
+
+```txt
+Celular
+192.168.0.10
+   ↓
+Router de casa
+192.168.0.1
+   ↓
+Proveedor de Internet
+   ↓
+Otros routers
+   ↓
+Servidor de Google
+```
+
+Entonces, la idea importante es:
+
+> La IP privada identifica a mi dispositivo dentro de mi red local. La IP de destino permite que los routers sepan hacia dónde tienen que enviar 
+los paquetes cuando salen hacia otras redes.
+
+## Hops: los saltos de un paquete
+
+Cuando un paquete viaja por Internet, no suele ir directamente desde mi computadora hasta el servidor final. Pasa por varios routers intermedios.
+Cada paso de un router a otro se llama **hop**.
+
+Notebook → Router de casa → Router del ISP → Router intermedio → Servidor
+
+Para evitar que un paquete quede circulando infinitamente por un error de red, 
+los paquetes tienen un límite de saltos. Si superan ese límite, se descartan.
+
+Esto evita que la red se llene de paquetes perdidos dando vueltas para siempre.
+
+# TCP/IP: que los paquetes lleguen bien
+
+IP se encarga de direccionar y mover paquetes entre redes, pero no garantiza que todos los paquetes lleguen, ni que lleguen en orden.
+
+Para eso existe **TCP**, Transmission Control Protocol.
+
+TCP trabaja encima de IP y se encarga de hacer la comunicación más confiable:
+
+- verifica que los paquetes lleguen;
+- pide retransmisión si alguno se pierde;
+- ordena los paquetes correctamente;
+- controla el flujo de datos entre origen y destino.
+
+Podemos resumirlo así:
+
+IP → se encarga de llevar paquetes hasta el destino  
+TCP → se encarga de que la conversación sea confiable
+
+Por eso muchas veces hablamos de **TCP/IP** como una de las bases de Internet.
+
+# Conclusión
+
+Computer Networking es la tecnología que hace posible la comunicación entre dispositivos a través de redes. Desde las primeras LANs con cables 
+compartidos y direcciones MAC, hasta las complejas redes globales de hoy con routers, IP y TCP, el mundo de las redes ha evolucionado para permitirnos 
+conectarnos y compartir información de formas que antes eran impensables. La próxima vez que mandes un mensaje o navegues por Internet, 
+pensá en todo el trabajo detrás de escena que hace posible esa conexión instantánea.
+
