@@ -55,7 +55,7 @@ Antes las redes de computadoras eran LANs, creadas en las organizaciones para ha
 de "Ethernet": un cable que conectabas a la computadora desde el router para tener internet. Eso es una LAN, una red local que conecta tus dispositivos 
 a un router, y el router a su vez se conecta a Internet.
 
-## Ethernet y el cable compartido: no fue al jardín, no aprendió a compartir
+## Ethernet y el cable compartido
 
 Al principio de las redes Ethernet, muchas computadoras eran conectadas al mismo cable compartido. Cuando una computadora quería enviar datos,
 transmitía una señal eléctrica a través del cable. El problema era que cada computadora conectada a ese cable podía oír la transmisión. Entonces 
@@ -68,3 +68,90 @@ la red necesitaba poder responder la pregunta: _"Es este mensaje para mi?"_. Y a
 En Ethernet, el "sender" incluye la dirección MAC del destinatario en el mensaje. Cuando una computadora recibe un mensaje, compara la dirección MAC 
 del destinatario con su propia dirección MAC: si hay match, procesa el mensaje; si no, lo ignora. Esto permite que múltiples computadoras compartan el 
 mismo cable sin interferir entre sí.
+
+## El problema del cable compartido: que pasa si todos quieren hablar al mismo tiempo?
+
+La dirección MAC resolvió el problema de identificar a quien iba dirigido el mensaje, pero quedaba otro problema:
+si todas las computadoras estaban conectadas al mismo cable compartido, que pasa si dos computadoras tratan de enviarse información al mismo tiempo?
+
+Pensemos en una situación cotidiana: dos personas en una misma habitación, si solo una de ellas habla, todos vamos a entender que esta comunicando. Pero
+si las dos comienzan a hablar al mismo tiempo, el mensaje se vuelve confuso y difícil de entender. Algo similar sucedía en las primeras redes Ethernet. Cuando 
+dos dispositivos transmitían al mismo tiempo por el mismo cable, sus señales interferían entre sí. Esto se llamaba **colisión**.
+
+Para manejar esto Ethernet usaba un método llamado **CSMA/CD**, que significa:
+> Carrier Sense Multiple Access with Collision Detection = "Escuchar antes de hablar, muchas personas pueden compartir el mismo espacio, y si dos personas hablan al mismo tiempo, se dan cuenta de la colisión y dejan de hablar".
+
+- **Carrier Sense**: antes de enviar información, un dispositivo escucha el cable para verificar si alguien más ya está transmitiendo.
+- **Multiple Access**: multiples dispositivos comparten el mismo medio de comunicación (mismo cable)
+- **Collision Detection**: si dos dispositivos envían datos al mismo tiempo, detectan la colisión y dejan de transmitir.
+
+Podríamos decir que era una política muy "educada" para compartir el mismo cable, cada dispositivo se aseguraba de no interrumpir 
+a los demás y si ocurría una colisión, esperaban su turno para volver a intentarlo.
+
+## Backoff exponencial: esperar antes de intentar de nuevo
+
+Cuando una colisión ocurría, los dispositivos no intentaban enviar el mensaje de nuevo inmediatamente. Si lo hicieran, podrían chocar de nuevo.
+Cada dispositivo esperaba un tiempo aleatorio antes de volver a intentar. Si las colisiones seguían ocurriendo, el tiempo de espera aumentaba. 
+Este mecanismo se llama **backoff exponencial**.
+Por ejemplo:
+
+```txt
+Primera colisión  → espero 1 segundo + un número aleatorio entre 0 y 1 segundos
+Segunda colisión → espero 2 segundos + un número aleatorio entre 0 y 1 segundos
+Tercera colisión  → espero 4 segundos + un número aleatorio entre 0 y 1 segundos
+Cuarta colisión → espero 8 segundos + un número aleatorio entre 0 y 1 segundos
+```
+Esto ayudaba a reducir la probabilidad de colisiones repetidas, ya que los dispositivos esperaban más tiempo antes de volver a intentar enviar su mensaje.
+
+![Backoff exponencial](/images/exponential-backoff.png)
+
+## Switches: una red un poco más inteligente
+
+El modelo del cable compartido funcionaba, pero tenía un problema claro: no escalaba demasiado bien.
+
+Si todas las computadoras compartían el mismo medio físico, cada mensaje podía ser escuchado por todos los dispositivos. Esto generaba más tráfico innecesario y aumentaba la posibilidad de colisiones. A medida que las redes crecían, esta forma de comunicación se volvía cada vez menos eficiente.
+
+Para resolver este problema aparecen los **switches**.
+
+Un **switch** es un dispositivo de red que conecta varios dispositivos dentro de una LAN y decide hacia dónde reenviar cada mensaje. A diferencia del cable compartido, un switch no necesita enviar todo a todos. Puede aprender qué dispositivo está conectado a cada puerto usando las direcciones MAC.
+
+Por ejemplo:
+
+```txt
+Puerto 1 → Notebook
+Puerto 2 → Impresora
+Puerto 3 → Computadora de escritorio
+Puerto 4 → Servidor local
+
+### Ejemplo
+
+Supongamos que tenemos seis computadoras conectadas a un switch: A, B, C, D, E y F.
+
+La computadora **A** quiere enviarle un mensaje a la computadora **C**. En una red con cable compartido, 
+ese mensaje podría ser escuchado por todos los dispositivos. Pero con un **switch**, la red se vuelve más inteligente.
+El switch aprende qué computadora está conectada a cada puerto usando sus direcciones MAC. Entonces, cuando A envía un mensaje para C,
+ el switch revisa su tabla interna y dice:
+
+> “Este mensaje viene de A y va para C. C está conectada en este puerto, así que solo se lo envío a C.”
+
+Por eso, en la imagen, el mensaje verde llega desde **A** hasta **C**, pero no se entrega a **B**. El switch filtra el tráfico y 
+evita enviar información a dispositivos que no son el destinatario. Lo mismo pasa abajo: si **E** quiere enviarle un mensaje a **F**, 
+el switch reenvía ese mensaje únicamente hacia **F**, no hacia **D**.
+
+En resumen, el switch no grita el mensaje a toda la red. Lo dirige al dispositivo correcto.
+
+![Switch](/images/Switch.png)
+
+## Frames: los mensajes dentro de una red local
+
+En una red local, los mensajes se envían en unidades llamadas **frames**. Un frame es como un sobre que contiene la información que queremos enviar,
+junto con la dirección MAC del destinatario y del remitente.
+
+[ MAC destino ][ MAC origen ][ Datos ][ Verificación de errores ]
+
+Dentro de una LAN las direcciones MAC son fundamentales porque permiten entregar mensajes entre diferentes dispositivos. Pero encontramos
+un fuerte limite: las direcciones MAC solo funcionan dentro de la misma red local, no nos permite conectarnos a dispositivos fuera de esa
+red (ejemplo: llegar a un servidor en otro país). 
+
+Para eso necesitamos otro tipo de dirección: **las direcciones IP**, Para eso necesitamos otro tipo de dirección: **las direcciones IP**. Para entender por qué son necesarias, 
+primero tenemos que pasar de las redes locales a una idea mucho más grande: enviar información en paquetes a través de muchas redes conectadas entre sí.
