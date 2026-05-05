@@ -155,3 +155,132 @@ red (ejemplo: llegar a un servidor en otro país).
 
 Para eso necesitamos otro tipo de dirección: **las direcciones IP**, Para eso necesitamos otro tipo de dirección: **las direcciones IP**. Para entender por qué son necesarias, 
 primero tenemos que pasar de las redes locales a una idea mucho más grande: enviar información en paquetes a través de muchas redes conectadas entre sí.
+
+# Packet Switching: dividir los datos para que viajen mejor
+
+Antes de la era de Internet, las comunicaciones a larga distancia se basaban en circuitos dedicados (**circuit switching**). Esto significa que cuando dos computadoras querían comunicarse,
+se establecía una conexión directa entre ellas, y esa conexión se mantenía durante toda la comunicación. Era como si dos personas se tomaran de la mano para hablar, y nadie más podía interrumpir esa conversación.
+
+Este enfoque funcionaba, pero era ineficiente. Si una computadora quería enviar un mensaje largo, la conexión se mantenía ocupada durante todo el tiempo que durara la transmisión, incluso si no se estaba enviando información constantemente.
+Además, si la conexión se interrumpía por cualquier motivo, toda la comunicación se perdía.
+
+Entonces, para poder comunicarnos entre diferentes redes, necesitábamos una forma de enviar información sin depender de una conexión dedicada. 
+Aquí es donde entra el concepto de **packet switching**: dividir los datos en pequeños paquetes que pueden viajar de forma independiente a través de la red.
+Cada paquete contiene parte de la información, junto con la dirección del destinatario y del remitente.
+
+Cada paquetito puede tomar un camino diferente a través de la red, y cuando llegan al destino, se vuelven a ensamblar para reconstruir el mensaje original. 
+Esto es como enviar varias cartas por correo: cada carta puede tomar una ruta diferente, pero al final todas llegan a su destino y 
+se pueden juntar para entender el mensaje completo.
+
+Checklist:
+
+- **Circuit switching** reserva un camino dedicado.
+- **Packet switching** divide los datos en paquetes y comparte la infraestructura.
+
+# Routers: conectar distintas redes
+
+Un **switch** conecta varios dispositivos dentro de una misma red local, pero ¿qué pasa si queremos conectar diferentes redes entre sí? 
+Para eso necesitamos un dispositivo llamado **router**: conecta distintas redes y dirige el tráfico entre ellas.
+
+Un router es como un director de tráfico que decide por dónde enviar cada paquete de datos para que llegue a su destino. Utiliza
+direcciones IP en lugar de direcciones MAC para tomar decisiones de enrutamiento. Cuando un paquete llega al router, este revisa la dirección IP 
+del destinatario y decide a qué red enviar el paquete para que siga su camino hacia el destino final.
+
+## IP addresses: direcciones para comunicarnos entre redes
+
+> Una **dirección IP** es un identificador único asignado a cada dispositivo en una red que permite identificarlo y comunicarse con 
+otros dispositivos a través de la red.
+
+Pensemos en una red doméstica:
+
+```txt
+Router:   192.168.0.1
+Celular:  192.168.0.10
+Notebook: 192.168.0.11
+````
+
+Estas direcciones son **privadas**. Esto significa que solo tienen sentido dentro de mi casa. Mi celular puede ser `192.168.0.10` en mi red, 
+pero otra persona en otra casa también podría tener un celular con esa misma IP privada. No hay problema, porque esas direcciones no se usan 
+directamente en Internet.
+
+Dentro de mi casa, el router funciona como la puerta de salida. Si mi celular quiere comunicarse con mi notebook, ambos están en la misma red local, 
+entonces el mensaje puede quedarse dentro de la LAN.
+
+```txt
+Celular 192.168.0.10 → Notebook 192.168.0.11
+```
+
+Pero si mi celular quiere abrir una página web, por ejemplo:
+
+```txt
+google.com
+```
+ese servidor no está dentro de mi red local. Entonces el celular envía el paquete al router:
+
+```txt
+Celular → Router → Internet
+```
+
+El router mira la dirección IP de destino y reenvía el paquete hacia la siguiente red, normalmente la red de mi proveedor de Internet. 
+A partir de ahí, otros routers van haciendo lo mismo: cada uno mira la IP de destino y decide cuál es el próximo salto para acercar el paquete al servidor final.
+
+De forma simplificada:
+
+```txt
+Celular
+192.168.0.10
+   ↓
+Router de casa
+192.168.0.1
+   ↓
+Proveedor de Internet
+   ↓
+Otros routers
+   ↓
+Servidor de Google
+```
+
+Entonces, la idea importante es:
+
+> La IP privada identifica a mi dispositivo dentro de mi red local. La IP de destino permite que los routers sepan hacia dónde tienen que enviar 
+los paquetes cuando salen hacia otras redes.
+
+## Hops: los saltos de un paquete
+
+Cuando un paquete viaja por Internet, no suele ir directamente desde mi computadora hasta el servidor final. Pasa por varios routers intermedios.
+Cada paso de un router a otro se llama **hop**.
+
+Notebook → Router de casa → Router del ISP → Router intermedio → Servidor
+
+Para evitar que un paquete quede circulando infinitamente por un error de red, 
+los paquetes tienen un límite de saltos. Si superan ese límite, se descartan.
+
+Esto evita que la red se llene de paquetes perdidos dando vueltas para siempre.
+
+# TCP/IP: que los paquetes lleguen bien
+
+IP se encarga de direccionar y mover paquetes entre redes, pero no garantiza que todos los paquetes lleguen, ni que lleguen en orden.
+
+Para eso existe **TCP**, Transmission Control Protocol.
+
+TCP trabaja encima de IP y se encarga de hacer la comunicación más confiable:
+
+- verifica que los paquetes lleguen;
+- pide retransmisión si alguno se pierde;
+- ordena los paquetes correctamente;
+- controla el flujo de datos entre origen y destino.
+
+Podemos resumirlo así:
+
+IP → se encarga de llevar paquetes hasta el destino  
+TCP → se encarga de que la conversación sea confiable
+
+Por eso muchas veces hablamos de **TCP/IP** como una de las bases de Internet.
+
+# Conclusión
+
+Computer Networking es la tecnología que hace posible la comunicación entre dispositivos a través de redes. Desde las primeras LANs con cables 
+compartidos y direcciones MAC, hasta las complejas redes globales de hoy con routers, IP y TCP, el mundo de las redes ha evolucionado para permitirnos 
+conectarnos y compartir información de formas que antes eran impensables. La próxima vez que mandes un mensaje o navegues por Internet, 
+pensá en todo el trabajo detrás de escena que hace posible esa conexión instantánea.
+
