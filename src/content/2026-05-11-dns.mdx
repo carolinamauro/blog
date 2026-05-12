@@ -1,0 +1,208 @@
+---
+title: "DNS"
+date: "2026-05-11"
+tags: ["DNS", "Domain Name System", "sistema de nombres de dominio", "redes", "networking"]
+summary: "DNS es el sistema de nombres de dominio que traduce los nombres de dominio legibles por humanos en direcciones IP 
+numéricas que las computadoras utilizan para comunicarse entre sí en Internet. Es como una guía de teléfono: conozco a Pepita por su nombre,
+no por su numero, entonces si la quiero contactar, busco su nombre y me devuelve su numero, y así puedo contactarla."
+---
+
+# Qué es DNS?
+
+> DNS (Domain Name System o Sistema de Nombres de Dominio) es la guía telefónica de internet, traduciendo nombre de dominio memorizables (ej. google.com)
+a direcciones IP numéricas (ej. 192.0.1.2) que las computadoras utilizan para comunicarse entre sí.
+
+# Cómo funciona DNS?
+
+El proceso de resolución de DNS involucra convertir un hostname (www.example.com) a una dirección IP que la computadora comprende (192.0.1.2). Una
+dirección IP es un número único asignado a cada dispositivo conectado a una red, permitiendo que los dispositivos se encuentren y se comuniquen entre sí.
+
+## 4 servidores DNS involucrados al cargar un sitio web
+
+Podemos imaginar el proceso de resolución DNS como una búsqueda dentro de una biblioteca.
+
+Supongamos que queremos encontrar un libro específico, pero no sabemos exactamente en qué ubicación está. Para eso, contamos con un bibliotecario que nos ayuda a encontrarlo.
+
+- **Índice general**: nos indica en qué sección buscar.
+- **Rack o sección**: agrupa libros de una determinada categoría.
+- **Diccionario del rack**: nos dice la ubicación exacta del libro.
+- **Libro**: representa el sitio web o recurso al que queremos llegar.
+
+Cuando escribimos un dominio como `example.com`, ocurre algo parecido:
+
+1. **Servidor DNS recursivo o DNS Recursor**  
+   Es como el bibliotecario. Nosotros le preguntamos por un dominio específico y él se encarga de hacer la búsqueda completa por nosotros.
+
+2. **Servidor raíz de nombres o Root NameServer**  
+   Es como el índice general de la biblioteca. No sabe dónde está exactamente el libro, pero sí sabe a qué sección debe enviar al bibliotecario.  
+   Por ejemplo, si buscamos `example.com`, le indica que debe consultar a los servidores encargados de `.com`.
+
+3. **Servidor de nombres de dominio de nivel superior o TLD NameServer**  
+   Es como el rack o sección correspondiente. En este caso, sería la sección de dominios `.com`.  
+   Este servidor no tiene la dirección IP final, pero sabe qué servidor autoritativo tiene la información del dominio `example.com`.
+
+4. **Servidor de nombres autoritativo o Authoritative NameServer**  
+   Es como el diccionario específico dentro del rack. Tiene la información oficial del dominio y puede responder cuál es la dirección IP asociada a `example.com`.
+
+Finalmente, el DNS recursivo le devuelve esa dirección IP al navegador, y con esa IP el navegador puede conectarse al servidor donde está alojado el sitio web.
+
+# Diferencia entre un servidor DNS autoritativo y un servidor DNS recursivo
+
+Ambos servidores son componentes esenciales del sistema DNS, pero cumplen diferente rol y viven en diferentes locaciones dentro 
+del proceso de resolución de nombres. Lo podemos ver como que el servidor DNS recursivo es ek inicio de la consulta DNS y el servidor DNS autoritativo es el final.
+
+## Recursive DNS resolver o Servidor DNS recursivo
+
+> El **recursive DNS resolver** es el servidor que recibe la consulta DNS de un cliente, por ejemplo tu computadora o navegador, y
+se encarga de buscar el registro DNS necesario. Inicia una ser
+
+Cuando escribimos un dominio como `example.com`, nuestra computadora le pregunta al resolver: "¿Cuál es la dirección IP de `example.com`?"
+
+Si el resolver ya tiene esa información guardada en caché, responde directamente.
+Si no la tiene, empieza a consultar otros servidores DNS hasta encontrar la respuesta:
+
+1. Consulta a un **Root NameServer**.
+2. Luego consulta al **TLD NameServer**, por ejemplo el encargado de `.com`.
+3. Finalmente consulta al **Authoritative NameServer**, que tiene la información oficial del dominio.
+
+Cuando obtiene el registro DNS, por ejemplo una dirección IP, se lo devuelve al cliente.
+
+La ventaja es que el resolver no siempre tiene que hacer todo este recorrido. Gracias al **caching**, puede guardar respuestas anteriores durante 
+un tiempo determinado y reutilizarlas para responder más rápido.
+
+<img 
+  src="/images/dns_record_request_sequence_recursive_resolver.png" 
+  alt="DNS lookup process" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+### Diferencia entre recursive DNS query y recursive DNS resolver
+
+- **Recursive DNS query**: es el tipo de consulta que hace un cliente al resolver, pidiéndole que busque 
+la información completa por él. Es como decirle al bibliotecario: "Encuentra este libro para mí, no me digas solo dónde está el rack".
+- **Recursive DNS resolver**: es el servidor que recibe esa consulta y se encarga de hacer todo el trabajo de búsqueda, consultando a otros servidores DNS hasta encontrar la respuesta.
+
+<img 
+  src="/images/dns_recursive_query.png" 
+  alt="DNS lookup process" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+## Authoritative DNS server o Servidor DNS autoritativo
+
+> El servidor DNS autoritativo es el que guarda los registros DNS reales de un dominio y puede decir: “para este dominio, la IP correcta es esta”
+
+A diferencia del DNS recursivo, que busca la respuesta consultando a otros servidores, el servidor autoritativo responde usando sus propios datos, 
+porque es la fuente de verdad para ese dominio.
+
+Por ejemplo, si se consulta `example.com`, el servidor autoritativo de ese dominio puede responder cuál es la IP correspondiente.
+
+En el caso de subdominios, como `blog.example.com`, el servidor autoritativo también puede devolver un registro CNAME, 
+que funciona como un alias y obliga al resolver a buscar el destino final de ese alias.
+
+<img 
+  src="/images/dns_record_request_sequence_authoritative_nameserver.png" 
+  alt="DNS lookup process" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+# Pasos de una consulta DNS
+
+Cuando escribimos un dominio como `example.com` en el navegador, el navegador necesita conocer la dirección IP del servidor donde está alojado ese sitio. Para obtenerla, se realiza una consulta DNS.
+
+En el caso completo, cuando la información no está guardada en caché, el proceso suele tener estos pasos:
+
+1. **El usuario escribe un dominio en el navegador**  
+   Por ejemplo, `example.com`.
+
+2. **La consulta llega al DNS recursivo**  
+   El navegador o sistema operativo le pregunta al **DNS recursive resolver** cuál es la dirección IP de ese dominio.
+
+3. **El DNS recursivo consulta al Root NameServer**  
+   Como no tiene la respuesta, el resolver consulta a un servidor raíz.
+
+4. **El Root NameServer responde con el TLD correspondiente**  
+   El servidor raíz no conoce la IP final de `example.com`, pero sabe que debe derivar la consulta hacia los servidores encargados de `.com`.
+
+5. **El DNS recursivo consulta al TLD NameServer**  
+   El resolver le pregunta al servidor TLD de `.com` quién tiene la información de `example.com`.
+
+6. **El TLD NameServer responde con el servidor autoritativo del dominio**  
+   El TLD no devuelve la IP final del sitio, sino la dirección del **Authoritative NameServer** responsable de `example.com`.
+
+7. **El DNS recursivo consulta al Authoritative NameServer**  
+   Ahora el resolver le pregunta directamente al servidor autoritativo de `example.com`.
+
+8. **El Authoritative NameServer responde con la IP del dominio**  
+   Este servidor devuelve el registro DNS solicitado, por ejemplo un registro `A` con la dirección IP de `example.com`.
+
+9. **El DNS recursivo le devuelve la IP al navegador**  
+   El navegador ya sabe a qué dirección IP conectarse.
+
+10. **El navegador hace la petición HTTP/HTTPS**  
+   Con la IP obtenida, el navegador se conecta al servidor web y solicita la página.
+
+11. **El servidor responde con el contenido del sitio**  
+   Finalmente, el navegador recibe la página y la renderiza.
+
+<img 
+  src="/images/complete-dns-lookup-and-webpage-query.png" 
+  alt="DNS lookup process" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+# Tipos de consultas DNS
+
+En una consulta DNS típica pueden aparecer distintos tipos de consultas. Usando una combinación de ellas, el proceso de resolución puede optimizarse, especialmente cuando existen registros guardados en caché.
+
+| Tipo de consulta | Quién la realiza | Qué ocurre | Ejemplo simple |
+|---|---|---|---|
+| **Consulta recursiva** | El cliente DNS, por ejemplo la computadora del usuario, le consulta al DNS recursivo | El cliente exige una respuesta final: el registro solicitado o un error si no se encuentra. El DNS recursivo se encarga de buscar la respuesta consultando a otros servidores si hace falta. | “Buscame la IP de `example.com` y devolveme la respuesta final.” |
+| **Consulta iterativa** | Generalmente el DNS recursivo consulta a otros servidores DNS | El servidor consultado devuelve la mejor respuesta que tiene. Si no sabe la respuesta final, devuelve una referencia a otro servidor más específico. | El Root NameServer no sabe la IP de `example.com`, pero responde: “preguntale al servidor `.com`.” |
+| **Consulta no recursiva** | Un cliente DNS consulta a un servidor que ya tiene la respuesta | El servidor responde directamente porque tiene el registro en caché o porque es autoritativo para ese dominio. No necesita consultar a otros servidores. | El DNS recursivo ya tiene guardada en caché la IP de `example.com` y la devuelve directamente. |
+
+## ¿Qué es el DNS caching?
+
+El **DNS caching** consiste en guardar temporalmente registros DNS en distintos puntos del sistema para que futuras consultas puedan resolverse más rápido.
+
+En lugar de repetir todo el recorrido DNS cada vez que queremos entrar a un sitio, se reutiliza información ya obtenida anteriormente, como la IP asociada a un dominio.
+
+Esto mejora:
+
+- el tiempo de carga;
+- el rendimiento;
+- la confiabilidad;
+- y reduce el consumo de ancho de banda y procesamiento.
+
+Cada registro DNS cacheado se guarda por un tiempo limitado, definido por su **TTL** (*Time To Live*). Cuando ese tiempo expira, el registro debe consultarse nuevamente.
+
+## ¿Dónde ocurre el DNS caching?
+
+El caché DNS puede ocurrir en varios lugares.
+
+| Lugar donde se cachea | Qué hace |
+|---|---|
+| **Navegador** | Es el primer lugar donde se busca. Los navegadores modernos guardan registros DNS por un tiempo para evitar repetir consultas. Por ejemplo, Chrome permite ver el estado del caché DNS en `chrome://net-internals/#dns`. |
+| **Sistema operativo** | Si el navegador no tiene la respuesta, la consulta pasa al resolver DNS del sistema operativo, también llamado **stub resolver** o cliente DNS. Este también puede tener su propio caché. |
+| **DNS recursivo** | Si la respuesta no está en la máquina local, la consulta llega al DNS recursivo, por ejemplo el del proveedor de internet. Este resolver también revisa su caché antes de consultar a otros servidores DNS. |
+
+## Cómo ayuda el caché en el proceso DNS
+
+Si el navegador, el sistema operativo o el DNS recursivo ya tienen guardada la IP de un dominio, pueden responder directamente sin recorrer toda la cadena DNS.
+
+Por ejemplo, si ya está cacheada la IP de `example.com`, no hace falta consultar al Root NameServer, al TLD NameServer ni al Authoritative NameServer.
+
+Además, el DNS recursivo puede tener distintos niveles de información cacheada:
+
+| Información cacheada | Qué permite hacer |
+|---|---|
+| **Registro A** | Responder directamente con la IP del dominio. |
+| **Registros NS del dominio** | Consultar directamente al servidor autoritativo, sin pasar por Root ni TLD. |
+| **Registros del TLD** | Saltar la consulta al Root NameServer y consultar directamente al TLD correspondiente, por ejemplo `.com`. |
+| **Sin información útil en caché** | Hacer el recorrido completo desde el Root NameServer. |
+
+## Resumen corto
+
+El **DNS caching** guarda temporalmente respuestas DNS para acelerar futuras consultas. Puede ocurrir en el navegador, en el sistema operativo y en el DNS recursivo.
+
+Gracias al caché, muchas consultas DNS no necesitan recorrer toda la cadena de servidores, lo que hace que la navegación sea más rápida y eficiente.
