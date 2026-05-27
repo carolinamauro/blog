@@ -34,9 +34,8 @@ const projects = [
 ];
 
 const orbitStats = [
-  { value: "4+", label: "años creando producto" },
-  { value: "UBA", label: "docencia + ingeniería" },
-  { value: "B2", label: "inglés y alemán" },
+  { value: "4+ años de experiencia", label: "en el desarrollo de Software" },
+  { value: "FIUBA", label: "ayudante de catedra" },
 ];
 
 export default function Home() {
@@ -53,19 +52,20 @@ export default function Home() {
         <div className="mx-auto grid min-h-[calc(92vh-6rem)] max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="max-w-3xl">
             <p className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100 shadow-[0_0_24px_rgba(103,232,249,0.22)]">
-              Frontend Engineer · Ingeniera en Informática
+               Ingeniera en Informática · Frontend Engineer
             </p>
             <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               Carolina Mauro
             </h1>
             <p className="mt-5 max-w-2xl text-xl font-semibold text-pink-100 sm:text-2xl">
-              Construyo interfaces, exploro sistemas y convierto aprendizaje en
-              productos con personalidad.
+              Me encanta aprender, crear y compartir lo que sé. Este es mi espacio para mostrar lo que estoy haciendo, 
+              lo que aprendí y hacia dónde quiero ir.
             </p>
             <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-200 sm:text-lg">
               Portfolio personal con proyectos, stack, ideas técnicas y notas de
-              aprendizaje. Mi base está en frontend de producto, y mi brújula
-              apunta a cloud, backend, sistemas distribuidos e IA aplicada.
+              aprendizaje. Mi base está en frontend, y busco expandir mi perfil hacia la nube, sistemas distribuidos y 
+              backend. También me interesa mucho la docencia, así que voy a compartir lo que voy aprendiendo sobre cómo
+              explicar software de forma clara y efectiva.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -100,7 +100,7 @@ export default function Home() {
           <aside className="cosmic-console hidden rounded-lg border border-white/15 bg-zinc-950/55 p-6 shadow-2xl shadow-pink-950/40 backdrop-blur-md lg:block">
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm font-semibold uppercase tracking-wide text-zinc-400">
-                Mission control
+                Resumen
               </p>
               <span className="h-3 w-3 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.9)]" />
             </div>
