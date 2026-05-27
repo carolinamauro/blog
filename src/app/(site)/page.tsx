@@ -1,4 +1,5 @@
 import Link from "next/link";
+import TechStackShowcase from "../../components/TechStackShowcase";
 import { getAllPostsMeta } from "../../lib/posts";
 
 const focusAreas = [
@@ -8,14 +9,21 @@ const focusAreas = [
   "Backend",
   "Linux",
   "Agentes de IA",
+  "Frontend avanzado",
 ];
 
 const projects = [
   {
     title: "Personal blog",
     description:
-      "Un espacio para documentar lo que voy aprendiendo. Actualmente con foco en cloud, sistemas distribuidos y redes.",
+      "Portfolio y blog técnico construido con Next.js, MDX y Tailwind para documentar aprendizaje, stack y proyectos.",
     status: "En progreso",
+  },
+  {
+    title: "Sistema de Gestión de Tratamientos Oncológicos",
+    description:
+      "Plataforma web para prescripción pediátrica oncológica con cálculo automático de dosis y trazabilidad de medicamentos. Stack: React, HL7, Node.js y Docker.",
+    status: "UBA + Hospital Garrahan",
   },
   {
     title: "Organizador de Alumnos para Entrenadores",
@@ -39,9 +47,10 @@ export default function Home() {
             Ingeniera en Informática construyendo mi camino en software.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-            Este es mi portfolio personal: proyectos, intereses técnicos y un
-            blog donde documento lo que aprendo mientras exploro cloud
-            computing, sistemas distribuidos, redes y desarrollo.
+            Frontend Engineer con 4 años de experiencia en productos web y
+            móviles. Acá reúno proyectos, stack, intereses técnicos y notas de
+            aprendizaje mientras profundizo en cloud, sistemas distribuidos,
+            backend e IA aplicada.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -78,8 +87,8 @@ export default function Home() {
               Ahora
             </p>
             <p className="mt-3 text-base leading-7 text-zinc-700 dark:text-zinc-300">
-              Estoy organizando mi aprendizaje, reforzando fundamentos y
-              convirtiendo cada tema nuevo en una nota, proyecto o experimento.
+              Trabajo principalmente con Vue, Nuxt, React, React Native y
+              TypeScript. También colaboro en backend, testing y arquitectura.
             </p>
           </div>
         </aside>
@@ -90,15 +99,19 @@ export default function Home() {
           <div className="max-w-3xl">
             <h2 className="text-3xl font-bold tracking-tight">Sobre mí</h2>
             <p className="mt-4 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-              En diciembre de 2025 me recibi de Ingeniera en Informática. Desde entonces, me encuentro en un proceso de aprendizaje 
-              autodidacta, explorando diferentes áreas del software para encontrar mi camino. Me apasiona entender cómo funcionan 
-              las cosas a nivel técnico, y disfruto especialmente los temas relacionados con cloud computing, sistemas distribuidos, 
-              redes y backend. Sin embargo, mi experiencia laboral se da mayormente en el area del Front-end. Por eso, estoy enfocada en 
-              reforzar mis fundamentos y construir proyectos que me permitan ganar confianza y experiencia práctica en estas áreas.
+              Soy Ingeniera en Informática y Frontend Engineer. Mi experiencia
+              laboral se concentra en productos web y móviles de alta escala,
+              pero me interesa entender el sistema completo: desde la interfaz y
+              la arquitectura de componentes hasta APIs, datos, testing,
+              observabilidad y cloud. También soy docente universitaria, un
+              espacio que me mantiene cerca de los fundamentos y de la práctica
+              de explicar software con claridad.
               </p>
           </div>
         </div>
       </section>
+
+      <TechStackShowcase />
 
       <section id="projects" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
