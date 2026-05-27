@@ -8,12 +8,12 @@ export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navigation = [{
-        name: 'Inicio',
+        name: 'Portfolio',
         href: '/',
         pathname: '/',
     }, {
-        name: 'Blog',
-        href: 'blog',
+        name: 'Blog personal',
+        href: '/blog',
         pathname: '/blog',
     }];
 

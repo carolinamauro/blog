@@ -1,56 +1,174 @@
 import Link from "next/link";
+import { getAllPostsMeta } from "../../lib/posts";
+
+const focusAreas = [
+  "Cloud computing",
+  "Sistemas distribuidos",
+  "Redes",
+  "Backend",
+  "Linux",
+  "Agentes de IA",
+];
+
+const projects = [
+  {
+    title: "Personal blog",
+    description:
+      "Un espacio para documentar lo que voy aprendiendo. Actualmente con foco en cloud, sistemas distribuidos y redes.",
+    status: "En progreso",
+  },
+  {
+    title: "Organizador de Alumnos para Entrenadores",
+    description:
+      "App web para gestión de pagos, rutinas y planificación de alumnos. Surge de una necesidad real del ámbito del entrenamiento personal.",
+    status: "Iterando",
+  },
+];
 
 export default function Home() {
+  const latestPosts = getAllPostsMeta().slice(0, 3);
+
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-zinc-100 via-white to-zinc-200 dark:from-black dark:via-zinc-950 dark:to-zinc-900 font-sans">
-
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-pink-500/20 blur-3xl" />
-
-      <div className="relative z-10 flex max-w-3xl flex-col items-center gap-8 px-6 text-center">
-
-        <span className="rounded-full bg-black/5 px-4 py-1 text-sm font-medium text-zinc-600 dark:bg-white/10 dark:text-zinc-300">
-          Diario de aprendizaje en construcción 🚀
-        </span>
-
-        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
-          Ups! Te encontraste con mi{" "}
-          <span className="bg-gradient-to-r from-indigo-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">
-            spam de ideas
-          </span>
-        </h1>
-
-        <div className="space-y-6 text-lg text-zinc-700 dark:text-zinc-300">
-          <p>
-            Desde un poco antes de recibirme como Ingeniera en Informática en
-            diciembre de 2025, estuve preguntándome si estaba lista. Si conocía
-            lo suficiente. Si había explorado bien las materias. Si había hecho
-            suficientes proyectos interesantes...
+    <main className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-white">
+      <section className="mx-auto grid min-h-[92vh] max-w-6xl items-center gap-12 px-4 pb-16 pt-24 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8">
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-wide text-pink-600 dark:text-pink-400">
+            Carolina Mauro
           </p>
-
-          <p>
-            Pero sobre todo no paro de preguntarme: ¿En qué quiero enfocarme?
-            ¿Front? ¿Back? ¿Ciberseguridad? ¿Machine Learning? ¿Cloud?
-            ¿AWS?
+          <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+            Ingeniera en Informática construyendo mi camino en software.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
+            Este es mi portfolio personal: proyectos, intereses técnicos y un
+            blog donde documento lo que aprendo mientras exploro cloud
+            computing, sistemas distribuidos, redes y desarrollo.
           </p>
-
-          <p>
-            Y entre tantas posibilidades, me di cuenta de algo simple:
-            <span className="font-semibold text-indigo-600 dark:text-indigo-400">
-              {" "}
-              lo que más me gusta es aprender.
-            </span>{" "}
-            Así que este blog es mi laboratorio personal.
-          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="#projects"
+              className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+            >
+              Ver proyectos
+            </Link>
+            <Link
+              href="/blog"
+              className="inline-flex items-center justify-center rounded-lg border border-zinc-300 px-5 py-3 text-sm font-semibold text-zinc-900 transition hover:border-pink-500 hover:text-pink-600 dark:border-zinc-700 dark:text-white dark:hover:border-pink-400 dark:hover:text-pink-300"
+            >
+              Ir al blog personal
+            </Link>
+          </div>
         </div>
 
-        <Link
-          href="/blog"
-          className="mt-4 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-500"
-        >
-          Ver lo que estoy aprendiendo →
-        </Link>
-      </div>
-    </div>
+        <aside className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+            Focus actual
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {focusAreas.map((area) => (
+              <span
+                key={area}
+                className="rounded-md bg-zinc-100 px-3 py-2 text-sm font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+              >
+                {area}
+              </span>
+            ))}
+          </div>
+          <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+              Ahora
+            </p>
+            <p className="mt-3 text-base leading-7 text-zinc-700 dark:text-zinc-300">
+              Estoy organizando mi aprendizaje, reforzando fundamentos y
+              convirtiendo cada tema nuevo en una nota, proyecto o experimento.
+            </p>
+          </div>
+        </aside>
+      </section>
+
+      <section className="border-y border-zinc-200 bg-white py-16 dark:border-zinc-800 dark:bg-zinc-900/60">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight">Sobre mí</h2>
+            <p className="mt-4 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
+              Me interesa entender cómo funcionan las cosas por debajo:
+              infraestructura, redes, sistemas distribuidos y las decisiones que
+              hacen que un software sea confiable. Este sitio existe para mostrar
+              ese proceso con más forma que un blog suelto.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight">Proyectos</h2>
+            <p className="mt-3 max-w-2xl text-zinc-600 dark:text-zinc-400">
+              Algunas piezas que estoy usando para practicar, documentar y darle
+              forma a mi perfil técnico.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {projects.map((project) => (
+            <article
+              key={project.title}
+              className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-lg font-semibold">{project.title}</h3>
+                <span className="shrink-0 rounded-md bg-pink-50 px-2.5 py-1 text-xs font-semibold text-pink-700 dark:bg-pink-500/10 dark:text-pink-300">
+                  {project.status}
+                </span>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                {project.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-white py-16 dark:bg-zinc-900">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight">Blog personal</h2>
+              <p className="mt-3 max-w-2xl text-zinc-600 dark:text-zinc-400">
+                Notas de aprendizaje, apuntes técnicos y reflexiones sobre mi
+                camino profesional.
+              </p>
+            </div>
+            <Link
+              href="/blog"
+              className="inline-flex items-center justify-center rounded-lg border border-zinc-300 px-4 py-2 text-sm font-semibold transition hover:border-pink-500 hover:text-pink-600 dark:border-zinc-700 dark:hover:border-pink-400 dark:hover:text-pink-300"
+            >
+              Ver todas las notas
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {latestPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="rounded-lg border border-zinc-200 bg-zinc-50 p-5 transition hover:-translate-y-0.5 hover:border-pink-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-pink-500/60 dark:hover:bg-zinc-950/70"
+              >
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  {post.date}
+                </p>
+                <h3 className="mt-3 text-lg font-semibold">{post.title}</h3>
+                {post.summary ? (
+                  <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                    {post.summary}
+                  </p>
+                ) : null}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

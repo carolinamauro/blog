@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Blog - Carolina Mauro",
-  description: "Documentation and blog about software development, programming languages, and more.",
+  title: "Portfolio - Carolina Mauro",
+  description:
+    "Portfolio personal de Carolina Mauro con proyectos, intereses técnicos y blog de aprendizaje.",
 };
 
 export default function RootLayout({
@@ -24,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
