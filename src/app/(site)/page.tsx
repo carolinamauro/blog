@@ -90,11 +90,12 @@ export default function Home() {
           <div className="max-w-3xl">
             <h2 className="text-3xl font-bold tracking-tight">Sobre mí</h2>
             <p className="mt-4 text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-              Me interesa entender cómo funcionan las cosas por debajo:
-              infraestructura, redes, sistemas distribuidos y las decisiones que
-              hacen que un software sea confiable. Este sitio existe para mostrar
-              ese proceso con más forma que un blog suelto.
-            </p>
+              En diciembre de 2025 me recibi de Ingeniera en Informática. Desde entonces, me encuentro en un proceso de aprendizaje 
+              autodidacta, explorando diferentes áreas del software para encontrar mi camino. Me apasiona entender cómo funcionan 
+              las cosas a nivel técnico, y disfruto especialmente los temas relacionados con cloud computing, sistemas distribuidos, 
+              redes y backend. Sin embargo, mi experiencia laboral se da mayormente en el area del Front-end. Por eso, estoy enfocada en 
+              reforzar mis fundamentos y construir proyectos que me permitan ganar confianza y experiencia práctica en estas áreas.
+              </p>
           </div>
         </div>
       </section>
