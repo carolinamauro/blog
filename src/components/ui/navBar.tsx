@@ -17,8 +17,8 @@ export default function NavBar() {
         pathname: '/blog',
     }];
 
-    const selectedStyle = "rounded-md px-3 py-2 text-sm font-semibold text-pink-600 bg-pink-100/60";
-    const unselectedStyle = "rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-pink-600 hover:bg-pink-50 transition-colors";
+    const selectedStyle = "rounded-md bg-white/80 px-3 py-2 text-sm font-semibold text-pink-700 shadow-sm backdrop-blur";
+    const unselectedStyle = "rounded-md px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/10 transition-colors";
     
     const pathname = usePathname();
 
@@ -38,7 +38,7 @@ export default function NavBar() {
                   type="button" 
                   data-command="--toggle" 
                   data-commandfor="mobile-menu" 
-                  className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500"
+                  className="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-300 hover:bg-white/10 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-pink-300"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" data-slot="icon" aria-hidden="true" className={`size-6 ${isMenuOpen ? 'hidden' : ''}`}>
