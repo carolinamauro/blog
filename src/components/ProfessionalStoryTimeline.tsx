@@ -24,11 +24,13 @@ const storyStages: StoryStage[] = [
     id: "degree",
     period: "2020 - 2025",
     title: "Ingeniería en Informática",
-    subtitle: "UBA · Ingeniería en Informática",
+    subtitle: "FIUBA · Ingeniería en Informática",
     ranges: [{ start: 2020, end: 2025 }],
     description:
-      "Acá podés contar cómo fue tu recorrido universitario: materias que te marcaron, proyectos importantes, cambios en tu forma de pensar software y el camino hasta recibirte.",
-    focus: ["Ingeniería", "Fundamentos", "Arquitectura", "Proyecto final"],
+      "Durante la carrera tuve la oportunidad de aprender sobre algoritmos, estructuras de datos, arquitectura de software, ingeniería de software, sistemas distribuidos, \
+      bases de datos, ciencia de devIndicatorServerState, inteligenia artificial, modelos de machine learning, programacion areCookiesMutableInCurrentPhase, blockchain, seguridad informática, entre otras cosas. \
+       Además, pude participar en proyectos prácticos y trabajos en equipo que me ayudaron a desarrollar habilidades técnicas y de colaboración.",
+    focus: ["Ingeniería", "Fundamentos", "Arquitectura", "Desarrollo de Software"],
   },
   {
     id: "foundations-ta",
@@ -40,7 +42,9 @@ const storyStages: StoryStage[] = [
       { start: 2025, end: 2026 },
     ],
     description:
-      "Acá podés escribir sobre tu rol enseñando C, memoria, punteros, TDAs y estructuras de datos. También podés contar qué aprendiste acompañando a estudiantes.",
+      "Acompaño a los alumnos en su primer contacto con la programación, ayudándolos a entender conceptos básicos como variables, \
+      tipos de datos, estructuras de control, funciones y algoritmos. Se enseña en lenguaje C, lo que permite a los estudiantes comprender \
+      cómo funciona la memoria y los punteros, y sentar las bases para su desarrollo futuro en el mundo del software.",
     focus: ["C", "TDAs", "Memoria", "Punteros", "Docencia"],
   },
   {
@@ -50,8 +54,10 @@ const storyStages: StoryStage[] = [
     subtitle: "FIUBA · Ingeniería de Software II",
     ranges: [{ start: 2025, end: 2026 }],
     description:
-      "Acá podés desarrollar tu mirada sobre diseño, clean code, BDD/TDD, arquitectura hexagonal y code reviews. Es un buen lugar para mostrar tu criterio técnico.",
-    focus: ["BDD/TDD", "Clean Code", "Ruby", "Hexagonal", "Code review"],
+      "Acompaño a los alumnos en el aprendizaje de metodologías de desarrollo de software, diseño de sistemas, pruebas y mantenimiento. Se trabaja con Ruby y \
+       hacemos gran incapie en el trabjo siguiendo BDD + TDD logrando un codigo que respete la arq. hexagonal, patron repositorio y POO. Además, se fomenta la colaboración \
+      y el trabajo en equipo a través de scrums y code reviews, preparando a los estudiantes para enfrentar los desafíos del desarrollo de software en el mundo real.",
+    focus: ["BDD/TDD", "Clean Code", "Ruby", "Arq. Hexagonal", "Code review", "POO", "Scrums", "Docencia"],
   },
   {
     id: "brosoft",
@@ -60,7 +66,9 @@ const storyStages: StoryStage[] = [
     subtitle: "BROSOFT · TurismoCity",
     ranges: [{ start: 2022, end: 2026 }],
     description:
-      "Acá podés contar tu experiencia profesional construyendo producto: frontend web, mobile, integración con APIs, colaboración con backend y features para usuarios reales.",
+      "3 años desarrollando la aplicacion móvil de TurismoCity, una plataforma de comparación de precios de vuelos y hoteles. \
+      Empecé trabajando con React Native y en Junio de 2025 cambie al equipo web que utiliza Vue y Nuxt. Actualmente desarrollo funcionalidades en la vertical de paquetes, \
+      desarrollando tando el backend en NodeJS como el frontend",
     focus: ["Vue", "Nuxt", "TypeScript", "React Native", "APIs"],
   },
 ];
@@ -81,24 +89,14 @@ export default function ProfessionalStoryTimeline() {
             Línea de tiempo profesional.
           </h2>
           <p className="mt-4 text-base leading-8 text-zinc-300">
-            Seleccioná un tramo para acercarte a esa etapa y completar el
-            detalle con tu propia historia.
+            Mi camino en el mundo del Software comienza con la pandemia de 2020, curse mi ultimo año de colegio online y 
+            en paralelo hice el ingreso de la facultad via UBA XXI. A partir de 2021 empecé a cursar la carrera de Ingeniería en Informática
+            en la UBA, y a lo largo de estos años tuve la oportunidad de aprender muchísimo tanto en el ámbito académico como profesional. 
           </p>
         </div>
 
         <div className="grid gap-5">
           <div className="rounded-lg border border-white/10 bg-black/35 p-4 backdrop-blur-sm">
-            <div className="hidden sm:grid sm:grid-cols-7 sm:pl-24">
-              {Array.from({ length: timelineRange + 1 }, (_, index) => (
-                <span
-                  key={timelineStart + index}
-                  className="text-xs font-semibold text-zinc-500"
-                >
-                  {timelineStart + index}
-                </span>
-              ))}
-            </div>
-
             <div className="mt-4 grid gap-3">
               {storyStages.map((stage, index) => {
               const isActive = stage.id === activeStage.id;

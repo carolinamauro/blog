@@ -118,7 +118,7 @@ export default function Home() {
 
             <div className="mt-6 rounded-lg border border-pink-300/25 bg-pink-300/10 p-4">
               <p className="text-sm font-semibold text-pink-100">
-                Ahora estoy orbitando
+                Ahora estoy profundizando
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {focusAreas.map((area) => (
@@ -142,7 +142,7 @@ export default function Home() {
               Sobre mí
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight">
-              Curiosa por diseño, frontend por oficio.
+             Curiosa por naturaleza, me gusta entender cómo funcionan las cosas y compartir lo que sé.
             </h2>
             <Link
               href="#story"
@@ -153,12 +153,8 @@ export default function Home() {
           </div>
           <p className="rounded-lg border border-white/10 bg-black/35 p-6 text-lg leading-8 text-zinc-200 backdrop-blur-sm lg:translate-y-8">
             Soy Ingeniera en Informática y Frontend Engineer. Mi experiencia
-            laboral se concentra en productos web y móviles de alta escala, pero
-            me interesa entender el sistema completo: desde la interfaz y la
-            arquitectura de componentes hasta APIs, datos, testing,
-            observabilidad y cloud. También soy docente universitaria, un espacio
-            que me mantiene cerca de los fundamentos y de la práctica de explicar
-            software con claridad.
+            laboral se concentra en productos web y mobile, con foco en frontend, aunque también tengo experiencia con backend.
+            Soy ayudante de catedra en FIUBA, donde me encuentro en constante contacto con la docencia y el aprendizaje de nuevos conceptos. 
           </p>
         </div>
       </section>

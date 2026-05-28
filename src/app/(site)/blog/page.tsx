@@ -8,10 +8,10 @@ export default function BlogIndex() {
     <main className="min-h-screen mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-20 pb-16">
       
       <div className="mb-10">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
+        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-200">
           Blog
         </h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-zinc-200">
           Mis notas en el camino a aprender conceptos nuevos. Hoy estoy haciendo una nueva ruta de Learn to Cloud, 
           así que probablemente la mayoría de los posts van a estar relacionados con la nube, 
           pero también voy a escribir sobre otras cosas que me parezcan interesantes.
