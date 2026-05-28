@@ -215,7 +215,7 @@ export default function TechStackShowcase() {
   return (
     <section
       id="stack"
-      className="overflow-hidden border-y border-zinc-200 bg-zinc-950 py-16 text-white dark:border-zinc-800"
+      className="section-shell overflow-hidden py-16 text-white"
     >
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
         <div>
