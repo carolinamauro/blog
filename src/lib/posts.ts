@@ -10,6 +10,7 @@ export type PostMeta = {
   date: string;
   tags?: string[];
   summary?: string;
+  category?: string;
 };
 
 export function getPostSlugs() {

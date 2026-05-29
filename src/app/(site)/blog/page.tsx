@@ -1,54 +1,37 @@
-import Link from "next/link";
 import { getAllPostsMeta } from "../../../lib/posts";
+import BlogList from "../../../components/BlogList";
 
 export default function BlogIndex() {
   const posts = getAllPostsMeta();
 
   return (
-    <main className="min-h-screen mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-      
-      <div className="mb-10">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-200">
-          Blog
-        </h1>
-        <p className="mt-2 text-zinc-200">
-          Mis notas en el camino a aprender conceptos nuevos. Hoy estoy haciendo una nueva ruta de Learn to Cloud, 
-          así que probablemente la mayoría de los posts van a estar relacionados con la nube, 
-          pero también voy a escribir sobre otras cosas que me parezcan interesantes.
-        </p>
+    <main className="relative z-10 min-h-screen overflow-hidden px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+      {/* Nebula blobs */}
+      <div
+        className="nebula-blob animate-nebula -z-10"
+        style={{ top: "-5rem", left: "-5rem", width: "28rem", height: "28rem", background: "rgba(6,182,212,0.18)", animationDelay: "0s" }}
+      />
+      <div
+        className="nebula-blob animate-nebula -z-10"
+        style={{ top: "10rem", right: "-2rem", width: "32rem", height: "32rem", background: "rgba(236,72,153,0.13)", animationDelay: "3s" }}
+      />
+
+      <div className="mx-auto max-w-3xl">
+        <div className="animate-fade-in-up mb-10">
+          <h1 className="text-shimmer text-4xl font-extrabold tracking-tight">
+            Blog
+          </h1>
+          <p className="mt-3 text-zinc-300">
+            Mis notas en el camino a aprender conceptos nuevos. Hoy estoy en la
+            ruta de{" "}
+            <span className="font-semibold text-cyan-300">Learn to Cloud</span>
+            , pero también escribo sobre otras cosas que me parezcan
+            interesantes.
+          </p>
+        </div>
+
+        <BlogList posts={posts} />
       </div>
-
-      <ul className="space-y-6">
-        {posts.map((p) => (
-          <li key={p.slug}>
-            <Link
-              href={`/blog/${p.slug}`}
-              className="group block rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
-            >
-              
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-zinc-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
-                  {p.title}
-                </h2>
-
-                <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                  {p.date}
-                </span>
-              </div>
-
-              {p.summary && (
-                <p className="mt-3 text-zinc-600 dark:text-zinc-400">
-                  {p.summary}
-                </p>
-              )}
-
-              <div className="mt-4 text-sm font-medium text-indigo-600 opacity-0 transition group-hover:opacity-100 dark:text-indigo-400">
-                Leer post →
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
     </main>
   );
 }

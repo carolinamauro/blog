@@ -12,7 +12,11 @@ export default function NavBar() {
         href: '/',
         pathname: '/',
     }, {
-        name: 'Blog personal',
+        name: 'Proyectos',
+        href: '/projects',
+        pathname: '/projects',
+    }, {
+        name: 'Blog',
         href: '/blog',
         pathname: '/blog',
     }];

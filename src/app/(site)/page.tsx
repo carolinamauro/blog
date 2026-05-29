@@ -43,17 +43,25 @@ export default function Home() {
   const latestPosts = getAllPostsMeta().slice(0, 3);
 
   return (
-    <main className="portfolio-shell min-h-screen text-white">
+    <main className="portfolio-shell relative z-10 min-h-screen text-white">
       <section className="cosmic-hero relative isolate min-h-[88vh] overflow-hidden px-4 pb-14 pt-24 text-white sm:px-6 lg:min-h-[92vh] lg:px-8">
         <div className="hero-illustration absolute inset-0 -z-20" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(2,2,8,0.95)_0%,rgba(2,2,8,0.82)_43%,rgba(2,2,8,0.34)_76%,rgba(2,2,8,0.72)_100%)]" />
+        <div
+          className="nebula-blob animate-nebula"
+          style={{ top: "2rem", left: "2rem", width: "28rem", height: "28rem", background: "rgba(6,182,212,0.12)", zIndex: -1 }}
+        />
+        <div
+          className="nebula-blob animate-nebula"
+          style={{ bottom: "2rem", right: 0, width: "36rem", height: "36rem", background: "rgba(139,92,246,0.10)", zIndex: -1, animationDelay: "4s" }}
+        />
 
         <div className="mx-auto grid min-h-[calc(92vh-6rem)] max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="max-w-3xl">
             <p className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100 shadow-[0_0_24px_rgba(103,232,249,0.22)]">
                Ingeniera en Informática · Frontend Engineer
             </p>
-            <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="text-shimmer mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
               Carolina Mauro
             </h1>
             <p className="mt-5 max-w-2xl text-xl font-semibold text-pink-100 sm:text-2xl">
@@ -173,6 +181,12 @@ export default function Home() {
               forma a mi perfil técnico.
             </p>
           </div>
+          <Link
+            href="/projects"
+            className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-100"
+          >
+            Ver todos los proyectos
+          </Link>
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
