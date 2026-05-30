@@ -36,7 +36,7 @@ const projects = [
 
 const orbitStats = [
   { value: "4+ años de experiencia", label: "en el desarrollo de Software" },
-  { value: "FIUBA", label: "ayudante de catedra" },
+  { value: "Ingeniera en Informática", label: "Universidad de Buenos Aires / Marzo 2020 - Diciembre 2025" },
 ];
 
 export default function Home() {

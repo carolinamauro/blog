@@ -26,7 +26,7 @@ const RANGE = TIMELINE_END - TIMELINE_START;
 const events: TimelineEvent[] = [
   {
     id: "degree-start",
-    at: 2020.2,  // March 2020
+    at: 2020.2, 
     label: "Inicio Ingeniería",
     sublabel: "FIUBA · Ingeniería en Informática",
     type: "education",
@@ -34,14 +34,14 @@ const events: TimelineEvent[] = [
       period: "Marzo 2020",
       description:
         "Empecé la carrera en plena pandemia, cursando el CBC de forma virtual a través de UBA XXI mientras terminaba el colegio. Arrancar en ese contexto me enseñó desde el primer día a organizarme, estudiar de forma autónoma y mantener el foco en metas de largo plazo.",
-      focus: ["FIUBA", "Algoritmos", "Matemática", "Física"],
+      focus: ["FIUBA", "Algoritmos", "Analisis Matemático", "Física", "Química", "IPC"],
     },
   },
   {
     id: "ta-foundations-1",
     at: 2021.2,
     label: "Ayudantía I",
-    sublabel: "Fundamentos de Programación",
+    sublabel: "Algoritmos y programació ",
     type: "ta",
     detail: {
       period: "Junio 2021 – Junio 2022",
@@ -60,7 +60,8 @@ const events: TimelineEvent[] = [
     detail: {
       period: "Junio 2022 – actualidad",
       description:
-        "Empecé en BROSOFT desarrollando la app móvil de TurismoCity, una plataforma de comparación de vuelos y hoteles. Durante más de 3 años trabajé en React Native, y en junio de 2025 pasé al equipo web (Vue + Nuxt), donde desarrollo funcionalidades de la vertical de paquetes tanto en el frontend como en el backend con Node.js.",
+        "Empecé en BROSOFT aprendiendo a programar en React para insertarme en un proyecto llamado SIDOM. Luego de 6 meses, me integre al equipo de la aplicación móvil de TurismoCity, una plataforma de comparación de vuelos y hoteles. Contribuí en el desarrollo de nuevos features, despligues a producción (generación de apk y subida a Playstore), \
+        integración con Firebase crashlytics para la revisión de errores en el flujo logrando llegar a 99.6% de sesiones sin fallas para 1.100.000 usuarios activos. En junio de 2025 me integre al equipo web donde aprendi como nuevo framework de programacion Vue.js. Actualmente desarrollo funcionalidades de la vertical de paquetes tanto en el frontend como en el backend con Node.js.",
       focus: ["Vue", "Nuxt", "TypeScript", "React Native", "Node.js", "APIs"],
     },
   },
@@ -212,18 +213,6 @@ export default function ProfessionalStoryTimeline() {
 
         {/* Timeline track */}
         <div className="relative select-none overflow-x-auto">
-          {/*
-            Fixed vertical zones (all absolute from container top):
-              0  – 70px  : top-event label area
-             70  – 86px  : top-event dot area   (dot centre ≈ 78px)
-             86  – 96px  : connector top → rail
-             96px        : ─────── RAIL ─────────
-             96  – 110px : connector rail → bottom dot
-            110  – 126px : bottom-event dot area (dot centre ≈ 118px)
-            126  – 158px : bottom-event label area
-            158  – 168px : year tick
-            168  – 188px : year text
-          */}
           <div
             ref={lineRef}
             className="relative"
