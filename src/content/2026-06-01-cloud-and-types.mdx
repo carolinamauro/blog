@@ -35,5 +35,65 @@ no están en tu computadora, sino que están en los servidores de Google, y vos 
 Google se "reserve" más espacio para vos, entonces tenes que pagar por ese espacio adicional, y eso es básicamente el modelo de negocio de 
 la nube: pagas por el almacenamiento y los servicios que utilizas.
 
+## Entonces, que es la programación en la nube?
 
+> La programación en la nube se refiere a la práctica de desarrollar, implementar y administrar aplicaciones y servicios utilizando 
+recursos y servicios proporcionados por proveedores de nube, en lugar de hacerlo en servidores locales o infraestructura propia.
 
+¿En qué se diferencia de la programación tradicional?
+- **Tradicional**: Escribís el código en tu computadora, usas la potencia de tu propio procesados y guardas Los archivos en tu disco duro. 
+Si querés compartir tu aplicación con alguien, tenes que subirla a un servidor o compartirla de alguna manera.
+- **En la nube**: Escribís y ejecutas el código en entornos virtuales remotos. La aplicación se fragmenta en piezas independientes que escalan automáticamente según el número de usuarios.
+
+# Tipos de Cloud computing
+
+Existen diferentes tipos de Cloud computing, cada uno con sus propias características y casos de uso. Podemos mirarlo desde
+dos ángulos distintos:
+
+1. **Según el modelo de servicio**: qué parte de la infraestructura administras vos y qué parte administra el proveedor de la nube. 
+2. **Según el modelo de implementación**: cómo se estructuran los entornos en la nube, quien los administra y como se accede a ellos.
+
+Osea una cosa es qué estas usando de la nube y otra es dónde y cómo está desplegada esa nube.
+
+## Según el modelo de servicio
+
+Los modelos de servicio más comunes son IaaS (Infrastructure as a Service), PaaS (Platform as a Service) y SaaS (Software as a Service). La 
+diferencia está en el nivel de control y responsabilidad que tenes sobre la infraestructura y los servicios que utilizas:
+
+### **IaaS (Infrastructure as a Service)**
+
+El proveedor de la nube te proporciona la infraestructura básica, como servidores, almacenamiento y redes. 
+Vos eres responsable de administrar el sistema operativo, las aplicaciones y los datos. 
+
+No tenes que preocuparte por el hardware físico, pero si tenes que encargarte de la configuración y el mantenimiento del software. 
+
+- *Ejemplo más técnico*: creas una maquina virtual en AWS EC2, le instalas Linux y configuras una base de datos para levantar tu backend y manejar todo desde ahí. 
+- *Ejemplo más criollo*: querés hacer una pizza pero no tenes cocina. Entonces alquilas la cocina, el horno y los utensilios, pero la pizza la haces vos desde cero. Tenes mucho control, pero también más responsabilidad.
+
+### **PaaS (Platform as a Service)**
+
+Va un nivel más arriba. El proveedor te da la infraestructura y además te proporciona una plataforma completa para desarrollar, desplegar y
+ejecutar aplicaciones.
+
+No te preocupas tanto en configurar servidores, instalar sistemas operativos o administrar recursos a bajo nivel. Simplemente escribís el código de tu aplicación 
+y lo despliegas en la plataforma, que se encarga de manejar todo lo demás, como el escalado automático, la seguridad y el mantenimiento.
+
+- *Ejemplo más técnico*: este blog esta desplegado en Vercel, que es una plataforma PaaS. Yo solo me preocupo por escribir el código y 
+subirlo a Vercel, y ellos se encargan de todo lo demás.
+- *Ejemplo más criollo*: para hacer las pizzas tenes la cocina lista para usar, solo tenes que poner los ingredientes y hacer la pizza, 
+no tenes que preocuparte por el horno, ni por los utensilios, ni por limpiar después.
+
+Es un modelo muy cómodo para desarrolladores, ya que les permite centrarse en escribir código y desarrollar aplicaciones sin 
+tener que preocuparse por la infraestructura subyacente. No pensas en como configurar un servidor, sino que te concentras en crear 
+la aplicación y que nada rompa en producción.
+
+### **SaaS (Software as a Service)**
+
+Es el modelo más cercano al usuario final: no administrar infraestructura ni plataforma ni servidores, simplemente usas una aplicación que
+ya esta lista. Acá entran servicios como Google Drive, Gmail, Google Fotos, etc. Vos no te preocupas por nada, simplemente usas la aplicación a través de internet.
+No tenes ni idea en que servidor corre Gmail ni que base de datos usa Google Fotos, ni como hacen para escalar internamente cuando hay millones
+de usuarios usando la aplicación al mismo tiempo. Simplemente usas el servicio y listo.
+
+- *Ejemplo más técnico*: usas Google Drive para almacenar tus archivos, no te preocupas por la infraestructura ni la plataforma, simplemente usas la aplicación.
+- *Ejemplo más criollo*: ni en pedo te haces la pizza vos, simplemente vas a la pizzería y compras la pizza ya hecha, no te preocupas por nada,
+solo disfrutas de la pizza.
