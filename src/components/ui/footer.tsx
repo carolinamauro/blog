@@ -1,21 +1,27 @@
 import Link from "next/link";
 
 export default function Footer() {
-
-    return (
-        <footer className="mt-10 rounded-2xl border border-black/5 bg-white/60 p-5 text-sm text-zinc-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-zinc-200">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p>
-              Temrminaste de leer el post, pero no te vayas todavía.
-              <span className="font-semibold">Tengo mucho más para contar</span>
-            </p>
-            <Link
-              href="/blog"
-              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-2 font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:bg-indigo-500"
-            >
-              Ver más posts
-            </Link>
-          </div>
-        </footer>
-    )
+  return (
+    <footer className="mt-12 rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-white">
+            Terminaste de leer el post.
+          </p>
+          <p className="mt-1 text-sm text-zinc-400">
+            Tengo mucho más para contar — pasate por el blog.
+          </p>
+        </div>
+        <Link
+          href="/blog"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-cyan-400/20"
+        >
+          Ver más posts
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </Link>
+      </div>
+    </footer>
+  );
 }

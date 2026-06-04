@@ -1,17 +1,9 @@
 import Link from "next/link";
+import ContactSection from "../../components/ContactSection";
+import HeroCaricature from "../../components/HeroCaricature";
 import ProfessionalStoryTimeline from "../../components/ProfessionalStoryTimeline";
 import TechStackShowcase from "../../components/TechStackShowcase";
 import { getAllPostsMeta } from "../../lib/posts";
-
-const focusAreas = [
-  "Cloud computing",
-  "Sistemas distribuidos",
-  "Redes",
-  "Backend",
-  "Linux",
-  "Agentes de IA",
-  "Frontend avanzado",
-];
 
 const projects = [
   {
@@ -34,136 +26,134 @@ const projects = [
   },
 ];
 
-const orbitStats = [
-  { value: "4+ años de experiencia", label: "en el desarrollo de Software" },
-  { value: "Ingeniera en Informática", label: "Universidad de Buenos Aires / Marzo 2020 - Diciembre 2025" },
-];
-
 export default function Home() {
   const latestPosts = getAllPostsMeta().slice(0, 3);
 
   return (
     <main className="portfolio-shell relative z-10 min-h-screen text-white">
-      <section className="cosmic-hero relative isolate min-h-[88vh] overflow-hidden px-4 pb-14 pt-24 text-white sm:px-6 lg:min-h-[92vh] lg:px-8">
-        <div className="hero-illustration absolute inset-0 -z-20" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(2,2,8,0.95)_0%,rgba(2,2,8,0.82)_43%,rgba(2,2,8,0.34)_76%,rgba(2,2,8,0.72)_100%)]" />
+      <HeroCaricature />
+
+      <section className="section-shell relative overflow-hidden py-20">
+        {/* Decorative blobs */}
         <div
           className="nebula-blob animate-nebula"
-          style={{ top: "2rem", left: "2rem", width: "28rem", height: "28rem", background: "rgba(6,182,212,0.12)", zIndex: -1 }}
+          style={{ top: "1rem", left: "-3rem", width: "22rem", height: "22rem", background: "rgba(244,114,182,0.10)", zIndex: 0 }}
         />
         <div
           className="nebula-blob animate-nebula"
-          style={{ bottom: "2rem", right: 0, width: "36rem", height: "36rem", background: "rgba(139,92,246,0.10)", zIndex: -1, animationDelay: "4s" }}
+          style={{ bottom: "0", right: "-2rem", width: "24rem", height: "24rem", background: "rgba(6,182,212,0.10)", zIndex: 0, animationDelay: "5s" }}
         />
 
-        <div className="mx-auto grid min-h-[calc(92vh-6rem)] max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="max-w-3xl">
-            <p className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-sm font-semibold text-cyan-100 shadow-[0_0_24px_rgba(103,232,249,0.22)]">
-               Ingeniera en Informática · Frontend Engineer
-            </p>
-            <h1 className="text-shimmer mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              Carolina Mauro
-            </h1>
-            <p className="mt-5 max-w-2xl text-xl font-semibold text-pink-100 sm:text-2xl">
-              Me encanta aprender, crear y compartir lo que sé. Este es mi espacio para mostrar lo que estoy haciendo, 
-              lo que aprendí y hacia dónde quiero ir.
-            </p>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-200 sm:text-lg">
-              Portfolio personal con proyectos, stack, ideas técnicas y notas de
-              aprendizaje. Mi base está en frontend, y busco expandir mi perfil hacia la nube, sistemas distribuidos y 
-              backend. También me interesa mucho la docencia, así que voy a compartir lo que voy aprendiendo sobre cómo
-              explicar software de forma clara y efectiva.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="#stack"
-                className="inline-flex items-center justify-center rounded-lg bg-white px-5 py-3 text-sm font-bold text-zinc-950 shadow-[0_0_28px_rgba(255,255,255,0.24)] transition hover:-translate-y-0.5 hover:bg-cyan-100"
-              >
-                Explorar stack
-              </Link>
-              <Link
-                href="/blog"
-                className="inline-flex items-center justify-center rounded-lg border border-pink-300/50 bg-pink-300/10 px-5 py-3 text-sm font-bold text-pink-100 transition hover:-translate-y-0.5 hover:border-pink-200 hover:bg-pink-300/20"
-              >
-                Ir al blog personal
-              </Link>
-            </div>
-
-            <div className="mt-8 grid grid-cols-2 gap-2 lg:hidden">
-              {orbitStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-lg border border-white/15 bg-white/[0.08] p-3 backdrop-blur"
-                >
-                  <p className="text-lg font-black leading-tight">{stat.value}</p>
-                  <p className="mt-1 text-[11px] leading-4 text-zinc-300">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+        <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          {/* Section label */}
+          <div className="mb-10 flex items-center gap-4">
+            <span className="inline-flex items-center gap-2 rounded-full border border-pink-300/30 bg-pink-300/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-pink-200">
+              <span className="text-sm">✦</span> Sobre mí
+            </span>
+            <span className="h-px flex-1 bg-gradient-to-r from-pink-300/40 via-white/10 to-transparent" />
           </div>
 
-          <aside className="cosmic-console hidden rounded-lg border border-white/15 bg-zinc-950/55 p-6 shadow-2xl shadow-pink-950/40 backdrop-blur-md lg:block">
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-sm font-semibold uppercase tracking-wide text-zinc-400">
-                Resumen
-              </p>
-              <span className="h-3 w-3 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.9)]" />
-            </div>
-
-            <div className="mt-6 grid gap-3">
-              {orbitStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-lg border border-white/10 bg-white/[0.06] p-4 transition hover:-translate-y-0.5 hover:border-cyan-200/60 hover:bg-cyan-200/10"
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr] lg:gap-8">
+            {/* Left — big quote card with animated gradient border */}
+            <div className="group relative rounded-3xl bg-gradient-to-br from-cyan-400/50 via-violet-400/40 to-pink-400/50 p-px transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-950/40">
+              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-[#08060f]/90 p-8 backdrop-blur-md">
+                {/* Giant decorative quote mark */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-3 -top-10 select-none font-serif text-[10rem] leading-none text-white/[0.06]"
                 >
-                  <p className="text-3xl font-black text-white">{stat.value}</p>
-                  <p className="mt-1 text-sm text-zinc-300">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+                  ”
+                </span>
+                {/* Floating sparkle */}
+                <span
+                  aria-hidden
+                  className="animate-float absolute right-8 top-8 text-cyan-300/70"
+                >
+                  ✦
+                </span>
 
-            <div className="mt-6 rounded-lg border border-pink-300/25 bg-pink-300/10 p-4">
-              <p className="text-sm font-semibold text-pink-100">
-                Ahora estoy profundizando
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {focusAreas.map((area) => (
-                  <span
-                    key={area}
-                    className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-medium text-zinc-100"
-                  >
-                    {area}
+                <h2 className="relative text-3xl font-bold leading-snug tracking-tight sm:text-4xl">
+                  Curiosa por naturaleza, me gusta entender{" "}
+                  <span className="text-shimmer">cómo funcionan las cosas</span> y
+                  compartir lo que sé.
+                </h2>
+
+                <Link
+                  href="#story"
+                  className="group/btn mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-200/10 hover:text-cyan-100"
+                >
+                  Ver historia profesional
+                  <span aria-hidden className="transition-transform group-hover/btn:translate-x-1">
+                    →
                   </span>
-                ))}
+                </Link>
               </div>
             </div>
-          </aside>
-        </div>
-      </section>
 
-      <section className="section-shell py-16">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
-          <div className="rounded-lg border border-white/10 bg-white/[0.045] p-6 backdrop-blur-sm lg:-translate-y-6">
-            <p className="text-sm font-semibold uppercase tracking-wide text-pink-300">
-              Sobre mí
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight">
-             Curiosa por naturaleza, me gusta entender cómo funcionan las cosas y compartir lo que sé.
-            </h2>
-            <Link
-              href="#story"
-              className="mt-6 inline-flex rounded-lg border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:-translate-y-0.5 hover:border-cyan-200"
-            >
-              Ver historia profesional
-            </Link>
+            {/* Right — editor window with bio + highlighted keywords */}
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/50 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-white/20">
+              {/* Window title bar */}
+              <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
+                <span className="h-3 w-3 rounded-full bg-pink-400/80" />
+                <span className="h-3 w-3 rounded-full bg-amber-300/80" />
+                <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+                <span className="ml-3 font-mono text-xs text-zinc-500">sobre-mi.md</span>
+              </div>
+
+              {/* Bio */}
+              <div className="p-6 sm:p-8">
+                <p className="text-lg leading-9 text-zinc-200">
+                  Soy{" "}
+                  <span className="font-semibold text-cyan-300">Ingeniera en Informática</span> y trabajo actualmente como{" "}
+                  <span className="font-semibold text-pink-300">Frontend Engineer</span>. Mi
+                  experiencia laboral se concentra en productos web y mobile, con foco en{" "}
+                  <span className="font-semibold text-pink-300">frontend</span>, aunque también
+                  tengo experiencia con{" "}
+                  <span className="font-semibold text-violet-300">backend</span>. Soy ayudante de
+                  catedra en{" "}
+                  <span className="font-semibold text-amber-300">FIUBA</span>, donde me encuentro
+                  en constante contacto con la{" "}
+                  <span className="font-semibold text-emerald-300">docencia</span> y el
+                  aprendizaje de nuevos conceptos. Actualmente estoy integrando mis
+                  conocimientos de ingeniería en el aprendizaje de{" "}
+                  <span className="font-semibold text-cyan-300">cloud</span>,{" "}
+                  <span className="font-semibold text-amber-300">AWS</span> y{" "}
+                  <span className="font-semibold text-violet-300">agentes de IA</span>, ya que me
+                  interesa muchísimo poder trabajar con ellos.
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="rounded-lg border border-white/10 bg-black/35 p-6 text-lg leading-8 text-zinc-200 backdrop-blur-sm lg:translate-y-8">
-            Soy Ingeniera en Informática y Frontend Engineer. Mi experiencia
-            laboral se concentra en productos web y mobile, con foco en frontend, aunque también tengo experiencia con backend.
-            Soy ayudante de catedra en FIUBA, donde me encuentro en constante contacto con la docencia y el aprendizaje de nuevos conceptos. 
-          </p>
+
+          {/* Idiomas */}
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {[
+              { flag: "🇬🇧", name: "Inglés", level: "B2", pct: 75, color: "from-cyan-400 to-cyan-300" },
+              { flag: "🇩🇪", name: "Alemán", level: "B2", pct: 75, color: "from-violet-400 to-violet-300" },
+              { flag: "🇦🇷", name: "Español", level: "Nativo", pct: 100, color: "from-pink-400 to-pink-300" },
+            ].map((lang) => (
+              <div
+                key={lang.name}
+                className="group rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-white/20"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{lang.flag}</span>
+                    <span className="text-base font-semibold text-white">{lang.name}</span>
+                  </div>
+                  <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-0.5 text-xs font-bold text-zinc-200">
+                    {lang.level}
+                  </span>
+                </div>
+                <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className={`h-full rounded-full bg-gradient-to-r ${lang.color}`}
+                    style={{ width: `${lang.pct}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -249,6 +239,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ContactSection />
     </main>
   );
 }
