@@ -5,6 +5,15 @@ import ProfessionalStoryTimeline from "../../components/ProfessionalStoryTimelin
 import TechStackShowcase from "../../components/TechStackShowcase";
 import { getAllPostsMeta } from "../../lib/posts";
 
+function toFileName(text: string) {
+  return text
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 const projects = [
   {
     title: "Personal blog",
@@ -183,17 +192,29 @@ export default function Home() {
           {projects.map((project) => (
             <article
               key={project.title}
-              className="group rounded-lg border border-white/10 bg-black/55 p-6 shadow-sm backdrop-blur-sm transition hover:-translate-y-1 hover:border-pink-300/70 hover:bg-black/70 hover:shadow-xl hover:shadow-pink-950/30"
+              className="group overflow-hidden rounded-xl border border-white/10 bg-black/55 shadow-sm backdrop-blur-sm transition hover:-translate-y-1 hover:border-pink-300/60 hover:shadow-xl hover:shadow-pink-950/30"
             >
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-lg font-semibold">{project.title}</h3>
-                <span className="shrink-0 rounded-md bg-pink-400/10 px-2.5 py-1 text-xs font-semibold text-pink-200 transition group-hover:bg-cyan-400/10 group-hover:text-cyan-200">
-                  {project.status}
+              {/* Mac window title bar */}
+              <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-2.5">
+                <span className="h-3 w-3 rounded-full bg-pink-400/80" />
+                <span className="h-3 w-3 rounded-full bg-amber-300/80" />
+                <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+                <span className="ml-2 truncate font-mono text-xs text-zinc-500">
+                  {toFileName(project.title)}.tsx
                 </span>
               </div>
-              <p className="mt-4 text-sm leading-6 text-zinc-300">
-                {project.description}
-              </p>
+              {/* Body */}
+              <div className="p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-lg font-semibold">{project.title}</h3>
+                  <span className="shrink-0 rounded-md bg-pink-400/10 px-2.5 py-1 text-xs font-semibold text-pink-200 transition group-hover:bg-cyan-400/10 group-hover:text-cyan-200">
+                    {project.status}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-zinc-300">
+                  {project.description}
+                </p>
+              </div>
             </article>
           ))}
         </div>
@@ -223,17 +244,29 @@ export default function Home() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="rounded-lg border border-white/10 bg-black/45 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-cyan-300/70 hover:bg-black/70 hover:shadow-xl hover:shadow-cyan-950/30"
+                className="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-black/45 backdrop-blur-sm transition hover:-translate-y-1 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-950/30"
               >
-                <p className="text-xs font-medium text-zinc-400">
-                  {post.date}
-                </p>
-                <h3 className="mt-3 text-lg font-semibold">{post.title}</h3>
-                {post.summary ? (
-                  <p className="mt-3 text-sm leading-6 text-zinc-300">
-                    {post.summary}
-                  </p>
-                ) : null}
+                {/* Mac window title bar */}
+                <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-2.5">
+                  <span className="h-3 w-3 rounded-full bg-pink-400/80" />
+                  <span className="h-3 w-3 rounded-full bg-amber-300/80" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+                  <span className="ml-2 truncate font-mono text-xs text-zinc-500">
+                    {toFileName(post.slug.replace(/^\d{4}-\d{2}-\d{2}-/, ""))}.md
+                  </span>
+                </div>
+                {/* Body */}
+                <div className="p-5">
+                  <p className="text-xs font-medium text-zinc-400">{post.date}</p>
+                  <h3 className="mt-3 text-lg font-semibold transition group-hover:text-cyan-200">
+                    {post.title}
+                  </h3>
+                  {post.summary ? (
+                    <p className="mt-3 text-sm leading-6 text-zinc-300">
+                      {post.summary}
+                    </p>
+                  ) : null}
+                </div>
               </Link>
             ))}
           </div>
