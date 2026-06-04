@@ -64,8 +64,8 @@ export const projects: Project[] = [
     tagline: "Automatizando recetas médicas en el Hospital Garrahan.",
     description:
       "Plataforma web para prescripción pediátrica oncológica con cálculo automático de dosis y trazabilidad de medicamentos.",
-    status: "Iterando",
-    progress: 90,
+    status: "Completado",
+    progress: 100,
     period: "2024 – 2025",
     context: "Trabajo Profesional · FIUBA · Hospital Garrahan",
     stack: [
