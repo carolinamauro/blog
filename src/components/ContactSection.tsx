@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { t, type Lang } from "@/src/lib/i18n";
 
 type Contact = {
   label: string;
@@ -54,7 +55,7 @@ const contacts: Contact[] = [
   },
 ];
 
-function ContactCard({ contact }: { contact: Contact }) {
+function ContactCard({ contact, lang }: { contact: Contact; lang: Lang }) {
   const [copied, setCopied] = useState(false);
   const isExternal = contact.href.startsWith("http");
 
@@ -79,7 +80,7 @@ function ContactCard({ contact }: { contact: Contact }) {
       </span>
 
       <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-        {contact.label}
+        {t(contact.label, lang)}
       </span>
 
       {/* Value — links out, wraps nicely on small screens */}
@@ -97,21 +98,21 @@ function ContactCard({ contact }: { contact: Contact }) {
         type="button"
         onClick={copy}
         className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-semibold text-zinc-300 transition hover:border-white/25 hover:text-white"
-        aria-label={`Copiar ${contact.label}`}
+        aria-label={`${t("Copiar", lang)} ${t(contact.label, lang)}`}
       >
         {copied ? (
           <>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-3.5 w-3.5 text-emerald-300">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            <span className="text-emerald-300">Copiado</span>
+            <span className="text-emerald-300">{t("Copiado", lang)}</span>
           </>
         ) : (
           <>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-3.5 w-3.5">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 8V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-3M5 8h9a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z" />
             </svg>
-            Copiar
+            {t("Copiar", lang)}
           </>
         )}
       </button>
@@ -119,7 +120,7 @@ function ContactCard({ contact }: { contact: Contact }) {
   );
 }
 
-export default function ContactSection() {
+export default function ContactSection({ lang }: { lang: Lang }) {
   return (
     <section id="contact" className="section-shell relative overflow-hidden py-20">
       {/* Decorative blobs */}
@@ -134,19 +135,18 @@ export default function ContactSection() {
 
       <div className="relative z-[1] mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <span className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-cyan-200">
-          <span className="text-sm">✦</span> Contacto
+          <span className="text-sm">✦</span> {t("Contacto", lang)}
         </span>
         <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
-          ¿Trabajamos juntos? <span className="text-shimmer">Hablemos</span>
+          {t("¿Trabajamos juntos?", lang)} <span className="text-shimmer">{t("Hablemos", lang)}</span>
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-zinc-300">
-          Estoy abierta a nuevas oportunidades, colaboraciones y proyectos. Escribime por el medio
-          que prefieras.
+          {t("Estoy abierta a nuevas oportunidades, colaboraciones y proyectos. Escribime por el medio que prefieras.", lang)}
         </p>
 
         <div className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-3">
           {contacts.map((c) => (
-            <ContactCard key={c.label} contact={c} />
+            <ContactCard key={c.label} contact={c} lang={lang} />
           ))}
         </div>
       </div>

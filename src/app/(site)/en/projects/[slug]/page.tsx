@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { projects, getProjectBySlug } from "../../../../lib/projects";
-import ProjectDetailView from "../../../../components/views/ProjectDetailView";
+import { projects, getProjectBySlug } from "../../../../../lib/projects";
+import ProjectDetailView from "../../../../../components/views/ProjectDetailView";
+import { t } from "../../../../../lib/i18n";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -15,16 +16,16 @@ export async function generateMetadata({
   const project = getProjectBySlug(slug);
   if (!project) return {};
   return {
-    title: `${project.title} · Carolina Mauro`,
-    description: project.description,
+    title: `${t(project.title, "en")} · Carolina Mauro`,
+    description: t(project.description, "en"),
   };
 }
 
-export default async function ProjectDetailPage({
+export default async function ProjectDetailPageEn({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <ProjectDetailView slug={slug} lang="es" />;
+  return <ProjectDetailView slug={slug} lang="en" />;
 }

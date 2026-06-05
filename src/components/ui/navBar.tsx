@@ -3,34 +3,45 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import {
+  t,
+  langFromPathname,
+  localizedHref,
+  stripLangPrefix,
+} from "@/src/lib/i18n";
+import LangSwitch from "../LangSwitch";
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const pathname = usePathname();
+    const lang = langFromPathname(pathname);
+    const canonical = stripLangPrefix(pathname);
+  
+   
+
     const navigation = [{
-        name: 'Portfolio',
-        href: '/',
+        name: t("Portfolio", lang),
+        href: localizedHref("/", lang),
         pathname: '/',
     }, {
-        name: 'Proyectos',
-        href: '/projects',
+        name: t("Proyectos", lang),
+        href: localizedHref("/projects", lang),
         pathname: '/projects',
     }, {
-        name: 'Blog',
+        name: t("Blog", lang),
         href: '/blog',
         pathname: '/blog',
     }];
 
     const selectedStyle = "rounded-md bg-white/80 px-3 py-2 text-sm font-semibold text-pink-700 shadow-sm backdrop-blur";
     const unselectedStyle = "rounded-md px-3 py-2 text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/10 transition-colors";
-    
-    const pathname = usePathname();
 
     function isActive(currentPathname: string) {
         if (currentPathname === "/") {
-          return pathname === "/";
+          return canonical === "/";
         }
-        return pathname.startsWith(currentPathname);
+        return canonical.startsWith(currentPathname);
     }
 
     return (
@@ -38,10 +49,10 @@ export default function NavBar() {
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <button 
-                  type="button" 
-                  data-command="--toggle" 
-                  data-commandfor="mobile-menu" 
+                <button
+                  type="button"
+                  data-command="--toggle"
+                  data-commandfor="mobile-menu"
                   className="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-300 hover:bg-white/10 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-pink-300"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
@@ -57,10 +68,14 @@ export default function NavBar() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                        <Link href={item.href} aria-current="page" key={item.name} className={isActive(item.pathname) ? selectedStyle : unselectedStyle}>{item.name}</Link>
+                        <Link href={item.href} aria-current="page" key={item.pathname} className={isActive(item.pathname) ? selectedStyle : unselectedStyle}>{item.name}</Link>
                     ))}
                   </div>
                 </div>
+              </div>
+              {/* Language switch (desktop) */}
+              <div className="absolute inset-y-0 right-0 hidden items-center sm:flex">
+                <LangSwitch />
               </div>
             </div>
           </div>
@@ -68,10 +83,13 @@ export default function NavBar() {
             <div className="sm:hidden" id="mobile-menu">
               <div className="space-y-1 px-2 pt-2 pb-3">
                 {navigation.map((item) => (
-                  <Link href={item.href} key={item.name} className={isActive(item.pathname) ? selectedStyle : unselectedStyle}>
+                  <Link href={item.href} key={item.pathname} className={isActive(item.pathname) ? selectedStyle : unselectedStyle}>
                     {item.name}
                   </Link>
                 ))}
+                <div className="px-1 pt-2">
+                  <LangSwitch />
+                </div>
               </div>
             </div>
           )}
