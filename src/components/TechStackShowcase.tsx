@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
+import { t, type Lang } from "@/src/lib/i18n";
 
 const ICON_BASE = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
 
@@ -41,8 +43,7 @@ const tabs: Array<"All" | Category> = ["All", ...categoryOrder];
 function TechCard({ name, icon, invert }: { name: string; icon: string; invert?: boolean }) {
   return (
     <div className="group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-all duration-200 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/[0.08] hover:shadow-xl hover:shadow-black/40">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={icon}
         alt={name}
         width={48}
@@ -57,7 +58,7 @@ function TechCard({ name, icon, invert }: { name: string; icon: string; invert?:
   );
 }
 
-export default function TechStackShowcase() {
+export default function TechStackShowcase({ lang }: { lang: Lang }) {
   const [active, setActive] = useState<"All" | Category>("All");
 
   const grouped = categoryOrder.reduce<Record<Category, typeof stack>>((acc, cat) => {
@@ -74,10 +75,9 @@ export default function TechStackShowcase() {
           Tech stack
         </p>
         <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-          Herramientas que uso
+          {t("Herramientas que uso", lang)}
         </h2>
 
-        {/* Filter tabs */}
         <div className="mt-8 flex flex-wrap gap-2 border-b border-white/10 pb-4">
           {tabs.map((tab) => (
             <button
@@ -90,12 +90,11 @@ export default function TechStackShowcase() {
                   : "text-zinc-500 hover:text-zinc-200"
               }`}
             >
-              {tab}
+              {t(tab, lang)}
             </button>
           ))}
         </div>
 
-        {/* Grid — filtered single category */}
         {filtered && (
           <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
             {filtered.map((item) => (
@@ -104,13 +103,12 @@ export default function TechStackShowcase() {
           </div>
         )}
 
-        {/* Grid — all, grouped by category */}
         {!filtered && (
           <div className="mt-8 space-y-10">
             {categoryOrder.map((cat) => (
               <div key={cat}>
                 <p className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  {cat}
+                  {t(cat, lang)}
                 </p>
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
                   {grouped[cat].map((item) => (

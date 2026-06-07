@@ -10,6 +10,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
+import { t, type Lang } from "@/src/lib/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Caricature (fixed image)                                           */
@@ -207,7 +208,7 @@ function FloatingEl({
 /*  Main component                                                     */
 /* ------------------------------------------------------------------ */
 
-export default function HeroCaricature() {
+export default function HeroCaricature({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion();
 
   /* ---- Mouse position (normalized -0.5..0.5) for parallax ---- */
@@ -267,29 +268,29 @@ export default function HeroCaricature() {
         >
           {[
             <p key="greeting" className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200">
-              Hola, soy
+              {t("Hola, soy", lang)}
             </p>,
             <h1 key="name" className="mt-3 text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl">
               <span className="text-shimmer">Carolina Mauro</span>
             </h1>,
             <h2 key="headline" className="mt-4 text-xl font-semibold text-zinc-200 sm:text-2xl">
-              Ingeniera en Informática &amp; Frontend Engineer
+              {t("Ingeniera en Informática & Frontend Engineer", lang)}
             </h2>,
             <p key="desc" className="mx-auto mt-5 max-w-md text-base leading-7 text-zinc-400 lg:mx-0">
-              Apasionada por aprender.
+              {t("Apasionada por aprender.", lang)}
             </p>,
             <div key="cta" className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start lg:justify-start">
               <Link
                 href="/blog"
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 px-7 py-3 text-sm font-bold text-zinc-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-cyan-500/40"
               >
-                Ver blog
+                {t("Ver blog", lang)}
               </Link>
               <a
                 href="#contact"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.05] px-7 py-3 text-sm font-bold text-zinc-100 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-pink-300/50 hover:text-pink-100"
               >
-                Contactame
+                {t("Contactame", lang)}
               </a>
             </div>,
           ].map((child, i) => (

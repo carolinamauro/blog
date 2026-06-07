@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { t, type Lang } from "@/src/lib/i18n";
 
 type EventType = "education" | "work" | "ta" | "project";
 
@@ -105,7 +106,7 @@ const DOT_COLOR: Record<EventType, string> = {
   project:   "bg-amber-400  shadow-[0_0_16px_6px_rgba(251,191,36,0.6)]",
 };
 
-function TimelineItem({ event, index }: { event: TimelineEvent; index: number }) {
+function TimelineItem({ event, lang }: { event: TimelineEvent; lang: Lang }) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
 
@@ -130,7 +131,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-50" />
         <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
       </span>
-      en curso
+      {t("en curso", lang)}
     </span>
   );
 
@@ -141,7 +142,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
           key={tag}
           className="rounded-md border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs font-medium text-zinc-400"
         >
-          {tag}
+          {t(tag, lang)}
         </span>
       ))}
     </div>
@@ -166,7 +167,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
               active ? "text-white text-2xl" : "text-zinc-700 text-xl"
             }`}
           >
-            {event.year}
+            {t(event.year, lang)}
           </span>
           {event.ongoing && active && ongoingBadge}
         </div>
@@ -175,13 +176,13 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
             active ? "text-white" : "text-zinc-500"
           }`}
         >
-          {event.title}
+          {t(event.title, lang)}
         </h3>
         <p className={`mt-0.5 text-sm font-medium transition-colors duration-500 ${active ? color : "text-zinc-600"}`}>
-          {event.subtitle}
+          {t(event.subtitle, lang)}
         </p>
         <p className={`mt-3 text-sm leading-7 transition-colors duration-500 ${active ? "text-zinc-300" : "text-zinc-600"}`}>
-          {event.description}
+          {t(event.description, lang)}
         </p>
         {active && tags}
       </div>
@@ -195,10 +196,10 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
               active ? "text-white" : "text-zinc-500"
             }`}
           >
-            {event.title}
+            {t(event.title, lang)}
           </h3>
           <p className={`mt-1 text-sm font-medium transition-colors duration-500 ${active ? color : "text-zinc-600"}`}>
-            {event.subtitle}
+            {t(event.subtitle, lang)}
           </p>
           {event.ongoing && active && (
             <span className="mt-2 flex justify-end">{ongoingBadge}</span>
@@ -212,7 +213,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
               active ? "text-white text-3xl lg:text-4xl" : "text-zinc-700 text-2xl lg:text-3xl"
             }`}
           >
-            {event.year}
+            {t(event.year, lang)}
           </span>
           <div
             className={`relative z-10 mt-4 h-3.5 w-3.5 rounded-full border-2 border-black transition-all duration-500 ${
@@ -228,7 +229,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
               active ? "text-zinc-300" : "text-zinc-600"
             }`}
           >
-            {event.description}
+            {t(event.description, lang)}
           </p>
           {active && tags}
         </div>
@@ -237,7 +238,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
   );
 }
 
-export default function ProfessionalStoryTimeline() {
+export default function ProfessionalStoryTimeline({ lang }: { lang: Lang }) {
   return (
     <section id="story" className="relative py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -245,8 +246,8 @@ export default function ProfessionalStoryTimeline() {
         {/* Header */}
         <div className="mb-4 text-center">
           <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Mi carrera &{" "}
-            <span className="text-violet-400">experiencia</span>
+            {t("Mi carrera &", lang)}{" "}
+            <span className="text-violet-400">{t("experiencia", lang)}</span>
           </h2>
         </div>
 
@@ -256,7 +257,7 @@ export default function ProfessionalStoryTimeline() {
             <div key={type} className="flex items-center gap-1.5">
               <span className={`h-2 w-2 rounded-full ${DOT_COLOR[type].split(" ")[0]}`} />
               <span className="text-xs text-zinc-500">
-                {{ education: "Educación", work: "Trabajo", ta: "Docencia", project: "Proyecto" }[type]}
+                {t({ education: "Educación", work: "Trabajo", ta: "Docencia", project: "Proyecto" }[type], lang)}
               </span>
             </div>
           ))}
@@ -268,8 +269,8 @@ export default function ProfessionalStoryTimeline() {
           {/* Vertical line — left on mobile, centered on desktop */}
           <div className="pointer-events-none absolute inset-y-0 left-1.5 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent md:left-1/2 md:-translate-x-1/2" />
 
-          {events.map((event, i) => (
-            <TimelineItem key={event.id} event={event} index={i} />
+          {events.map((event) => (
+            <TimelineItem key={event.id} event={event} lang={lang} />
           ))}
         </div>
 
