@@ -126,11 +126,11 @@ export default function ContactSection({ lang }: { lang: Lang }) {
       {/* Decorative blobs */}
       <div
         className="nebula-blob animate-nebula"
-        style={{ top: "0", left: "10%", width: "24rem", height: "24rem", "--blob": "rgba(129,140,248,0.10)", zIndex: 0 }}
+        style={{ top: "0", left: "10%", width: "24rem", height: "24rem", background: "radial-gradient(closest-side, rgba(129,140,248,0.10), transparent 78%)", zIndex: 0 }}
       />
       <div
         className="nebula-blob animate-nebula"
-        style={{ bottom: "0", right: "8%", width: "22rem", height: "22rem", "--blob": "rgba(244,114,182,0.10)", zIndex: 0, animationDelay: "4s" }}
+        style={{ bottom: "0", right: "8%", width: "22rem", height: "22rem", background: "radial-gradient(closest-side, rgba(244,114,182,0.10), transparent 78%)", zIndex: 0, animationDelay: "4s" }}
       />
 
       <div className="relative z-[1] mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">

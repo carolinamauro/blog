@@ -191,12 +191,9 @@ html {
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
-  /* Glow painted as a soft radial-gradient instead of filter: blur().
-     filter promotes the element to its own compositing layer, and large
-     blurred layers are the classic cause of black "checkerboard" flashes on
-     fast scroll. A radial-gradient is painted as a normal background — no
-     extra layer, no flash. Each blob passes its colour via --blob. */
-  background: radial-gradient(closest-side, var(--blob, rgba(129, 140, 248, 0.12)), transparent 78%);
+  /* Each blob sets its own `background: radial-gradient(...)` inline.
+     Painted as a normal background (no filter:blur, no compositing layer),
+     so it can't cause the black "checkerboard" flash on fast scroll. */
 }
 
 /* ── Perf: drop backdrop-filter ──

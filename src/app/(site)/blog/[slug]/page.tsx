@@ -32,11 +32,11 @@ export default async function BlogPostPage({
       {/* Nebula blobs */}
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-4rem", right: "-2rem", width: "28rem", height: "28rem", "--blob": "rgba(139,92,246,0.14)" }}
+        style={{ top: "-4rem", right: "-2rem", width: "28rem", height: "28rem", background: "radial-gradient(closest-side, rgba(139,92,246,0.14), transparent 78%)" }}
       />
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ bottom: "0", left: "-4rem", width: "32rem", height: "32rem", "--blob": "rgba(6,182,212,0.10)", animationDelay: "4s" }}
+        style={{ bottom: "0", left: "-4rem", width: "32rem", height: "32rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.10), transparent 78%)", animationDelay: "4s" }}
       />
 
       <article className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">

@@ -186,7 +186,7 @@ export default function HeroCaricature({ lang }: { lang: Lang }) {
               <span className="text-shimmer">Carolina Mauro</span>
             </h1>,
             <h2 key="headline" className="mt-4 text-xl font-semibold text-zinc-200 sm:text-2xl">
-              {t("Ingeniera en Informática & Frontend Engineer", lang)}
+              {t("Ingeniera en Informática", lang)}
             </h2>,
             <p key="desc" className="mx-auto mt-5 max-w-md text-base leading-7 text-zinc-400 lg:mx-0">
               {t("Apasionada por aprender.", lang)}

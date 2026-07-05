@@ -38,11 +38,11 @@ export default function ProjectsView({ lang }: { lang: Lang }) {
     <main className="relative z-10 min-h-screen overflow-hidden px-4 pb-16 pt-24 sm:px-6 lg:px-8">
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-2rem", right: "2rem", width: "30rem", height: "30rem", "--blob": "rgba(139,92,246,0.15)" }}
+        style={{ top: "-2rem", right: "2rem", width: "30rem", height: "30rem", background: "radial-gradient(closest-side, rgba(139,92,246,0.15), transparent 78%)" }}
       />
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "20rem", left: "-2rem", width: "26rem", height: "26rem", "--blob": "rgba(6,182,212,0.12)", animationDelay: "4s" }}
+        style={{ top: "20rem", left: "-2rem", width: "26rem", height: "26rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.12), transparent 78%)", animationDelay: "4s" }}
       />
 
       <div className="mx-auto max-w-4xl">

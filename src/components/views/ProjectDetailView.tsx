@@ -46,11 +46,11 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
       {/* Nebula blobs */}
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-2rem", right: 0, width: "32rem", height: "32rem", "--blob": "rgba(139,92,246,0.13)" }}
+        style={{ top: "-2rem", right: 0, width: "32rem", height: "32rem", background: "radial-gradient(closest-side, rgba(139,92,246,0.13), transparent 78%)" }}
       />
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "40rem", left: "-4rem", width: "28rem", height: "28rem", "--blob": "rgba(6,182,212,0.10)", animationDelay: "5s" }}
+        style={{ top: "40rem", left: "-4rem", width: "28rem", height: "28rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.10), transparent 78%)", animationDelay: "5s" }}
       />
 
       <div className="mx-auto max-w-3xl">

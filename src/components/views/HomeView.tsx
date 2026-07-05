@@ -47,11 +47,11 @@ export default function HomeView({ lang }: { lang: Lang }) {
         {/* Decorative blobs */}
         <div
           className="nebula-blob animate-nebula"
-          style={{ top: "1rem", left: "-3rem", width: "22rem", height: "22rem", "--blob": "rgba(244,114,182,0.10)", zIndex: 0 }}
+          style={{ top: "1rem", left: "-3rem", width: "22rem", height: "22rem", background: "radial-gradient(closest-side, rgba(244,114,182,0.10), transparent 78%)", zIndex: 0 }}
         />
         <div
           className="nebula-blob animate-nebula"
-          style={{ bottom: "0", right: "-2rem", width: "24rem", height: "24rem", "--blob": "rgba(6,182,212,0.10)", zIndex: 0, animationDelay: "5s" }}
+          style={{ bottom: "0", right: "-2rem", width: "24rem", height: "24rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.10), transparent 78%)", zIndex: 0, animationDelay: "5s" }}
         />
 
         <div className="relative z-[1] mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -116,7 +116,7 @@ export default function HomeView({ lang }: { lang: Lang }) {
                   {t("Soy", lang)}{" "}
                   <span className="font-semibold text-cyan-300">{t("Ingeniera en Informática", lang)}</span>{" "}
                   {t("y trabajo actualmente como", lang)}{" "}
-                  <span className="font-semibold text-pink-300">{t("Frontend Engineer", lang)}</span>.{" "}
+                  <span className="font-semibold text-pink-300">{t("Frontend Developer", lang)}</span>.{" "}
                   {t("Mi experiencia laboral se concentra en productos web y mobile, con foco en", lang)}{" "}
                   <span className="font-semibold text-pink-300">{t("frontend", lang)}</span>,{" "}
                   {t("aunque también tengo experiencia con", lang)}{" "}

@@ -9,11 +9,11 @@ export default function BlogIndex() {
       {/* Nebula blobs */}
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-5rem", left: "-5rem", width: "28rem", height: "28rem", "--blob": "rgba(6,182,212,0.18)", animationDelay: "0s" }}
+        style={{ top: "-5rem", left: "-5rem", width: "28rem", height: "28rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.18), transparent 78%)", animationDelay: "0s" }}
       />
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "10rem", right: "-2rem", width: "32rem", height: "32rem", "--blob": "rgba(236,72,153,0.13)", animationDelay: "3s" }}
+        style={{ top: "10rem", right: "-2rem", width: "32rem", height: "32rem", background: "radial-gradient(closest-side, rgba(236,72,153,0.13), transparent 78%)", animationDelay: "3s" }}
       />
 
       <div className="mx-auto max-w-3xl">
