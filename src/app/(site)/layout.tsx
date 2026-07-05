@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import "../../styles/globals.css";
 import NavBar from "@/src/components/ui/navBar";
-import StarField from "@/src/components/StarField";
 import { langFromPathname } from "@/src/lib/i18n";
 
 const geistSans = Geist({
@@ -35,7 +34,6 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StarField />
         <NavBar />
           {children}
       </body>

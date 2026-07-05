@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getPostBySlug, getPostSlugs } from "../../../../lib/posts";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Footer from "@/src/components/ui/footer";
-import Image from "next/image";
 import remarkGfm from "remark-gfm";
 
 export function generateStaticParams() {
@@ -33,11 +32,11 @@ export default async function BlogPostPage({
       {/* Nebula blobs */}
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-4rem", right: "-2rem", width: "28rem", height: "28rem", background: "rgba(139,92,246,0.14)" }}
+        style={{ top: "-4rem", right: "-2rem", width: "28rem", height: "28rem", "--blob": "rgba(139,92,246,0.14)" }}
       />
       <div
         className="nebula-blob animate-nebula -z-10"
-        style={{ bottom: "0", left: "-4rem", width: "32rem", height: "32rem", background: "rgba(6,182,212,0.10)", animationDelay: "4s" }}
+        style={{ bottom: "0", left: "-4rem", width: "32rem", height: "32rem", "--blob": "rgba(6,182,212,0.10)", animationDelay: "4s" }}
       />
 
       <article className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -102,7 +101,7 @@ export default async function BlogPostPage({
           prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:text-cyan-200
           prose-strong:text-white
           prose-code:text-pink-300 prose-code:bg-white/[0.06] prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-          prose-pre:rounded-xl prose-pre:border prose-pre:border-white/10 prose-pre:bg-black/60
+          prose-pre:rounded-xl prose-pre:border prose-pre:border-white/10 prose-pre:bg-black/60 prose-pre:overflow-x-auto
           prose-blockquote:border-l-cyan-400 prose-blockquote:text-zinc-400
           prose-hr:border-white/10
           prose-ul:text-zinc-300 prose-ol:text-zinc-300
@@ -113,7 +112,14 @@ export default async function BlogPostPage({
             source={post.content}
             components={{
               img: (props) => (
-                <Image {...props} alt={props.alt ?? ""} width={800} height={450} className="rounded-xl border border-white/10" />
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  {...props}
+                  alt={props.alt ?? ""}
+                  loading="lazy"
+                  decoding="async"
+                  className="mx-auto h-auto w-full max-w-full rounded-xl border border-white/10"
+                />
               ),
             }}
             options={{

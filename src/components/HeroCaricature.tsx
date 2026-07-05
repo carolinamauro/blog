@@ -2,14 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, type ReactNode } from "react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "motion/react";
+import { type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { t, type Lang } from "@/src/lib/i18n";
 
 /* ------------------------------------------------------------------ */
@@ -30,36 +24,6 @@ function Caricature() {
         className="select-none object-contain drop-shadow-2xl"
       />
     </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Cursor follower glow                                               */
-/* ------------------------------------------------------------------ */
-
-function CursorGlow() {
-  const x = useMotionValue(-200);
-  const y = useMotionValue(-200);
-  const sx = useSpring(x, { stiffness: 150, damping: 20, mass: 0.4 });
-  const sy = useSpring(y, { stiffness: 150, damping: 20, mass: 0.4 });
-
-  useEffect(() => {
-    const move = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    };
-    window.addEventListener("pointermove", move);
-    return () => window.removeEventListener("pointermove", move);
-  }, [x, y]);
-
-  return (
-    <motion.div
-      aria-hidden
-      style={{ x: sx, y: sy }}
-      className="pointer-events-none fixed left-0 top-0 z-30 hidden md:block"
-    >
-      <div className="h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/15 blur-3xl" />
-    </motion.div>
   );
 }
 
@@ -157,49 +121,21 @@ const floatItems: FloatItem[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Floating element with mouse parallax                               */
+/*  Floating element — entrance only (no infinite loop / no parallax).  */
+/*  Continuously-animating + transform layers are what make the home    */
+/*  page checkerboard to black on fast scroll, so we keep them static.  */
 /* ------------------------------------------------------------------ */
 
-function FloatingEl({
-  item,
-  reduce,
-  mx,
-  my,
-}: {
-  item: FloatItem;
-  reduce: boolean | null;
-  mx: ReturnType<typeof useSpring>;
-  my: ReturnType<typeof useSpring>;
-}) {
-  const px = useTransform(mx, [-0.5, 0.5], [-item.depth, item.depth]);
-  const py = useTransform(my, [-0.5, 0.5], [-item.depth, item.depth]);
-
+function FloatingEl({ item, reduce }: { item: FloatItem; reduce: boolean | null }) {
   return (
     <motion.div
-      style={reduce ? undefined : { x: px, y: py }}
       className={`absolute ${item.position} ${item.hideSm ? "hidden sm:block" : ""}`}
+      initial={reduce ? false : { opacity: 0, scale: 0.6 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: item.delay }}
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={
-          reduce
-            ? { opacity: 1, scale: 1 }
-            : {
-                opacity: 1,
-                scale: 1,
-                y: item.float.y ? [0, item.float.y, 0] : 0,
-                rotate: item.float.rotate ? [0, item.float.rotate, 0] : 0,
-              }
-        }
-        transition={{
-          opacity: { duration: 0.5, delay: item.delay },
-          scale: { duration: 0.5, delay: item.delay },
-          y: { duration: item.duration, delay: item.delay, repeat: Infinity, ease: "easeInOut" },
-          rotate: { duration: item.duration, delay: item.delay, repeat: Infinity, ease: "easeInOut" },
-        }}
-      >
-        {item.node}
-      </motion.div>
+      {item.node}
     </motion.div>
   );
 }
@@ -211,48 +147,24 @@ function FloatingEl({
 export default function HeroCaricature({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion();
 
-  /* ---- Mouse position (normalized -0.5..0.5) for parallax ---- */
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const mx = useSpring(rawX, { stiffness: 80, damping: 18, mass: 0.4 });
-  const my = useSpring(rawY, { stiffness: 80, damping: 18, mass: 0.4 });
-
-  useEffect(() => {
-    if (reduce) return;
-    const onMove = (e: PointerEvent) => {
-      rawX.set(e.clientX / window.innerWidth - 0.5);
-      rawY.set(e.clientY / window.innerHeight - 0.5);
-    };
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
-  }, [reduce, rawX, rawY]);
-
-  // Caricature parallax (gentle, opposite direction feels natural)
-  const caricX = useTransform(mx, [-0.5, 0.5], [12, -12]);
-  const caricY = useTransform(my, [-0.5, 0.5], [10, -10]);
-
   return (
     <section className="relative isolate overflow-hidden text-white">
-      <CursorGlow />
-
-      {/* Soft blurred glow blobs */}
-      <motion.div
+      {/* Soft glow blobs — static radial-gradients (no filter, no animation,
+          no fixed layer) so the home page doesn't checkerboard on fast scroll */}
+      <div
         aria-hidden
-        className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-cyan-500/15 blur-3xl"
-        animate={reduce ? undefined : { x: [0, 30, 0], y: [0, 20, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full"
+        style={{ background: "radial-gradient(closest-side, rgba(6,182,212,0.16), transparent 70%)" }}
       />
-      <motion.div
+      <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 top-1/4 h-[28rem] w-[28rem] rounded-full bg-violet-500/15 blur-3xl"
-        animate={reduce ? undefined : { x: [0, -30, 0], y: [0, 30, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute -right-24 top-1/4 h-[28rem] w-[28rem] rounded-full"
+        style={{ background: "radial-gradient(closest-side, rgba(139,92,246,0.16), transparent 70%)" }}
       />
-      <motion.div
+      <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-pink-500/12 blur-3xl"
-        animate={reduce ? undefined : { x: [0, 20, 0], y: [0, -20, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute bottom-0 left-1/3 h-80 w-80 rounded-full"
+        style={{ background: "radial-gradient(closest-side, rgba(236,72,153,0.13), transparent 70%)" }}
       />
 
       <div className="mx-auto grid min-h-screen max-w-6xl items-center gap-12 px-6 py-24 lg:grid-cols-2 lg:gap-8 lg:px-8">
@@ -309,33 +221,25 @@ export default function HeroCaricature({ lang }: { lang: Lang }) {
         {/* ---------- Right: caricature + floating elements ---------- */}
         <div className="relative order-1 mx-auto w-full max-w-md lg:order-2">
           <div className="relative aspect-[4/5] w-full">
-            {/* Glow behind the image */}
-            <div className="absolute inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-cyan-500/30 to-violet-500/25 blur-2xl" />
+            {/* Glow behind the image — radial-gradient (no filter:blur) */}
+            <div
+              className="absolute inset-0 -z-10 rounded-full"
+              style={{ background: "radial-gradient(closest-side, rgba(99,102,241,0.28), transparent 72%)" }}
+            />
 
-            {/* Caricature: entrance + float + mouse parallax + scroll frames */}
+            {/* Caricature: entrance only */}
             <motion.div
               className="relative h-full w-full"
-              style={reduce ? undefined : { x: caricX, y: caricY }}
+              initial={{ opacity: 0, y: 40, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.div
-                className="relative h-full w-full"
-                initial={{ opacity: 0, y: 40, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.div
-                  className="relative h-full w-full"
-                  animate={reduce ? undefined : { y: [0, -12, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <Caricature />
-                </motion.div>
-              </motion.div>
+              <Caricature />
             </motion.div>
 
             {/* Floating tech elements */}
             {floatItems.map((item) => (
-              <FloatingEl key={item.id} item={item} reduce={reduce} mx={mx} my={my} />
+              <FloatingEl key={item.id} item={item} reduce={reduce} />
             ))}
           </div>
         </div>

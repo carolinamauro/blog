@@ -31,11 +31,22 @@ export default function StarField() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animId: number;
-    let t = 0;
+    // Static (no rAF) on mobile or when the user prefers reduced motion —
+    // this is what keeps scrolling smooth on phones.
+    const staticMode =
+      window.matchMedia("(max-width: 767px)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Opaque background painted by the canvas itself. Because the canvas is
+    // fixed + fully painted, any content area exposed during fast/async scroll
+    // reveals this instead of a black "checkerboard" gap.
+    const BG = "#03030a";
 
     const stars: Star[] = [];
     const shootingStars: ShootingStar[] = [];
+    let animId: number | null = null;
+    let last = 0;
+    let t = 0;
 
     function resize() {
       canvas!.width = window.innerWidth;
@@ -44,7 +55,8 @@ export default function StarField() {
 
     function initStars() {
       stars.length = 0;
-      const count = Math.floor((canvas!.width * canvas!.height) / 4000);
+      // lower density than before (÷5500) + hard cap
+      const count = Math.min(160, Math.floor((canvas!.width * canvas!.height) / 5500));
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas!.width,
@@ -54,6 +66,17 @@ export default function StarField() {
           speed: Math.random() * 0.6 + 0.2,
           twinkleOffset: Math.random() * Math.PI * 2,
         });
+      }
+    }
+
+    function drawStatic() {
+      ctx!.fillStyle = BG;
+      ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
+      for (const star of stars) {
+        ctx!.beginPath();
+        ctx!.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx!.fillStyle = `rgba(255,255,255,${star.opacity})`;
+        ctx!.fill();
       }
     }
 
@@ -72,13 +95,18 @@ export default function StarField() {
       });
     }
 
-    function draw() {
-      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+    function frame(now: number) {
+      animId = requestAnimationFrame(frame);
+      // throttle to ~30fps
+      if (now - last < 33) return;
+      last = now;
       t++;
 
-      // Twinkle stars
+      ctx!.fillStyle = BG;
+      ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
+
       for (const star of stars) {
-        const tw = Math.sin(t * star.speed * 0.04 + star.twinkleOffset);
+        const tw = Math.sin(t * star.speed * 0.08 + star.twinkleOffset);
         const op = star.opacity * (0.6 + 0.4 * tw);
         ctx!.beginPath();
         ctx!.arc(star.x, star.y, star.r, 0, Math.PI * 2);
@@ -86,52 +114,68 @@ export default function StarField() {
         ctx!.fill();
       }
 
-      // Shooting stars
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const s = shootingStars[i];
         s.x += s.vx;
         s.y += s.vy;
         s.life++;
         s.opacity = 1 - s.life / s.maxLife;
-
         if (s.life >= s.maxLife) {
           shootingStars.splice(i, 1);
           continue;
         }
-
-        const grad = ctx!.createLinearGradient(
-          s.x - s.vx * (s.length / s.vx || 8),
-          s.y - s.vy * (s.length / Math.max(Math.abs(s.vy), 1)),
-          s.x,
-          s.y
-        );
-        grad.addColorStop(0, `rgba(103,232,249,0)`);
-        grad.addColorStop(1, `rgba(255,255,255,${s.opacity * 0.9})`);
         ctx!.beginPath();
         ctx!.moveTo(s.x - s.vx * 8, s.y - s.vy * 8);
         ctx!.lineTo(s.x, s.y);
-        ctx!.strokeStyle = grad;
+        ctx!.strokeStyle = `rgba(255,255,255,${s.opacity * 0.8})`;
         ctx!.lineWidth = 1.5;
         ctx!.stroke();
       }
 
-      if (t % 180 === 0) spawnShootingStar();
+      if (t % 220 === 0) spawnShootingStar();
+    }
 
-      animId = requestAnimationFrame(draw);
+    function start() {
+      if (animId == null) {
+        last = 0;
+        animId = requestAnimationFrame(frame);
+      }
+    }
+    function stop() {
+      if (animId != null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
     }
 
     resize();
     initStars();
-    draw();
 
-    window.addEventListener("resize", () => {
+    if (staticMode) {
+      drawStatic();
+      const onResize = () => {
+        resize();
+        initStars();
+        drawStatic();
+      };
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }
+
+    start();
+
+    const onResize = () => {
       resize();
       initStars();
-    });
+    };
+    const onVisibility = () => (document.hidden ? stop() : start());
+    window.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
+      stop();
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 
