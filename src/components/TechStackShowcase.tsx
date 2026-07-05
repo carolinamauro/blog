@@ -23,7 +23,7 @@ const stack: { name: string; icon: string; category: Category; invert?: boolean 
   { name: "Ruby",         icon: `${ICON_BASE}/ruby/ruby-original.svg`,                                 category: "Lenguajes" },
   { name: "C",            icon: `${ICON_BASE}/c/c-original.svg`,                                       category: "Lenguajes" },
   { name: "Docker",       icon: `${ICON_BASE}/docker/docker-original.svg`,                             category: "DevOps" },
-  { name: "AWS",          icon: `${ICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,  category: "DevOps",   invert: true },
+  // { name: "AWS",          icon: `${ICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,  category: "DevOps",   invert: true },
   { name: "Git",          icon: `${ICON_BASE}/git/git-original.svg`,                                   category: "DevOps" },
   { name: "GitHub",       icon: `${ICON_BASE}/github/github-original.svg`,                             category: "DevOps",   invert: true },
   { name: "Linux",        icon: `${ICON_BASE}/linux/linux-original.svg`,                               category: "DevOps" },
