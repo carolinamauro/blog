@@ -1,0 +1,135 @@
+---
+title: "Desarrollo de aplicaciones con IA"
+date: "2026-07-10"
+tags: ["IA", "LLM", "Open Source", "Ollama", "LangChain", "Python"]
+category: "IA"
+summary: "Hoy en día la IA se convirtió en una herramienta esencial en el trabajo de la gran mayoría de la gente. Sin embargo,
+para los desarrolladores, la IA es una oportunidad para crear aplicaciones que antes eran imposibles de desarrollar. Este artículo es el 
+primero de una serie de artículos que buscan mostrar cómo desarrollar aplicaciones con IA, utilizando herramientas de código abierto y LLMs."
+---
+
+
+# Introducción a los modelos LLM y sus conceptos básicos
+
+Empecemos por lo básico, ¿qué es un LLM? Un LLM (Large Language Model) son sistemas de IA entrenados con grandes volúmenes de texto para adquirir
+la capacidad de comprender y generar lenguaje de manera coherente y relevante. Es MUY importante entender que funcionan a base de la estadística: aprenden
+a predecir la probabilidad de una secuencia de palabras usando las previas para anticipar la siguiente. Es decir, los LLM no tienen 
+conciencia ni comprenden el lenguaje como lo hacemos los humanos. Su funcionamiento se basa en patrones y probabilidades.
+
+Los modelos son entrenados con grandes volúmenes de datos de texto, como libros, artículos y sitios web, en un  proceso denominado "pre-entrenamiento" A este conjunto 
+de datos con el cual se alimenta el modelo en el proceso de entrenamiento se lo llama "corpus". El objetivo del entrenamiento es que el modelo "aprenda" a 
+identificar patrones y estructuras del lenguaje natural.
+
+Por ejemplo, durante el entrenamiento, el modelo podría recibir la siguiente oración incompleta: "El gato saltó sobre la..." y el modelo aprendería a predecir 
+que la palabra más probable para completar la oración podría ser "silla". A medida que el modelo procesa más datos ajusta sus parámetros internos para mejorar
+sus predicciones en función del contexto.
+
+> Los LLM no "entienden" el lenguaje de la misma forma que los humanos, aprenden patrones en los datos.
+
+# Tokenización, Prompts y otras técnicas
+
+## Tokenización y Prompts
+
+> **Prompts** son la forma en que el usuario interactúa con el modelo. Es esa la pregunta o declaración que hacemos para que genere una respuesta, es decir, son las entradas
+que le proporcionamos al modelo para que genere una respuesta coherente y relevante.
+
+> **La Tokenización** es el proceso de dividir el texto en piezas más pequeñas llamadas **tokens**. Suelen ser palabras, pero también pueden ser partes de palabras o 
+incluso caracteres individuales. Los LLMs procesan estos tokens para generar respuestas.
+
+Un ejemplo de tokenización por palabras podría ser la frase "El gato saltó sobre la silla" que se tokeniza en: ["El", "gato", "saltó", "sobre", "la", "silla"]. Pero también
+podría tokenizarse en subpalabras o caracteres, dependiendo del modelo y su configuración. Por ejemplo, la palabra "saltó" podría dividirse en ["sal", "tó"].
+
+OpenAI nos facilita una herramienta para ver como tokeniza las palabras el modelo: [Tokenizador de OpenAI](https://platform.openai.com/tokenizer). Por ejemplo, la frase
+con la que venimos trabajando openAI la tokeniza así:
+
+<img 
+  src="/images/tokenizacion.png" 
+  alt="Tokenización de la frase 'El gato saltó sobre la silla' en tokens" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+
+Y pensaran, para que querría yo saber esto? Bueno, la tokenización es importante porque afecta directamente a la forma en que el modelo procesa y genera texto. Y además
+nos va a ayudar a calcular los costos de nuestros prompts ya que dependen directamente del número de tokens utilizados.
+
+### Tipos de prompts
+
+Existen diferentes tipos de prompts que podemos utilizar para interactuar con los LLMs. Algunos de los más comunes son:
+
+1. **Prompts de system:** define las reglas y el comportamiento del modelo. Es la instrucción de mayor nivel que define **cómo debe comportarse el modelo** durante
+la conversación. Puede indicar:
+- Qué rol debe asumir el modelo (por ejemplo, un asistente de programación, un médico, un profesor, etc.).
+- Qué tono debe usar (por ejemplo, formal, informal, técnico, amigable, etc.).
+- Qué reglas debe respetar (por ejemplo, no dar consejos médicos, no generar contenido ofensivo, etc.).
+- Qué formato deben tener las respuestas (por ejemplo, en formato JSON, en párrafos, con ejemplos, etc.).
+- Qué cosas debe evitar (por ejemplo, no inventar información, no dar opiniones personales, etc.).
+Un ejemplo completo seria:
+
+```json
+{
+  "role": "system",
+  "content": "Eres un asistente de programación experto en Python. 
+  Debes responder de manera clara y concisa, proporcionando ejemplos 
+  de código cuando sea necesario. No debes inventar información ni 
+  borrar código que no sea relevante para la pregunta."
+}
+```
+La idea es que el usuario no tenga que estar repitiendo esta instrucción en cada mensaje, ya que el prompt system funciona como una configuración inicial que establece
+el contexto para toda la conversación.
+
+2. **Prompts de user:** pide algo concreto. Es el mensaje que escribe la persona que utiliza la aplicación. Representa la consulta o tarea
+concreta que debe resolver el modelo. Ejemplo: 
+```json
+{
+  "role": "user",
+  "content": "¿Cómo puedo crear una función en Python que calcule la suma de los números pares en una lista?"
+}
+```
+
+3. **Prompts de assistant:** responde y va construyendo el historial. Es un mensaje escrito desde el rol del asistente. Normalmente corresponde a una respuesta que el modelos generó
+anteriormente. Esos mensajes se guardan en el historial para que el modelo comprenda como avanzó la conversación. Ejemplo:
+
+```json
+{
+  "role": "assistant",
+  "content": "Puedes crear una función en Python que recorra la lista
+    y sume los números pares de la siguiente manera:
+  
+  def suma_pares(lista):
+    return sum(num for num in lista if num % 2 == 0)
+
+  Esta función utiliza una comprensión de listas para 
+  filtrar los números pares y luego suma esos valores."
+}
+```
+
+También puede ser definido manualmente por quien desarrolla la aplicación. Esto se utiliza para:
+- Mostrarle al modelo un ejemplo de la respuesta esperada
+- Simular que ta respondió algo anteriormente
+- Mantener continuidad en una conversación
+- Orientar el estilo de las próximas respuestas del modelo
+
+#### Ejemplo completo
+
+```json
+[
+  {
+    "role": "system",
+    "content": "Sos una profesora de programación. Explica con ejemplos sencillos."
+  },
+  {
+    "role": "user",
+    "content": "¿Qué es una variable?"
+  },
+  {
+    "role": "assistant",
+    "content": "Una variable es un espacio donde guardamos un dato para usarlo más adelante."
+  },
+  {
+    "role": "user",
+    "content": "¿Y una constante?"
+  }
+]
+```
+
+## Word Embeddings
