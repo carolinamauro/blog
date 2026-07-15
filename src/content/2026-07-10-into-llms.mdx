@@ -133,3 +133,42 @@ También puede ser definido manualmente por quien desarrolla la aplicación. Est
 ```
 
 ## Word Embeddings
+
+> Un embedding es una representación numérica de "algo". Ese  "algo" puede ser una palabra, una oración, un documento, una imagen, etc. Esta representación suele
+ser un vector, es decir, una lista de números. 
+
+Por otro lado tenemos que:
+
+> Un word embedding es un tipo específico de embedding aplicado a palabras. Cuando tomamos un texto y lo tokenizamos, este se transforma en vectores numéricos.
+
+Cada token token es un vector en un espacio de **alta dimensión**: los significados mas similares quedan más cerca entre sí. De esta forma el modelo
+captura el significado y las relaciones semánticas entre palabras y frases. La calidad depende de la cantidad y diversidad de los datos de entrenamiento.
+
+Podemos decir que todo word embedding es un embedding, pero no todo embedding es un word embedding. Por ejemplo, un embedding de imagen no es un word embedding,
+pero un embedding de palabra sí lo es.
+
+### Diferencia entre los tokens
+
+> Un token ID es solo el identificador del token dentro del vocabulario del modelo:
+
+```
+"gato" -> token ID 9967
+```
+
+Ese número no representa el significado de "gato". El modelo transforma ese token ID en un embedding vectorial que captura el significado de la palabra
+en un espacio de alta dimensión. Por ejemplo, el embedding vectorial de "gato" podría ser algo como:
+
+```
+[0.12, -0.34, 0.56, ..., 0.78]
+```
+
+## Atención de Transformador
+
+Los LLM usan la atención del transformer para ponderar la importancia de cada token. Los más relevantes para el contexto reciben mayor peso 
+y el modelo se centra en lo que realmente importa
+
+<img 
+  src="/images/transformer.png" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
