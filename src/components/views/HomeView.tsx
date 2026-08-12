@@ -28,12 +28,6 @@ const projects = [
       "Plataforma web para prescripción pediátrica oncológica con cálculo automático de dosis y trazabilidad de medicamentos. Stack: React, HL7, Node.js y Docker.",
     status: "UBA + Hospital Garrahan",
   },
-  {
-    title: "Organizador de Alumnos para Entrenadores",
-    description:
-      "App web para gestión de pagos, rutinas y planificación de alumnos. Surge de una necesidad real del ámbito del entrenamiento personal.",
-    status: "Iterando",
-  },
 ];
 
 export default function HomeView({ lang }: { lang: Lang }) {
