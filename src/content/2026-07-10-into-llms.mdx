@@ -172,3 +172,77 @@ y el modelo se centra en lo que realmente importa
   alt="Esquema de atención de un transformador" 
   style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
 />
+
+## Aprendizaje Supervisado
+
+Es el método de aprendizaje en el que se entrenan los Modelos LLM: se les da un gran volumen de texto etiquetado y se les enseña a predecir el siguiente
+token de la secuencia de tokens, basándose en los tokes que han visto hasta ahora.
+
+## Aprendizaje No Supervisado
+
+El modelo aprende a partir de texto sin etiquetar, descubriendo estructura y patrones por su cuenta. Permite captar relaciones del lenguaje que luego se afinan con datos
+más específicos.
+
+## Fine Tuning
+
+Una vez entrenado en un corpus de texto general, el modelo puede ser ajustado en un corpus más específico para adaptarse a tareas mas especializadas.
+
+```json
+{
+  "messages": 
+    [
+      {"role": "system", "content": "Sos el asistente del curso de IA."},
+      {"role": "user", "content": "¿Qué es un token?"},
+      {"role": "assistant", "content": "La unidad mínima que procesa el modelo..."}
+    ]
+}
+```
+
+OJO! si el modelo es muy grande y agregamos poco texto para el fine tuning, el modelo puede olvidar lo aprendido en el entrenamiento inicial. 
+Esto se llama "catástrofe del olvido" y es un problema común en el aprendizaje profundo. 
+
+## Transferencia de Aprendizaje
+
+Un modelo entrenado en un conjunto de datos puede aplicar lo que ha aprendido a un conjunto de datos completamente diferente. Por ejemplo, un modelo
+entrenado en textos de libros de filosofía puede aplicar lo que ha aprendido al generar un articulo periodístico sobre un tema relacionado.
+
+# Ventana de contexto
+
+> La **ventana de contexto** o **context window** es la cantidad de tokens que un modelo puede "ver" a la vez al generar la siguiente palabra. Es decir, es la cantidad
+de tokens que un modelo de lenguaje considera al predecir la siguiente palabra en una secuencia.
+
+Esta ventana puede ser tanto hacia atrás (palabras anteriores en la secuencia) como hacia adelante (palabras siguientes en la secuencia)
+
+Por ejemplo, si la ventana de contexto es de 2048 tokens, entonces el modelo solo tiene en cuenta los últimos 2048 tokens de la conversación para generar 
+una respuesta. Si la conversación es más larga que eso, el modelo no podrá considerar los tokens más antiguos. Es importante aclarar que la ventana de contexto
+tiene en cuenta tanto la entrada como la salida: hacer una petición inicial de 2048 tokes significa que el modelo no tendrá espacio para generar una respuesta,
+ya que la ventana de contexto se llenará con la entrada y no quedará espacio para la salida.
+
+# Limitaciones
+
+Los modelos no son infalibles ni perfectos, por lo que es importante entender que un modelo siempre intentará darnos una respuesta, y **muchas 
+veces ese afán puede derivar en errores**.
+
+## Limitaciones conocidas
+
+1. **Conocimiento limitado**: pensemos que estamos en 2022 de nuevo, y el modelo fue entrenado con datos hasta 2021. Si le preguntamos sobre un evento que ocurrió en 
+2022, el modelo no tendrá información sobre eso y podría inventar una respuesta incorrecta. Pero siendo julio de 2026 esto cambio completamente, ya que los 
+modelos LLMs ahora pueden acceder a información actualizada en tiempo real. Sin embargo, los LLM posee una fecha limite de conocimiento determinada por sus
+datos de entrenamiento y no conocen por si solos acontecimientos posteriores a esa fecha. Pero si pueden complementar ese conocimiento con búsquedas web, RAG, etc.
+
+2. **Comprensión contextual**: puede interpretar mal el contexto de una conversación o pregunta, lo que lleva a respuestas incorrectas o irrelevantes. 
+Por ejemplo, si le preguntamos "¿Cuál es la capital de Francia?" y luego le preguntamos "¿Y la de Alemania?", el modelo podría no recordar que estamos h
+ablando de capitales y responder algo completamente diferente.
+
+3. **Sensibilidad al prompt**: la forma en que se formula una pregunta puede afectar significativamente la respuesta del modelo. 
+
+4. **Contexto finito**: existe un limite en la cantidad de información que el modelo puede procesar a la vez, lo que puede llevar a perder detalles importantes 
+en conversaciones largas.
+
+## Alucinaciones
+
+> Una alucinación se refiere a una respuesta generada que es extremadamente creativa o imaginativa, pero que no esta necesariamente relacionada con la realidad
+o la experiencia humana.
+
+Los LLMs usan una gran cantidad de datos para generar respuestas, y puede crear respuestas que son del todo lógicas o que no tienen sentido o directamente inventadas.
+Las alucinaciones son una consecuencia natural del funcionamiento de los modelos de lenguaje, y no deben ser tomadas como verdades o realidades.
