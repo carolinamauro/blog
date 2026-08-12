@@ -29,6 +29,10 @@ export default function NavBar() {
         href: localizedHref("/projects", lang),
         pathname: '/projects',
     }, {
+        name: t("Cursos", lang),
+        href: localizedHref("/courses", lang),
+        pathname: '/courses',
+    }, {
         name: t("Blog", lang),
         href: '/blog',
         pathname: '/blog',
