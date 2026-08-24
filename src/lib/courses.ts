@@ -5,7 +5,7 @@ export type Course = {
   description: string;
   topics: string[];
   date: string;
-  status: "completed" | "upcoming";
+  status: "completed" | "studying" | "upcoming";
   certificate?: string;
 };
 
@@ -13,30 +13,30 @@ export type Course = {
 export const courses: Course[] = [
   {
     id: "utn-professional-course",
-    title: "Curso de formación profesional",
+    title: "Curso de Desarrollo de Aplicaciones con IA (Open Source, ChatGPT y otros LLMs)",
     institution: "Universidad Tecnológica Nacional (UTN)",
     description: "Aprendí a desarrollar aplicaciones con IA, incluyendo Open Source, ChatGPT y otros LLMs, y a integrar estas tecnologías en soluciones prácticas.",
-    topics: ["Formación continua", "Desarrollo profesional"],
+    topics: ["IA", "Open Source", "ChatGPT", "LLMs", "Desarrollo de aplicaciones", "Agentes", "RAG", "Lang Chain"],
     date: "Finalizado",
     status: "completed",
     certificate: "/certificates/Curso_de_Desarrollo_de_Aplicaciones_con_IA__Open_Source__ChatGPT_y_otros_LLMs.pdf",
   },
-  // {
-  //   id: "aws-cloud",
-  //   title: "Cloud & AWS",
-  //   institution: "Próximo objetivo",
-  //   description: "Profundizar en arquitectura cloud, servicios fundamentales de AWS y buenas prácticas para construir soluciones escalables.",
-  //   topics: ["Arquitectura cloud", "Servicios de AWS"],
-  //   date: "Próximamente",
-  //   status: "upcoming",
-  // },
-  // {
-  //   id: "ai-agents",
-  //   title: "Agentes de IA",
-  //   institution: "Próximo objetivo",
-  //   description: "Aprender a diseñar agentes, conectarlos con herramientas y evaluar sistemas de IA que resuelvan problemas reales.",
-  //   topics: ["LLMs", "Uso de herramientas", "Evaluación"],
-  //   date: "En planificación",
-  //   status: "upcoming",
-  // },
+  {
+    id: "electronic-circuit-design",
+    title: "Curso de Diseño de circuitos electrónicos (PCB)",
+    institution: "Universidad Tecnológica Nacional (UTN)",
+    description: "Abordar los fundamentos del diseño y la fabricación de circuitos impresos (PCB), desde las primeras etapas de desarrollo hasta la obtención de una placa funcional.",
+    topics: ["PCB", "Diseño electrónico"],
+    date: "17 de agosto de 2026",
+    status: "studying",
+  },
+  {
+    id: "aws-cloud",
+    title: "Cloud & AWS",
+    institution: "Universidad Tecnológica Nacional (UTN)",
+    description: "Profundizar en arquitectura cloud, servicios fundamentales de AWS y buenas prácticas para construir soluciones escalables.",
+    topics: ["Arquitectura cloud", "Servicios de AWS"],
+    date: "Próximamente",
+    status: "upcoming",
+  },
 ];

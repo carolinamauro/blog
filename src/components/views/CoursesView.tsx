@@ -4,6 +4,7 @@ import { t, type Lang } from "../../lib/i18n";
 
 export default function CoursesView({ lang }: { lang: Lang }) {
   const completed = courses.filter((course) => course.status === "completed");
+  const studying = courses.filter((course) => course.status === "studying");
   const upcoming = courses.filter((course) => course.status === "upcoming");
   return (
     <main className="portfolio-shell relative z-10 min-h-screen px-4 pb-24 pt-28 text-white sm:px-6 lg:px-8">
@@ -68,6 +69,28 @@ export default function CoursesView({ lang }: { lang: Lang }) {
 
         <section className="mt-20" aria-labelledby="upcoming-title">
           <div className="mb-7 flex items-center gap-4">
+            <h2 id="upcoming-title" className="text-2xl font-bold">{t("Aprendiendo ahora", lang)}</h2>
+            <span className="h-px flex-1 bg-gradient-to-r from-cyan-300/40 to-transparent" />
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            {studying.map((course, index) => (
+              <article key={course.id} className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-7 transition hover:-translate-y-1 hover:border-cyan-300/40">
+                <span className="absolute right-5 top-3 font-mono text-6xl font-bold text-white/[0.04]">0{index + 1}</span>
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-200"><span className="h-2 w-2 rounded-full bg-amber-300" />{t(course.date, lang)}</span>
+                  <h3 className="mt-5 text-2xl font-bold">{t(course.title, lang)}</h3>
+                  <p className="mt-3 leading-7 text-zinc-300">{t(course.description, lang)}</p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {course.topics.map((topic) => <span key={topic} className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">{t(topic, lang)}</span>)}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-20" aria-labelledby="upcoming-title">
+          <div className="mb-7 flex items-center gap-4">
             <h2 id="upcoming-title" className="text-2xl font-bold">{t("Lo que sigue", lang)}</h2>
             <span className="h-px flex-1 bg-gradient-to-r from-cyan-300/40 to-transparent" />
           </div>
@@ -87,6 +110,8 @@ export default function CoursesView({ lang }: { lang: Lang }) {
             ))}
           </div>
         </section>
+
+        
       </div>
     </main>
   );
