@@ -1,0 +1,68 @@
+---
+title: "Vision general de la API de OpenAI y otras"
+date: "2026-08-24"
+tags: ["IA", "API", "OpenAI", "Desarrollo de aplicaciones"]
+category: "IA"
+summary: "Ahora que entendimos que es un LLM y los diferentes aspectos que tenemos que tener en cuenta, como 
+usamos todo esto en la practica? Bueno, ahora se viene lo interesante y te acompaño en este viaje para que puedas entender como usar la API de OpenAI y
+ otras para poder crear tus propias aplicaciones."
+---
+
+# La API de openAI
+
+Supongo que si estas leyendo esto sabes que es una API pero nunca esta de más recordar una pequeña definición:
+
+> Una API (Application Program Interface) es un contrato que permite que dos aplicaciones se comuniquen entre sí. En otras palabras, 
+es un conjunto de reglas y protocolos que permiten que diferentes programas interactúen y compartan datos de manera eficiente.
+
+En este contexto, la API de openAI permita aplicar la IA a casi cualquier tarea que implique entender o generar lenguaje natural, código o imágenes. El diseño
+del prompt es como "guías" la respuesta del modelo, proporcionando algunas instrucciones o ejemplos. El número de tokens procesados en una solicitud
+de API determinada depende de la longitud tanto de sus entradas como de tus salidas.
+
+> Regla: 1 token ~= 4 caracteres en inglés, o 1 palabra en promedio. El prompt + la respuesta no pueden superar la longitud del contexto máximo del modelo.
+
+# Endpoint `/completions` LEGACY, ahora `/responses`
+
+Viendo la teoría del curso que realice, encuentro que se habla del endpoint `/completions` como el endpoint principal para generar texto, 
+pero en la documentación actual de OpenAI, se menciona que este endpoint ha sido reemplazado por `/responses`, el cual proporciona una interfaz completa del sistema de IA.
+
+No entrare tanto en detalle sino que me interesa que veamos conceptos relacionados a los parámetros de generación. En caso que te interese, te dejo [este link]("https://dev.to/dev-in-progress/chat-completions-vs-openai-responses-api-what-actually-changed-4bco")
+donde compara ambos endpoints. Más adelante veremos ejercicios prácticos de como usar la API de OpenAI y otras.
+
+# Parámetros de generación
+
+Cuando llamamos al modelo, le pasamos parámetros que cambian cómo genera la respuesta.
+
+## `temperature` - ¿determinista o creativo?
+
+`temperature` (0 a 2) controla la aleatoriedad:
+- 0: el modelo elige siempre el token más probable, las respuestas son mas estables y repetibles.
+- Alto (1-1.5): más variedad y creatividad pero menos predecible.
+
+### Ejemplo práctico
+
+Elegí un valor de `temperature` y ejecuta tres veces el mismo prompt. Con valores cercanos a `0` 
+esperamos respuestas más estables y parecidas; al acercarnos a `2`, las respuestas deberían ser más variadas y creativas:
+
+<OllamaPlayground />
+
+## `top_p` - Filtrado de probabilidad acumulada
+
+`top_p` (0 a 1) controla la diversidad de la salida: el modelo solo considera los tokens más probables cuya probabilidad acumulada sea menor o igual a `top_p`. 
+Esto permite un control más fino sobre la diversidad de la salida.
+
+- `top_p` = 1: considera todos los tokens posibles.
+- `top_p` < 1: filtra los tokens menos probables, aumentando la coherencia pero reduciendo la diversidad.
+
+> Recomendación: ajusta `top_p` o `temperature`, no ambos al mismo tiempo, para evitar resultados inesperados.
+
+## `max_tokens` - Limitar la longitud de la respuesta
+
+Limita la *longitud de la respuesta* en tokens. Si es muy chico, la respuesta se corta, y lo notamos en `finish_reason == "length"`. Si es muy grande, 
+el modelo puede generar respuestas más largas de lo necesario.
+
+## Otros parámetros
+
+- `frequency_penalty` (-2 a 2): penaliza repetir tokens según cuantas veces ya aparecieron. Subilo si el modelo se repite mucho.
+- `presence_penalty` (-2 a 2): penaliza tokens que ya aparecieron en la conversación al menos una vez. Empuja a introducir temas nuevos. 
+- `seed` (entero): con el mismo `seed' (semilla) y los mismos parámetros, la salida tiende a ser reproducible.

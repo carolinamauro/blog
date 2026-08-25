@@ -112,7 +112,7 @@ const floatItems: FloatItem[] = [
   { id: "code-component", node: <CodeGlyph text="<Component />" />, position: "right-0 top-1/3", float: { y: -10, rotate: 2 }, duration: 8, delay: 0.8, depth: 22 },
   { id: "browser", node: <BrowserMock />, position: "right-2 top-2", float: { y: -16 }, duration: 9, delay: 0.4, depth: 26, hideSm: true },
   { id: "card", node: <MiniCard />, position: "left-2 bottom-2", float: { y: 14, rotate: -3 }, duration: 7.5, delay: 1, depth: 16, hideSm: true },
-  { id: "pill-ts", node: <TechPill label="TypeScript" dot="#6aa5e0" />, position: "right-6 bottom-16", float: { y: 10 }, duration: 6.5, delay: 0.6, depth: 14 },
+  { id: "pill-ts", node: <TechPill label="Javascript" dot="#6aa5e0" />, position: "right-6 bottom-16", float: { y: 10 }, duration: 6.5, delay: 0.6, depth: 14 },
   { id: "pill-react", node: <TechPill label="React" dot="#8fd0e6" />, position: "right-10 bottom-2", float: { y: -12, rotate: 2 }, duration: 8.5, delay: 1.2, depth: 20, hideSm: true },
   { id: "sparkle-1", node: <Sparkle className="h-5 w-5 text-cyan-300" />, position: "right-1/4 top-4", float: { y: -10, rotate: 20 }, duration: 5, delay: 0.3, depth: 30 },
   { id: "sparkle-2", node: <Sparkle className="h-4 w-4 text-violet-300" />, position: "left-1/4 bottom-10", float: { y: 10, rotate: -18 }, duration: 5.5, delay: 0.9, depth: 28 },

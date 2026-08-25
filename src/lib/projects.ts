@@ -133,40 +133,6 @@ export const projects: Project[] = [
       },
     ],
   },
-  {
-    slug: "entrenadores",
-    title: "Organizador para Entrenadores",
-    tagline: "Gestión de alumnos, pagos y rutinas para entrenadores personales.",
-    description:
-      "App web para gestión de pagos, rutinas y planificación de alumnos. Surge de una necesidad real.",
-    status: "En progreso",
-    progress: 25,
-    period: "2025 – actualidad",
-    stack: ["React", "Node.js", "PostgreSQL", "Tailwind CSS"],
-    highlights: [
-      "Gestión de pagos y estados de cuenta por alumno",
-      "Constructor de rutinas asignable por alumno",
-      "Seguimiento de progreso físico",
-      "Panel de planificación semanal",
-    ],
-    sections: [
-      {
-        title: "El origen",
-        content:
-          "Un entrenador personal cercano me comentó que maneja todo con planillas de Excel y mensajes de WhatsApp: quién pagó, qué rutina tiene cada alumno, cuándo vence la mensualidad. Le pregunté si usaría algo más cómodo y armamos juntos el listado de lo que necesitaba. Ese fue el punto de partida.",
-      },
-      {
-        title: "Qué estoy construyendo",
-        content:
-          "Un panel web simple donde el entrenador puede ver todos sus alumnos, registrar pagos mensuales, armar rutinas personalizadas y hacer seguimiento de progreso. El MVP está focalizado en los pagos y la asignación de rutinas, que son las dos cosas que más tiempo le consumen hoy.",
-      },
-      {
-        title: "Estado actual",
-        content:
-          "En diseño y primeras pantallas. Definí el modelo de datos, diseñé los flujos principales en Figma y estoy implementando el backend con Node.js + PostgreSQL. El frontend en React todavía está en sus primeras etapas.",
-      },
-    ],
-  },
 ];
 
 export function getProjectBySlug(slug: string): Project | undefined {
