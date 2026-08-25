@@ -45,3 +45,24 @@ Elegí un valor de `temperature` y ejecuta tres veces el mismo prompt. Con valor
 esperamos respuestas más estables y parecidas; al acercarnos a `2`, las respuestas deberían ser más variadas y creativas:
 
 <OllamaPlayground />
+
+## `top_p` - Filtrado de probabilidad acumulada
+
+`top_p` (0 a 1) controla la diversidad de la salida: el modelo solo considera los tokens más probables cuya probabilidad acumulada sea menor o igual a `top_p`. 
+Esto permite un control más fino sobre la diversidad de la salida.
+
+- `top_p` = 1: considera todos los tokens posibles.
+- `top_p` < 1: filtra los tokens menos probables, aumentando la coherencia pero reduciendo la diversidad.
+
+> Recomendación: ajusta `top_p` o `temperature`, no ambos al mismo tiempo, para evitar resultados inesperados.
+
+## `max_tokens` - Limitar la longitud de la respuesta
+
+Limita la *longitud de la respuesta* en tokens. Si es muy chico, la respuesta se corta, y lo notamos en `finish_reason == "length"`. Si es muy grande, 
+el modelo puede generar respuestas más largas de lo necesario.
+
+## Otros parámetros
+
+- `frequency_penalty` (-2 a 2): penaliza repetir tokens según cuantas veces ya aparecieron. Subilo si el modelo se repite mucho.
+- `presence_penalty` (-2 a 2): penaliza tokens que ya aparecieron en la conversación al menos una vez. Empuja a introducir temas nuevos. 
+- `seed` (entero): con el mismo `seed' (semilla) y los mismos parámetros, la salida tiende a ser reproducible.
