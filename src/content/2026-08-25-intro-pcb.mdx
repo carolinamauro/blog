@@ -1,0 +1,186 @@
+---
+title: "Bases de la electricidad"
+date: "2026-08-25"
+tags: ["Electricidad", "Magnitudes eléctricas"]
+category: "Electronica"
+summary: "En el contexto de el curso de diseño de circuitos electrónicos (PCB), en este articulo exploraremos las bases de la electricidad hasta llegar a los 
+circuitos esquemáticos."
+---
+
+# ¿Qué es la electricidad?
+
+Antes de profundizar en el concepto de circuito esquemático, es importante tener una comprensión básica de la electricidad (tuve que ir a repasar todo, física II ocurrió
+hace mucho mucho tiempo).
+
+> La electricidad es un flujo de electrones a través de un medio que sea capaz de permitir su circulación.
+
+## La carga eléctrica
+
+La materia está construida por unas partículas elementales llamadas átomos. Dentro de cada uno podemos distinguir dos zonas:
+1. El núcleo, que contiene protones (carga positiva) y neutrones (sin carga) -> la zona central
+2. La corteza, que contiene electrones (carga negativa) -> la zona exterior. Los electrones están girando en orbitales que envuelven al núcleo.
+
+Los responsables de todos los fenómenos eléctricos son los *electrones* ya que pueden escapar de la órbita del átomo. 
+
+En general, los materiales son *neutros* = contiene el mismo número de carga + (protones) y carga - (electrones). Sin embargo, en ciertas ocasiones los electrones
+pueden moverse de un material a otro originando cuerpos con *cargas positivas* (falta de electrones) y cuerpos con *cargas negativas* (exceso de electrones). Entonces, para
+adquirir carga eléctrica (*electrizarse*) los cuerpos tienen que *ganar o perder electrones.*
+
+Probablemente sepas (pero no esta de más aclarar) que las cargas del mismo signo se repelen y las cargas de signo opuesto se atraen.
+
+<img 
+  src="/images/atraccioncargas.png" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+> Carga eléctrica es una propiedad física propia de algunas partículas subatómicas que se manifiesta mediante fuerzas de atracción y repulsión entre ellas. La materia
+cargada eléctricamente es influida por campos electromagnéticos, siendo a su vez, generadora de ellos.
+
+> Un Campo electromagnético es un campo físico de fuerzas producido por aquellos elementos cargados eléctricamente, que afecta a partículas con carga eléctrica.
+
+## La corriente eléctrica
+
+> Una corriente eléctrica es un movimiento ordenado de cargas libres, normalmente de electrones, a través de un material conductor en un circuito eléctrico.
+
+Dependiendo como sea es movimiento podemos distinguir entre *corriente continua (CC)* y *corriente alterna (CA)*.
+
+### Corriente continua (CC)
+
+Es aquella en la que los electrones se mueven en un solo sentido. Por ejemplo, la corriente que circula por una batería o aquellos aparatos que están conectados
+a una fuente de alimentación.
+
+El símbolo es el siguiente:
+<img 
+  src="/images/simbolocontinua.gif" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "50%", maxWidth: "900px", height: "auto" }} 
+/>
+
+### Corriente Alterna (CA)
+
+Cuando el movimiento de los electrones cambia de sentido cada cierto tiempo. Utilizan CA todos los aparatos que se enchufan directamente a la red. Por ejemplo,  en la toma de corriente, 
+los polos positivo y negativo se están invirtiendo constantemente.
+
+El símbolo es el siguiente:
+<img 
+  src="/images/simboloalterna.gif" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "50%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Una de las características de la corriente alterna es la frecuencia, que es el número de veces que la corriente cambia de sentido en un segundo. En Argentina, por ejemplo, 
+la frecuencia es de 50 Hz; esto quiere decir que en nuestros toma corriente los polos positivos y negativo se invierten sucesivamente 50 veces en un segundo. Los electrones
+están cambiando de sentido sucesivamente y lo que transmite por el cable son las vibraciones.
+
+## ¿Cómo generamos la electricidad?
+
+La electricidad se genera transformando otras formas de energía en energía eléctrica. En la mayoría de las centrales, el elemento encargado
+de hacer esta conversión es el *alternador*.
+
+> Un alternador es una máquina que transforma energía mecánica (el movimiento) en energía eléctrica mediante el principio de inducción electromagnética. 
+
+En su forma mas simple, un alternador está compuesto por:
+
+- Un *campo magnético* (un imán o electroimán) que genera un campo magnético.
+- Una o varias *bobinas de material conductor*, normalmente cobre.
+- Un sistema que permite que exista un movimiento relativo entre el campo magnético y las bobinas.
+
+Cuando el campo magnético se mueve respecto de las bobinas, el campo que atraviesa el conductor cambia constantemente. Esa variación genera una tensión 
+eléctrica que provoca el movimiento de cargas dentro del cable, produciendo así una *corriente eléctrica*.
+
+El nombre alternador viene justamente de que genera corriente alterna (CA). A medida que el sistema gira, la tensión generada cambia periódicamente de sentido
+y, por lo tanto, también lo hace la corriente.
+
+Para conseguir ese movimiento normalmente se utiliza una turbina conectada al eje del alternador. La turbina puede ser movida por agua, 
+viento o vapor, dependiendo del tipo de central eléctrica. El principio fundamental es: hacer girar un alternador para transformar 
+movimiento en electricidad mediante inducción electromagnética.
+
+## Materiales conductores, aislantes y semiconductores
+
+Los clasificamos en materiales por los que los electrones pueden moverse libremente y
+materiales por los que no pueden moverse.
+
+### Conductores
+
+> Los *conductores* son aquellos materiales que contienen electrones que pueden moverse libremente. 
+
+Nos van a servir para hacer circuitos eléctricos. Los más comunes son los metales, como el cobre,
+aluminio, oro y plata.
+
+### Aislantes
+
+> Los *aislantes* son aquellos materiales que no permiten el movimiento de electrones.
+
+Estos materiales no conducen la corriente eléctrica, como la madera, el vidrio, el plástico y la cerámica.
+
+### Semiconductores
+
+> Los *semiconductores* presentan propiedades eléctricas que están entre los conductores y los aislantes. 
+
+Son aquellos materiales que permiten el movimiento de electrones solo bajo ciertas condiciones, así como el silicio y el germanio. 
+Los semiconductores son la base de los dispositivos electrónicos modernos, como los transistores y los diodos.
+
+#### Dopaje
+
+> Es el proceso intencional de agregar impurezas en un semiconductor extremadamente puro con el fin de cambiar sus propiedades eléctricas. 
+
+Por ejemplo, el silicio tiene en su ultima capa (el nivel 3) 4 electrones, por lo que  necesita otros 4 electrones para tener 8 y completar su capa de valencia. 
+Cuando los átomos de silicio se unen a otros átomos de silicio lo hacen mediante enlaces covalentes, compartiendo electrones y formando una estructura cristalina estable (y al mismo tiempo aislante).
+Sin embargo, si se introduce un átomo de fósforo (que tiene 5 electrones de valencia) en la estructura de silicio, el fósforo aportará un  electrón extra que no puede formar 
+un enlace covalente. Este electrón adicional queda libre para moverse a través del material por lo que cuando la corriente eléctrica llega, este electrón se mueve y 
+el material se comporta como un conductor. A este tipo de semiconductor se le llama tipo *N (negativo)*.
+
+En el caso contrario, podemos introducir en la estructura de silicio un átomo que tenga menos electrones de valencia. Por ejemplo, el boto tiene 3 electrones en su última capa. Al unirse
+con el silicio, el boro crea un "hueco" en la estructura cristalina, es decir, un lugar donde falta un electrón. Un átomo vecino puede moverse para ocupar ese hueco, dejando otro hueco. De esta manera,
+podemos pensar que el *hueco se mueve a través del material* en sentido contrario. Como la ausencia de un electrón equivale a una carga positiva, este tipo de semiconductor se llama tipo *P (positivo)*. 
+
+# Magnitudes eléctricas
+
+## Voltaje, tensión o diferencia de potencial
+
+> La tensión o voltaje (V), es la energía por unidad de carga que proporciona una pila o fuente de alimentación. La medimos en voltios (V).
+
+Cuando hablamos de diferencia de potencial nos referimos a la diferencia de energía por unidad de carga entre dos puntos de un circuito.
+
+## Resistencia eléctrica
+
+> La resistencia eléctrica (R), indica la oposición que presentan los conductores al paso de corriente eléctrica. La medimos en ohmios (Ω).
+
+Los materiales conductores tienen poca resistencia, pues permiten que la corriente eleática circule por ellos. En cambio, los aislantes presentan una
+resistencia muy alta, tan alta que no permite el paso de electrones. 
+
+Todos los receptores (lamparas, motores, etc) que pongamos en un circuito tienen una resistencia, y a los electrones les resulta más difícil circular cuantos más elementos de esos conectemos.
+
+## Intensidad de corriente eléctrica
+
+> La intensidad de corriente (I) es la cantidad de carga eléctrica que pasa por un conductor en es un segundo. Se mide en amperios (A).
+
+## La ley de Ohm
+
+La intensidad de corriente que atraviesa un circuito es directamente proporcional al voltaje o tensión del mismo e inversamente proporcional a la resistencia del circuito. Esta relación se expresa mediante la ley de Ohm:
+
+```
+I = V / R
+```
+
+## Energía
+
+> La energía eléctrica (E) es la capacidad de un sistema para realizar trabajo. Podemos definirla como el trabajo necesario para desplazar una carga eléctrica entre dos puntos con diferente potencial eléctrico.
+Se mide en julios (J).
+
+La podemos calcular mediante:
+
+```
+E = V * I * t
+```
+
+## Potencia
+
+> La potencia eléctrica (P) es la cantidad de energía eléctrica que se consume o se genera en un circuito por unidad de tiempo. Se mide en vatios (W).
+
+Cuanta más potencia tenga un dispositivo, más energía consume en menos tiempo. La potencia se puede calcular mediante:
+
+```
+P = E / t
+```
