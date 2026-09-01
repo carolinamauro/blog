@@ -1,0 +1,56 @@
+---
+title: "Alimentación de módulos ESP32"
+date: "2026-08-30"
+tags: ["ESP32", "Microcontrolador", "Alimentación", "Circuitos electrónicos"]
+category: "Electronica"
+summary: ""
+---
+
+# Qué es un módulo ESP32
+
+> El ESP32 es un microcontrolador económico de bajo consumo que integra WI-FI y Bluetooth. Funciona como un cerebro pequeño para proyectos electrónicos.
+
+Su función principal es procesar datos de sensores, tomar decisiones lógicas y transmitir esa información de forma inalámbrica a través de Wi-Fi o Bluetooth. 
+
+# Alimentación de módulos ESP32
+
+Debemos entender cómo proteger el microcontrolador y asegurar que funcione sin reinicio aleatorios. 
+
+El ESP32 es un chip potente pero "quisquilloso" con la energía. Trabaja a 3.3V y puede llegar a tener picos de consumo de corriente (hasta 500mA) cuando activamos Wi-Fi o Bluetooth.
+Si tu fuente no es capaz de entregar eso instantáneamente, el ESP32 entrará en un bucle de reinicios (brownout) y no funcionará correctamente.
+
+# El regulador de Voltaje (LDO)
+
+Normalmente tendremos una entrada de 5V o superior y tendremos que bajar ese Voltaje a 3.3V para alimentar el ESP32. Para eso usamos un regulador de voltaje lineal (LDO). El AMS1117-3.3 es
+el estándar "de batalla". Soporta hasta 800mA o 1A, lo cual sobra para el ESP32. Como el LDO es un regulador lineal, la diferencia entre la
+tensión de entrada y la de salida se disipa en forma de calor. Por eso es preferible alimentarlo con 5 V en lugar de 12 V.
+
+## El Filtrado (Capacitores de desacoplo)
+
+Los capacitores actúan como pequeños "tanques de reserva" para esos picos de corriente de Wi-Fi. Sin ellos, el voltaje cae por un milisegundo y el chip se apaga.
+
+<img 
+  src="/images/capacitores.png" 
+  alt="Simbología de los elementos eléctricos" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Tenemos entonces:
+1. Capacitor grande (22uF): es como un tanque de agua grande. Reacciona "lento" pero puede entregar mucha energía cuando el Wi-Fi arranca. Sin embargo, debido a su construcción interna, tiene
+algo llamado ESR (Resistencia Serie Equivalente) que impide filtrar ruidos muy rápidos.
+2. *El capacitor pequeño (100nF):* Es cerámico. No puede guardar mucha energía, pero es extremadamente rápido. Su "pista de salida" no tiene casi resistencia,
+por lo que puede absorber picos de ruido de alta frecuencia que el capacitor grande ni siquiera "ve"
+
+### Por qué lo separamos
+
+Si el ESP32 pide un pico de energía muy rápido el capacitor de 100nF reacciona instantáneamente y le da ese "empujón" inicial. El capacitor de la salida del regulador rellena
+la energía que el de 100nF gastó. Finalmente, el regulador ajusta todo para mantener los 3.3V estables.
+
+# Regla de ORO en el diseño PCB
+
+Para que el capacitor de 100nF cumpla su función, debe estar físicamente lo más cerca posible del pin de alimentación del ESP32. 
+Si lo colocamos lejos, la resistencia de la pista hace que el capacitor no pueda filtrar correctamente los picos de ruido.
+
+En PCB es nuestra responsabilidad arrastrar el capacitor de 100nF y ponerlo físicamente al lado del pin ESP32. Si lo dejamos lejos, el esquema eléctrico será correcto pero el
+hardware será inestable.
+
