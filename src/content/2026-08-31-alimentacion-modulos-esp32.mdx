@@ -1,0 +1,240 @@
+---
+title: "Alimentación de módulos ESP32"
+date: "2026-08-30"
+tags: ["ESP32", "Microcontrolador", "Alimentación", "Circuitos electrónicos"]
+category: "Electronica"
+summary: "El ESP32 es un microcontrolador económico de bajo consumo que integra WI-FI y Bluetooth. Funciona como un cerebro pequeño para proyectos electrónicos. 
+Su función principal es procesar datos de sensores, tomar decisiones lógicas y transmitir esa información de forma inalámbrica a través de Wi-Fi o Bluetooth. 
+En este artículo aprenderemos cómo alimentar correctamente un módulo ESP32 para evitar reinicios aleatorios y asegurar su funcionamiento estable."
+---
+
+# Qué es un módulo ESP32
+
+> El ESP32 es un microcontrolador económico de bajo consumo que integra WI-FI y Bluetooth. Funciona como un cerebro pequeño para proyectos electrónicos.
+
+Su función principal es procesar datos de sensores, tomar decisiones lógicas y transmitir esa información de forma inalámbrica a través de Wi-Fi o Bluetooth. 
+
+# Alimentación de módulos ESP32
+
+Debemos entender cómo proteger el microcontrolador y asegurar que funcione sin reinicio aleatorios. 
+
+El ESP32 es un chip potente pero "quisquilloso" con la energía. Trabaja a 3.3V y puede llegar a tener picos de consumo de corriente (hasta 500mA) cuando activamos Wi-Fi o Bluetooth.
+Si tu fuente no es capaz de entregar eso instantáneamente, el ESP32 entrará en un bucle de reinicios (brownout) y no funcionará correctamente.
+
+# El regulador de Voltaje (LDO)
+
+Normalmente tendremos una entrada de 5V o superior y tendremos que bajar ese Voltaje a 3.3V para alimentar el ESP32. Para eso usamos un regulador de voltaje lineal (LDO). El AMS1117-3.3 es
+el estándar "de batalla". Soporta hasta 800mA o 1A, lo cual sobra para el ESP32. Como el LDO es un regulador lineal, la diferencia entre la
+tensión de entrada y la de salida se disipa en forma de calor. Por eso es preferible alimentarlo con 5 V en lugar de 12 V.
+
+## El Filtrado (Capacitores de desacoplo)
+
+Los capacitores actúan como pequeños "tanques de reserva" para esos picos de corriente de Wi-Fi. Sin ellos, el voltaje cae por un milisegundo y el chip se apaga.
+
+<img 
+  src="/images/capacitores.png" 
+  alt="Capacitores de desacoplo" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Tenemos entonces:
+1. Capacitor grande (22uF): es como un tanque de agua grande. Reacciona "lento" pero puede entregar mucha energía cuando el Wi-Fi arranca. Sin embargo, debido a su construcción interna, tiene
+algo llamado ESR (Resistencia Serie Equivalente) que impide filtrar ruidos muy rápidos.
+2. *El capacitor pequeño (100nF):* Es cerámico. No puede guardar mucha energía, pero es extremadamente rápido. Su "pista de salida" no tiene casi resistencia,
+por lo que puede absorber picos de ruido de alta frecuencia que el capacitor grande ni siquiera "ve"
+
+### Por qué lo separamos
+
+Si el ESP32 pide un pico de energía muy rápido el capacitor de 100nF reacciona instantáneamente y le da ese "empujón" inicial. El capacitor de la salida del regulador rellena
+la energía que el de 100nF gastó. Finalmente, el regulador ajusta todo para mantener los 3.3V estables.
+
+# Regla de ORO en el diseño PCB
+
+Para que el capacitor de 100nF cumpla su función, debe estar físicamente lo más cerca posible del pin de alimentación del ESP32. 
+Si lo colocamos lejos, la resistencia de la pista hace que el capacitor no pueda filtrar correctamente los picos de ruido.
+
+En PCB es nuestra responsabilidad arrastrar el capacitor de 100nF y ponerlo físicamente al lado del pin ESP32. Si lo dejamos lejos, el esquema eléctrico será correcto pero el
+hardware será inestable.
+
+# Circuito de entrada en el ESP32
+
+Los circuitos de entrada permiten que un microcontrolador como el ESP32 reciba información del exterior: por ejemplo, saber si se presiono un botón, leer un sensores
+de temperara o detectar una determinada señal electrónica.
+
+El problema es que una entrada digital no siempre recibe una señal perfecta. Puede captar ruido eléctrico, generar lecturas falsas o incluso recibir tensiones
+que dañen el microcontrolador. Por eso existen técnicas para *estabilizar, filtrar y proteger las entradas.*
+
+Los principales problemas a resolver son:
+- Evitar que el pin quede *flotando* (sin un valor definido)
+- Eliminar los *rebotes de los pulsadores* (cuando presionamos un botón, la señal puede oscilar antes de estabilizarse)
+- Proteger los GPIO (General Purpose Input Output) de tensiones que puedan dañarlos.
+- Garantizar que algunos sensores tengan un nivel lógico definido en sus líneas de comunicación.
+
+## Entradas digitales: HIGH y LOW
+
+Un GPIO configurado como entrada digital interpreta la tensión que recibe como uno de dos estados:
+
+- LOW → 0 lógico → aproximadamente 0 V
+- HIGH → 1 lógico → aproximadamente 3,3 V
+
+Por ejemplo, un botón puede hacer que el ESP32 lea un `0` cuando está presionado y un `1` cuando está suelto.
+
+El problema aparece cuando el pin no está conectado claramente ni a 3,3 V ni a GND. En ese caso se dice que el pin está *flotando.*
+
+## Pines flotantes
+
+Cuando una de nuestras salidas no está conectada , el ruido ambiente puede ser captado y afectar al dispositivo
+electrónico haciendo que lo confundan con una señal, la cual podría ser un "uno lógico" o un "cero lógico", esto debe ser
+considerado. Puede captar ruido eléctrico del ambiente y el ESP32 podría interpretar ese ruido como cambios entre:
+
+```
+HIGH
+LOW
+HIGH
+LOW
+...
+```
+aunque en realidad no haya ocurrido ningún evento. 
+
+Para evitar esto utilizamos las resistencias pull up y pull down de forma de forzar un valor y que el pin no
+considere el ruido ambiente.
+
+Esto lo podemos lograr
+1. Creando un circuito externo
+2. Utilizando instrucciones de micropython de forma interna
+
+## Resistencias Pull-up y Pull-down
+
+Estas resistencias sirven para darle al pin un estado conocido por defecto cuando ningún otro dispositivo está controlando la línea.
+
+### Pull-up
+
+Una resistencia Pull-up conecta el pin a la alimentación 3,3V mediante una resistencia. Por lo tanto cuando nadie modifica la señal `GPIO = HIGH`. 
+Cuando el botón está abierto, la resistencia mantiene el GPIO en: `3.3 V → HIGH → 1`. Cuando presionamos el botón, conectamos el GPIO directamente a tierra:
+`0 V → LOW → 0`.
+
+<img 
+  src="/images/pull_up.png" 
+  alt="pull-up" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Es importante notar que en este tipo de circuito presionar el botón produce un 0.
+
+### Pull-down
+
+La resistencia Pull-down hace exactamente lo contrario. El pin queda conectado a GND mediante una resistencia:
+
+<img 
+  src="/images/pull_down.png" 
+  alt="pull-down" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Entonces, cuando el botón está abierto: `GPIO = 0 V = LOW`. Mientras que cuando presionamos el botón `GPIO = 3.3 V = HIGH`. En este caso, presionar el botón 
+produce un 1.
+
+## Micropython
+
+No siempre es necesario colocar físicamente la resistencia en nuestro circuito. El ESP32 permite habilitar resistencias internas desde MicroPython.
+
+Para configurar un Pull-up:
+```
+pulsador = Pin(14, Pin.IN, pull=Pin.PULL_UP)
+```
+
+Para configurar un Pull-down:
+```
+pulsador = Pin(14, Pin.IN, pull=Pin.PULL_DOWN)
+```
+
+# El problema del rebote de los botones
+
+Los pulsadores a menudo generan falsas señales de transición apertura/cierre cuando son pulsados debido a problemas
+mecánicos o físicos. Estas transiciones pueden ser leídas como si estuviéramos presionando el botón varias veces en un
+tiempo muy breve con lo cual podríamos alterar los resultados esperados en el programa.
+
+Esto se llama *bounce* o *rebote* y puede ser un problema en aplicaciones donde necesitamos una lectura precisa de los botones, generando comportamientos inesperados.
+
+<img 
+  src="/images/bounce.png" 
+  alt="Bounce de los pulsadores" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+## Debounce
+
+> Proceso de eliminar esas falsas transiciones se denomina *debounce*. Pude hacerse de tres formas:
+1. Hardware
+2. Software
+3. Hardware + Software
+
+### Debounce por hardware
+
+Una opción consiste en agregar un capacitor al circuito para filtrar los cambios rápidos de la señal.
+
+<img 
+  src="/images/debounce_hardware.png" 
+  alt="Bounce de los pulsadores" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+El capacitor ayuda a suavizar las oscilaciones rápidas provocadas por el rebote. Un valor típico es de 100nF. Conceptualmente, la resistencia y el capacitor forman un filtro que 
+evita que pequeñas variaciones muy rápidas sean interpretadas inmediatamente por el GPIO.
+
+### Debounce por software
+
+Si optamos por esta alternativa, se deberán ignorar las «pulsaciones» en el intervalo en que se produce el «ruido». Un
+intervalo de tiempo (threshold) de entre 100 y 200 ms suele ser adecuado, pero hay casos en los que se debe
+ajustar de forma que se elimine el rebote, pero no se ignoren posibles eventos cercanos «verdaderos»
+
+````python
+from	machine	import	Pin
+import	time
+#	definiciones
+led_externo_rojo=Pin(22,	Pin.OUT)
+pulsador=Pin(14,	Pin.IN,	pull=Pin.PULL_UP)
+estado_led=1
+estado_btn=0	#POR	AHORA	NO	USADA
+ultimo_estado_de_btn=0
+ultimo_tiempo_de_rebote=0
+delay_por_rebote=50
+while	True:
+	lectura=pulsador.value()
+	if	lectura!=ultimo_estado_de_btn:
+	ultimo_tiempo_de_rebote=time.ticks_ms()
+			print(">>>>>>>>",ultimo_tiempo_de_rebote)
+	if	time.ticks_ms()-ultimo_tiempo_de_rebote>delay_por_rebote:
+	if	lectura!=estado_btn:
+	estado_btn=lectura
+	if	estado_btn==1:
+	if	estado_led==1:
+			estado_led=0
+	elsif	estado_led==0:
+	estado_led=1
+	led_externo_rojo.value(estado_led)
+	ultimo_estado_de_btn=lectura
+````
+
+# Protección de las entradas del ESP32
+
+Si nuestros proyectos se realizan en zona rural y ahí debemos manipular las placas, la
+electricidad estática de las manos o un pico de tensión en un cable largo de un sensor pueden
+destruir el GPIO del ESP32.
+
+## Resistencia en serie
+
+Una protección sencilla consiste en colocar una resistencia entre el dispositivo externo y el GPIO. Por ejemplo:
+`Sensor ─── 330 Ω ─── GPIO ESP32`
+
+La resistencia ayuda a limitar la corriente en caso de que aparezca una situación anormal.
+
+## Diodos Zener y TVS
+
+Para protecciones más avanzadas pueden utilizarse diodos Zener o TVS. La idea es evitar que una tensión demasiado alta llegue al GPIO, derivando a tierra
+cualquier voltaje superior a 3.3V que intente llegar al pin.
+
+Un diodo común deja circular corriente principalmente en un determinado sentido. El Zener, en cambio, está diseñado para tener un voltaje de ruptura definido.
+
+Por ejemplo, un Zener de 3.3 V se utiliza para mantener la tensión aproximadamente dentro de ese nivel. El objetivo es impedir que una tensión considerablemente
+superior termine llegando al GPIO.
