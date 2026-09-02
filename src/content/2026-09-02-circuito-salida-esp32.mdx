@@ -1,0 +1,60 @@
+---
+title: "Circuitos de Salida en ESP32: por qué no podes conectar cualquier cosa a un GPIO"
+date: "2026-09-02"
+tags: ["ESP32", "Microcontrolador", "Circuito de salida", "Circuitos electrónicos"]
+category: "Electronica"
+summary: ""
+---
+
+# El problema de base: un GPIO tiene "voz" pero no "musculo"
+
+Un pin GPIO del ESP32 puede *dar una orden eléctrica* (poner 3.3v o 0v), pero no puede entregar mucha corriente al hacerlo. El limite real es de
+20mA a 40mA dependiendo del pin. Si conectas algo que "pide" más corriente que eso (un motor, relé, muchos LEDs) el pin se quema por dentro, 
+
+# ¿Por qué se quema en vez de simplemente "no alcanzar"?
+
+La intuición dice: si el motor pide 10A y el pin tiene solo 1A, el motor no se mueve y listo.. Pero en electronica la corriente no es algo que el pin decida entregar,
+sino una consecuencia física de la Ley de Ohm.
+
+## Analogía del "fusible humano"
+
+Pensá en remolcar un camión con un hilo de coser. El camión no "espera" a que el hilo tenga más fuerza: el hilo se rompe, 
+porque la tensión aplicada supera lo que el material puede soportar físicamente.
+
+Dentro del ESP32, el "hilo" es una pista de metal microscópica. Si algo conectado a ese pin demanda mucha corriente, esa pista tiene que dejar 
+pasar tantos electrones que se calienta por efecto Joule hasta fundirse, destruyendo el transistor interno que controla ese pin.
+
+La ley de Ohm es la que manda: `I = V/R`. Si conectas algo con resistencia muy baja (un motor, la bobina de un relé), la fórmula "obliga" 
+a que circule mucha corriente para ese voltaje. El ESP32 va a intentar mantener sus 3.3V en el pin a toda costa, y en ese intento, 
+el flujo de electrones supera el límite físico del componente interno.
+
+# La solución conceptual: "músculos externos"
+
+La solución no es pedirle más al pin, sino usar el pin solo como señal de control, y delegar el trabajo pesado a un componente externo:
+- *Transistores (BJT o MOSFET):* el ESP32 usa poca corriente para "avisarle" al transistor que deje pasar corriente desde una fuente externa 
+(5V, 12V, etc.) hacia la carga real.
+- *Módulos de relé:* ya traen ese circuito de protección incluido.
+
+> El ESP32 es el "director de orquesta" (da la señal, con poco esfuerzo). El transistor es el músico que hace el trabajo pesado (mueve la corriente que necesita la carga).
+
+# Antes, ¿Qué es un transistor?
+
+> Un transistor es un componente electrónico que funciona como un interruptor o amplificador controlado eléctricamente.
+
+En vez de accionarse con la mano (como un interruptor de luz), se acciona con una señal eléctrica chica, y esa señal controla el paso de una corriente mucho
+mas grande a traves de el.
+
+Hay dos familias grandes, y se diferencian en qué tipo de señal necesitan para activarse:
+
+- *BJT (Bipolar Junction Transistor):* se activa con corriente. Necesita que le "inyecten" un flujo constante de corriente en su terminal de control (la Base).
+- *FET (Field Effect Transistor), y dentro de esta familia el MOSFET:* se activa con voltaje. No necesita que fluya corriente desde el control, 
+solo que haya una diferencia de voltaje en su terminal de control (la Gate/Puerta).
+
+Ambos "hacen lo mismo" en el sentido de que dejan pasar o cortan una corriente grande controlados por una señal chica. La diferencia está en el 
+mecanismo interno, y eso cambia cómo los conectas y cuándo conviene usar cada uno.
+
+<img 
+  src="/images/transistores.png" 
+  alt="Transistores" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
