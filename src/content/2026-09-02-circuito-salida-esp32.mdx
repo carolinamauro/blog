@@ -58,3 +58,86 @@ mecanismo interno, y eso cambia cómo los conectas y cuándo conviene usar cada 
   alt="Transistores" 
   style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
 />
+
+## Las patas de un transistor: control vs. flujo de corriente
+
+Todo transistor tiene tres terminales y siempre se dividen en la misma lógica: una pata de control (chica, la que manda la señal) y dos patas de paso (por donde
+circula la corriente grande que se esta controlando).
+
+**BJT:* las patas se llaman Base (control), Colector y Emisor (flujo de corriente).
+- *Base (B):* la terminal de control, donde se aplica la corriente de activación ("activa" el transistor).
+- *Colector (C):* la terminal por donde entra la corriente grande que se quiere controlar desde la fuente externa.
+- *Emisor (E):* la terminal por donde sale la corriente grande hacia la carga (generalmente hacia GND).
+
+**MOSFET:* las patas se llaman Gate (control), Drain y Source (flujo de corriente).
+- *Gate (G):* la terminal de control. Acá el ESP32 aplica un voltaje (no corriente) que "abre" el canal interno.
+- *Drain (D):* la terminal por donde entra la corriente grande, desde la carga.
+- *Source (S):* la terminal por donde sale la corriente grande hacia GND.
+
+
+<img 
+  src="/images/mosfet.png" 
+  alt="mosfet" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+# Tres formas de manejar salidas
+
+## Salida de baja potencia (LEDs): Resistencia
+
+Para un LED común, la conexión es directa pero siempre necesita una resistencia limitadora en serie, porque un LED sin resistencia se
+comporta casi como un cortocircuito y se quema al instante.
+
+El calculo de la resistencia limitadora se hace con la Ley de Ohm: `R = (Vfuente - Vled) / Iled`. Sabemos que el ESP32 entrega 3.3V, y un
+LED rojo típico consume 1.8V. La resistencia debe absorber la diferencia: 
+
+$$R = \frac{3.3V - 1.8V}{0.01A \text{ (10mA)}} = 150\,\Omega$$
+
+Las buenas prácticas de diseño indican que:
+- Trabajar a 10–20mA, no al límite de 40mA.
+- Controlar la corriente total del chip, no solo por pin: el ESP32 tiene un límite individual por pin (~40mA), pero también un límite total sumando todos los pines (~250–300mA). 
+Si tenes 40mA en 10 pines a la vez, son 400mA — se puede dañar el regulador interno aunque cada pin esté "dentro de su límite".
+- Vida útil y calor: trabajar a 40mA es como llevar un motor a las revoluciones máximas — funciona, pero el componente se degrada más rápido. 
+Trabajar a 10–15mA es la "zona de crucero": el chip se mantiene frío y la señal es más estable
+- A más corriente pedida, más cae el voltaje de salida del pin. A 2mA el pin entrega casi 3.3V; a 40mA puede caer a 2.8V 
+o menos, lo cual puede afectar el brillo de un LED o la fiabilidad de una señal de datos.
+- Diseñar para operar al 50% o menos de la capacidad máxima teórica, para tener margen ante picos o variaciones de temperatura.
+
+## Salida de media potencia (motores chicas, tiras de LED de 12V)
+
+Si queremos manejar algo que consuma más corriente (como una tira LED de 12V o un pequeño
+ventilador), usamos un MOSFET o un Transistor NPN. El transistor entra como "aplificador" de control: 
+el ESP32 le da una señal chica a la Base (BJT) o Gate (MOSFET), y el transistor deja pasar una corriente mucho mayor desde una fuente externa hacia la carga.
+
+Aunque los dos sirven para que el ESP32 controle algo potente, la forma en que lo hacen es
+distinta y eso cambia cómo los conectas.
+
+### BJT (transistor NPN) — la válvula que necesita un chorrito constante.
+
+Cómo funciona: el ESP32 le inyecta una pequeña corriente constante en la Base, y eso mantiene abierto el paso de una corriente mucho más grande por el Colector.
+
+Para entenderlo con agua: pensá en una válvula que solo se mantiene abierta mientras vos le estás empujando un chorrito chico de agua por un costado. Ese chorrito no es el caudal principal — es la señal que "sostiene" la válvula abierta. Si dejás de empujarlo, la válvula se cierra al toque.
+
+Punto débil: como necesita ese chorrito todo el tiempo, el pin del ESP32 está haciendo un esfuerzo constante mientras el transistor está activo, y se pierde algo de energía como calor.
+
+Uso común: cargas pequeñas o medianas (motores chicos, relés, pocos LEDs).
+
+Ejemplos típicos: 2N2222, BC548.
+
+### MOSFET — la válvula que se abre con presión, no con caudal
+
+Cómo funciona: no necesita que fluya corriente desde el ESP32, solo que el pin le entregue voltaje (presión eléctrica) en la Gate. En cuanto "siente" esa presión, se abre.
+
+Para entenderlo con agua: es como una válvula con una membrana elástica. No hace falta mandarle agua a la membrana — alcanza con apretarla para que se deforme y abra el paso grande del otro lado. Una vez apretada, no hace falta seguir empujando con la misma fuerza: queda abierta con solo mantener la presión.
+
+Punto fuerte: muy eficiente. Maneja mucha más corriente (tiras LED largas, ventiladores potentes) casi sin calentarse y sin pedirle esfuerzo constante al pin.
+
+Uso común: control de potencia real — PWM para brillo de tiras LED, velocidad de motores grandes.
+
+## Salida de alta potencia (relés, 220V) → Transistor + Diodo de protección + Optoacoplador
+
+Para manejar luces de la casa (220V) o bombas de agua se usa un relé, pero nunca se conecta un relé directo al ESP32. Hacen falta tres componentes:
+
+- Transistor: le da al relé los 70–100mA que necesita para activarse (más de lo que un GPIO puede dar solo).
+- Diodo de protección (flyback): en paralelo con la bobina del relé.
+- Optoacoplador (opcional pero recomendado): separa eléctricamente el circuito del ESP32 del circuito del relé mediante luz. Si el relé falla o hay un corto en los 220V, el ESP32 queda a salvo porque no hay conexión física de cobre entre ambos lados.

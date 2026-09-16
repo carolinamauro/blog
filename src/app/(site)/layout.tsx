@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import "../../styles/globals.css";
 import NavBar from "@/src/components/ui/navBar";
 import { langFromPathname } from "@/src/lib/i18n";
+import 'katex/dist/katex.min.css'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
