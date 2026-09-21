@@ -60,90 +60,101 @@ Osea una cosa es qué estas usando de la nube y otra es dónde y cómo está des
 Los modelos de servicio más comunes son IaaS (Infrastructure as a Service), PaaS (Platform as a Service) y SaaS (Software as a Service). La 
 diferencia está en el nivel de control y responsabilidad que tenes sobre la infraestructura y los servicios que utilizas:
 
+
+<img 
+  src="/images/aws_service_models.png" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
 ### **IaaS (Infrastructure as a Service)**
 
-El proveedor de la nube te proporciona la infraestructura básica, como servidores, almacenamiento y redes. 
-Vos eres responsable de administrar el sistema operativo, las aplicaciones y los datos. 
+> Es el modelo más básico dentro de los servicios en la nube. En este modelo, el proveedor ofrece recursos de infraestructura de TI a 
+través de Internet: servidores virtuales, almacenamiento, redes, firewalls, balanceadores de carga y otros componentes básicos.
 
-No tenes que preocuparte por el hardware físico, pero si tenes que encargarte de la configuración y el mantenimiento del software. 
+El usuario accede a estos recursos como si se tratara de hardware físico, pero sin tener que comprarlo o mantenerlo. Es decir, alquila 
+potencia de cómputo, espacio de almacenamiento y redes según sus necesidades, pagando solo por lo que utiliza.
 
-- *Ejemplo más técnico*: creas una maquina virtual en AWS EC2, le instalas Linux y configuras una base de datos para levantar tu backend y manejar todo desde ahí. 
-- *Ejemplo más criollo*: querés hacer una pizza pero no tenes cocina. Entonces alquilas la cocina, el horno y los utensilios, pero la pizza la haces vos desde cero. Tenes mucho control, pero también más responsabilidad.
+Su principal ventaja es la flexibilidad y control, el usuario puede configurar su entorno casi como si fuera físico pero sin tener que invertir en 
+hardware propio. También ofrece gran escalabilidad, se puedem agregar o quitar recursos rápidamente.
+
+Se suele usar en proyectos que requieren entronos personalizados como el desarrollo y prueba de software, el alojamiento de sitios web compleejas o aplicaciones
+empresariales.
+
+Uno de los principales desafíos de IaaS es la complejidad en la gestión. Aunque el proveedor se encarga de la infraestructura física, 
+el cliente sigue siendo responsable de la administración del sistema operativo, middleware, aplicaciones y datos. Esto requiere conocimientos 
+técnicos más avanzados. También puede haber riesgos de seguridad si no se implementan correctamente los controles y políticas adecuadas sobre los recursos virtuales.
 
 ### **PaaS (Platform as a Service)**
 
-Va un nivel más arriba. El proveedor te da la infraestructura y además te proporciona una plataforma completa para desarrollar, desplegar y
-ejecutar aplicaciones.
+> Este modelo ofrece un entorno completamente administrado para desarrollar, ejecutar y gestionar aplicaciones. A diferencia de IaaS, en este modelo el proveedor
+ no solo suministra la infraestructura subyacente, sino también herramientas de desarrollo, bases de datos, middleware, servidores web y sistemas operativos.
 
-No te preocupas tanto en configurar servidores, instalar sistemas operativos o administrar recursos a bajo nivel. Simplemente escribís el código de tu aplicación 
-y lo despliegas en la plataforma, que se encarga de manejar todo lo demás, como el escalado automático, la seguridad y el mantenimiento.
+La mayor ventaja radica en la productividad para los desarrolladores, ya que pueden enfocarse exclusivamente en el código y la lógica del negocio sin preocuparse
+ por servidores, sistemas operativos o middleware. Las plataformas PaaS suelen incluir herramientas de desarrollo, bases de datos, servicios de autenticación, y más.
 
-- *Ejemplo más técnico*: este blog esta desplegado en Vercel, que es una plataforma PaaS. Yo solo me preocupo por escribir el código y 
-subirlo a Vercel, y ellos se encargan de todo lo demás.
-- *Ejemplo más criollo*: para hacer las pizzas tenes la cocina lista para usar, solo tenes que poner los ingredientes y hacer la pizza, 
-no tenes que preocuparte por el horno, ni por los utensilios, ni por limpiar después.
+Es un modelo ideal para el desarrollo rápido de aplicaciones, especialmente para startups o equipos de desarrollo ágil. También se utiliza en escenarios donde 
+se requiere una entrega continua, ya que permite integrar fácilmente procesos de integración y despliegue automático (CI/CD). Es muy útil en entornos colaborativos, 
+donde múltiples desarrolladores trabajan en una misma aplicación
 
-Es un modelo muy cómodo para desarrolladores, ya que les permite centrarse en escribir código y desarrollar aplicaciones sin 
-tener que preocuparse por la infraestructura subyacente. No pensas en como configurar un servidor, sino que te concentras en crear 
-la aplicación y que nada rompa en producción.
+El principal reto de PaaS es la dependencia del proveedor (vendor lock-in), ya que muchas veces las aplicaciones se desarrollan con herramientas o configuraciones propietarias
+difíciles de trasladar a otra plataforma. También hay limitaciones de personalización, ya que el entorno está parcialmente gestionado por el proveedor y puede no ofrecer la misma 
+flexibilidad que una infraestructura completamente controlada por el usuario.
 
 ### **SaaS (Software as a Service)**
 
-Es el modelo más cercano al usuario final: no administrar infraestructura ni plataforma ni servidores, simplemente usas una aplicación que
-ya esta lista. Acá entran servicios como Google Drive, Gmail, Google Fotos, etc. Vos no te preocupas por nada, simplemente usas la aplicación a través de internet.
-No tenes ni idea en que servidor corre Gmail ni que base de datos usa Google Fotos, ni como hacen para escalar internamente cuando hay millones
-de usuarios usando la aplicación al mismo tiempo. Simplemente usas el servicio y listo.
+> Este es el modelo más abstracto y de mayor nivel. Aquí, el proveedor entrega aplicaciones completas listas para usar, accesibles generalmente a través de un navegador web. El 
+usuario final simplemente utiliza la aplicación sin preocuparse por la infraestructura, las actualizaciones o la seguridad, ya que todo eso es gestionado por el proveedor.
 
-- *Ejemplo más técnico*: usas Google Drive para almacenar tus archivos, no te preocupas por la infraestructura ni la plataforma, simplemente usas la aplicación.
-- *Ejemplo más criollo*: ni en pedo te haces la pizza vos, simplemente vas a la pizzería y compras la pizza ya hecha, no te preocupas por nada,
-solo disfrutas de la pizza.
+La principal ventaja es la facilidad de uso y mantenimiento, el usuario no necesita instalar, actualizar ni gestionar nada. Todo el mantenimiento, incluyendo actualizaciones de seguridad,
+escalado y disponibilidad, lo realiza el proveedor. Además, se reduce significativamente el tiempo de implementación y los costos iniciales.
 
-## Según el modelo de implementación
+Un desafío muy común en SaaS es la falta de control sobre los datos y las funcionalidades específicas. Las organizaciones deben confiar en que el proveedor cumplirá con las políticas de 
+seguridad, privacidad y disponibilidad. Además, las opciones de personalización suelen ser limitadas, lo que puede ser un obstáculo si se requieren flujos de trabajo muy específicos o 
+integraciones con sistemas heredados.
 
-Los modelos de implementación se refieren a cómo se estructura la nube y quién la administra. Los tipos más comunes son: nube pública, nube privada, nube híbrida y multinube.
+
+## Según el modelo de despliegue
+
+El modelo de despliegue en la computación en la nube se refiere a cómo se estructura y se entrega la infraestructura de nube según las necesidades específicas de las organizaciones.
 
 ### **Nube pública**
 
-Es la más conocida y utilizada. En este modelo, los recursos de la nube son propiedad de un proveedor de servicios en la nube y
-están disponibles para el público en general a través de internet. Es una infraestructura compartida, lo que significa que múltiples 
-usuarios pueden acceder a los mismos recursos físicos, pero cada usuario tiene su propio espacio virtualizado y seguro.
+> Es un entorno de computación en que los recurso, como servidores, almacenamiento y applicaciones, son propiedad de un proveedor externo y se entregan a través de internet. Múltiples usuarios
+comparten la misma infrastructura física, aunque de forma aislada y segura.
 
-Es muy utilizada porque permite empezar rápidamente sin necesidad de invertir en infraestructura propia, y ofrece escalabilidad y flexibilidad. 
-
-- *Ejemplo más técnico*: AWS, Google Cloud, Microsoft Azure son ejemplos de proveedores de nube pública.
+Esta opción se destaca por su escalabilidad, su costo accesible (se paga por uso) y su fácil acceso, lo que la convierte en una alternativa muy utilizada por startups, pymes y organizaciones que
+no desean mantener su propia infraestructura. Sin embargo, puede haber preocupaciones en sectores altamente regulados o con requisitos de seguridad extremos, ya que el control sobre los datos
+físicos y su ubicación puede estar limitado.
 
 ### **Nube privada**
 
-Es una infraestructura Cloud utilizada exclusivamente por una sola organización. Puede ser gestionada internamente o por un tercero, 
-y puede estar ubicada en las instalaciones de la organización o en un centro de datos externo. La diferencia principal es que
-sus recursos no se comparten con otros clientes.
+> Es un entorno excusivo para una sola organización. Puede estar alojada dentro del centro de datos de la propia empresa o en instalaciones de un proveedor externo, pero en ambos casos los recursos
+no se comparten con otros clientes.
 
-Es utilizada por organizaciones que requieren un mayor control sobre su infraestructura, seguridad y cumplimiento normativo, como bancos, 
-instituciones gubernamentales u hospitales.
+Esta modalidad brinda un mayor control, personalización y seguridad, lo que la hace ideal para instituciones financieras, entidades gubernamentales y organizaciones que manejan información sensible o confidencial. 
 
-- *Ejemplo más técnico*: una empresa que tiene su propio centro de datos y gestiona su propia infraestructura Cloud.
-
-La desventaja es que suele ser más costosa de implementar y mantener, ya que la organización es responsable de toda la infraestructura y su gestión.
+La nube privada permite cumplir con regulaciones estrictas y mantener una gobernanza más fuerte sobre la infraestructura. No obstante, también implica costos mucho más elevados, tanto en inversión inicial como 
+en mantenimiento, y requiere de personal especializado para su gestión.
 
 ### **Nube híbrida**
 
-Es una combinación de nube pública y privada, donde una organización utiliza ambos tipos de nubes para diferentes propósitos.
+> Combina lo mejor de ambos mundos: permite que una organización utilice tanto nubes públicas como privadas, y coordine entre ellas según la necesidad. 
 
-Por ejemplo, una empresa puede mantener sus datos más sensibles en una nube privada, pero usar la nube pública para escalar una aplicación cuando hay mucha demanda.
+Por ejemplo, una empresa puede alojar sus aplicaciones críticas y sus datos sensibles en una nube privada, mientras que delega el procesamiento de datos a 
+gran escala o el almacenamiento menos sensible en la nube pública. 
 
-Este modelo busca aprovechar lo mejor de ambos mundos: el control de la nube privada y la flexibilidad de la nube pública.
+Este modelo ofrece gran flexibilidad y eficiencia, y es especialmente útil en escenarios de migración gradual a la nube o en empresas con cargas de trabajo variables. Sin embargo, la nube híbrida también plantea
+desafíos técnicos significativos, como la integración de entornos dispares, la gestión unificada de seguridad y el mantenimiento de la interoperabilidad.
 
-- *Ejemplo más técnico*: una empresa que tiene su propia infraestructura privada para datos sensibles, pero utiliza AWS para escalar su aplicación web.
+### Resumen comparativo
 
-### **Multinube**
+<img 
+  src="/images/modelo_de_despliegue.png" 
+  alt="Esquema de atención de un transformador" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
 
-Consiste en usar servicios de más de un proveedor Cloud al mismo tiempo. Por ejemplo, una empresa puede usar AWS para su infraestructura 
-principal, pero también usar Google Cloud para servicios específicos como análisis de datos o inteligencia artificial. 
-
-Esto puede servir para evitar depender de un solo proveedor, o para aprovechar las fortalezas de cada plataforma según las 
-necesidades de la empresa. 
-
-La desventaja es que suma complejidad en la gestión y puede generar problemas de compatibilidad entre servicios de diferentes proveedores.
 
 # Por qué se usa el Cloud computing?
 
