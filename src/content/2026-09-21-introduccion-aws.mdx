@@ -1,0 +1,135 @@
+---
+title: "Introducción a AWS"
+date: "2026-09-21"
+tags: ["Cloud computing", "AWS", "Amazon Web Services"]
+category: "AWS"
+summary: ""
+---
+
+# ¿Qué es AWS?
+
+> *AWS* es una plataforma de cloud computing creada por Amazon. Su función principal es ofrecer una amplia gama de servicios tecnológicos accesibles a través de internet,
+sin necesidad de que los usuarios o empresas gestionen servidores físicos o infraestructura local.
+
+AWS permite desarrollar, implementar y administrar aplicaciones y servicios en un entorno escalable y distribuido.
+
+# ¿Qué diferencia a AWS de otras plataformas como Azure o GCP?
+
+1. Liderazgo en innovación y ecosistema abierto.
+2. Enfoque en alta disponibilidad y escalabilidad global.
+3. Cobertura geográfica y resiliencia: opera en más de 30 regiones.
+4. Modelo de precios flexible y pago por uso.
+5. Madurez y soporte técnico empresarial.
+
+# Disponibilidad de AWS
+
+En el contexto de cloud computing, los conceptos de regiones, zonas de disponibilidad y regiones especiales son fundamentales para comprender cómo se estructuran los servicios de la nube,
+cómo se garantiza la disponibilidad y resiliencia de los datos, y cómo se cumples normativas locales e internacionales.
+
+<img 
+  src="/images/aws_regions.jpg" 
+  alt="Regiones de servicios de AWS" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+## Regiones
+
+> Las regiones en AWS son ubicaciones geográficas que agrupan *múltiples zonas de disponibilidad (Availability Zones)*, y cada una de estas corresponde a uno o más centros de datos independientes.
+
+Cada región está diseñada para ofrecer *redundancia, baja latencia y cumplimiento de normativas locales*. Por ejemplo, us-east-1 (Norte de Virginia) o eu-west-1 (Irlanda) 
+son regiones en las que los usuarios pueden desplegar servicios, almacenar datos y ejecutar aplicaciones.
+
+Amazon Web Services gestiona actualmente más de 30 regiones distribuidas globalmente, cada una compuesta por varias Availability Zones (más de 95). Aunque el número de regiones es mejor 
+al de Azure, AWS cuenta con la red de disponibilidad más amplia del mercado, lo que refuerza su propuesta de alta disponibilidad y tolerancia a fallos.
+
+## Zonas de disponibilidad
+
+> Dentro de cada región de AWS, existen las *Zonas de Disponibilidad (Availability Zones)*, que son *ubicaciones físicas independientes*, cada una con su propio suministro eléctrico, refrigeración,
+conectividad de red y redundancia. 
+
+Una AZ puede estar compuesta por uno o varios centros de datos, diseñados para operar de manera aislada pero conectados entre sí con enlaces de alta velocidad y baja latencia.
+
+Las AZs están diseñadas para garantizar *alta disponibilidad y tolerancia a fallos* frente a desastres localizados, problemas de hardware o interrupciones de red. Permiten replicar servicios para
+que si una falla, otra zona mantenga la disponibilidad.
+
+En AWS cada región está compuesta siempre por múltiples Availability Zones. El mínimo es 2, aunque la mayoría de las regiones ofrecen 3 o más, lo que permite diseñar arquitecturas resilientes por defecto.
+
+## Regiones especiales
+
+> Orientadas a clientes con requerimientos particulares de *seguridad, soberanía y cumplimiento normativo*. 
+
+Estas regiones están aisladas de la nube pública global y cuentan con controles de seguridad adicionales.
+- *AWS GovCloud (US-East y US-West):* diseñadas para agencias gubernamentales y organizaciones que manejan información sensible en Estados Unidos. Están acreditadas bajo estándares 
+como *FedRAMP High, ITAR, CJIS y DoD SRG*, lo que permite hospedar cargas de trabajo clasificadas y datos restringidos
+- *AWS China (Beijing y Ningxia):* operadas en asociación con empresas locales (Sinnet y NWCD), totalmente separadas de la infraestructura global de AWS. Están sujetas a la 
+*Ley de Ciberseguridad de China* y otras regulaciones locales.
+- *Regiones Aisladas y Secretas (Top Secret Regions):* AWS ha desarrollado regiones dedicadas para agencias de inteligencia y defensa de EE.UU., que cumplen requisitos de 
+clasificación de datos confidenciales y secretos.
+
+Estas regiones especiales de AWS ofrecen un entorno altamente controlado, con *certificaciones de seguridad adicionales, personal autorizado y procesos de cumplimiento reforzados*,
+asegurando que gobiernos y sectores regulados puedan adoptar la nuble sin comprometer sus obligaciones legales o de confidencialidad.
+
+# Infraestructura física y lógica
+
+Ambas infraestructuras, física y lógica, representan capas distintas pero complementarias del ecosistema en la nube.
+
+## Infraestructura física
+
+> La infraestructura física en la nube hace referencia a todos los componentes tangibles que soportan el funcionamiento del entorno de la nube, incluyendo centros de datos, servidores físicos,
+redes de comunicación, dispositivos de almacenamiento y los sistemas de enfriamiento, energía y seguridad física que garantizan la disponibilidad y resiliencia del servicio.
+
+Esta infraestructura está distribuida globalmente en más de 30 regiones, cada una compuesta por múltiples Availability Zones (explicadas anteriormente). Cada centro de datos cumple con 
+estándares internacionales de seguridad, disponibilidad y eficiencia energética.
+
+Amazon implementa múltiples capas de seguridad física (acceso biométrico, guardias de seguridad, videovigilancia, controles de acceso) y mantiene redundancia en energía y conectividad mediante sistemas
+UPS, generadores de respaldo y redes interconectadas de baja latencia entre AZs, asegurando continuidad operativa incluso frente a fallas mayores.
+
+## Infraestructura lógica
+
+> La infraestructura lógica representa el nivel abstracto y virtualizado que utilizan los usuarios y administradores de la nube para interactuar con los recursos sin necesidad de preocuparse por los detalles
+físicos subyacentes.
+
+En AWS, los servicios que vemos y usamos ̣-como instancias EC2, redes virtuales (VPC), bases de datos RDS o DynamoDB, almacenamiento en S3, contenedores con ECS o EKS, funciones serverless con Lambda, etc- se
+crean y gestionan sobre esta capa lógica, que oculta la complejidad física real y permite una administración mucho más flexible, escalable y eficiente.
+
+La infraestructura lógica se construye a partir de *técnicas de virtualización, orquestación y automatización*, que permiten simular servidores, redes y dispositivos de almacenamiento como si fueran entidades
+independientes aunque físicamente puedan estar corriendo en el mismo servidor o distribuidos entre diferentes centros de datos y zonas de disponibilidad.
+
+Además, esta infraestructura permite aplicar *seguridad granular* (Security Groups, Network ACLs, IAM roles, cifrado de datos en tránsito y reposo), definir configuraciones específicas para cada recurso (como 
+Auto Scaling, replicación multi-AZ o multi-región, snapshots y backups automáticos) y habilitar arquitecturas complejas como microservicios, entornos híbridos con Outposts o Local Zones, y aplicaciones distribuidas
+globalmente.
+
+## Relación y dependencia entre ambas
+
+La infraestructura lógica depende completamente de la infraestructura física. Sin centros de datos, servidores o redes reales, no podría existir ninguna abstracción lógica. 
+
+Por otro lado, la infraestructura física se beneficia de la capa lógica para ofrecer servicios más flexibles, escalables y seguros, permitiendo a los usuarios interactuar con recursos virtualizados sin preocuparse por la complejidad 
+del hardware subyacente.
+
+El gran valor de la computación en la nube es que esta capa física queda completamente gestionada por el proveedor (AWS), permitiendo que los usuarios se concentren en el desarrollo y operación de sus aplicaciones
+sin tener que lidiar con la complejidad del hardware o del mantenimiento.
+
+La separación entre ambas capas es lo que habilita modelos de alta escalabilidad, alta disponibilidad y recuperación ante desastres: los recursos lógicos pueden ser replicados o migrados automáticamente entre zonas de disponibilidad o regiones
+físicas distintas sin intervención humana ni interrupciones visibles.
+
+# AWS Management Console
+
+> El AWS Management Console es la interfaz centralizada para la gestión, provisión y supervisión de recursos en Amazon Web Services.
+
+Es una capa de orquestación que permite a los usuarios interactuar con todos los servicios de AWS de manera coherente, predecible y segura, ya sea a través de la consola web (AWS Command Line Interface, CLI) o mediante SDKs
+o plantillas declarativas con AWS CloudFormation.
+
+## Características
+
+Una de las funciones más potentes de la AWS Management Console se evidencia cuando se complementa con *AWS CloudFormation*.
+
+> AWS CloudFormation es una herramienta que permite automatizar la implementación de infraestructuras completas de manera repetible y controlada. Los usuarios pueden definir qué recursos crear, cómo se relacionan, qué configuraciones deben 
+tener y en qué orden desplegarlos, usando plantillas en JSON o YAML.
+
+Esto facilita la implementación de entorno consistentes entre el desarrollo, pruebas y producción, mejora la productividad, la confiabilidad operativa y coherencia entre despliegues.
+
+Otra característica destacada es el *modelo de control de acceso basado en roles (IAM - Identity and Access Management)*.
+
+> IAM permite asignar permisos granulares sobre recursos específicos a usuarios, grupos o aplicaciones, garantizando gobernanza, seguridad y segregación de responsabilidades en entornos empresariales donde distintos equipos requieren diferentes 
+niveles de acceso.
+
