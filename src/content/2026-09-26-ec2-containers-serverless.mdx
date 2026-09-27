@@ -1,0 +1,61 @@
+---
+title: "Servicios de Cómputo: EC2, Containers y Serverless"
+date: "2026-09-26"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon EC2 (Elastic Compute Cloud)
+
+> Una instancia de *Amazon EC2* es una máquina virtual segura y escalable en la nube de AWS. 
+
+Funciona como una computadora dentro de otra, con su propio:
+- Sistema operativo
+- CPU
+- Memoria RAM
+- Almacenamiento
+- Red
+pero ejecutada sobre la infraestructura de AWS. Con EC2 los usuarios pueden lanzar servidores virtuales en minutos, escalar su capacidad de cómputo según la demanda
+y pagar únicamente por el tiempo y los recursos que utilizan.
+
+EC2 es uno de los servicios fundamentales de AWS dentro del modelo de Infraestructura como Servicio (IaaS), y permite desplegar;
+- aplicaciones
+- bases de datos
+- entornos de prueba
+- servidores web
+y mucho más.
+
+## ¿Para qué se usa EC2?
+
+Los usos más comunes de EC2 incluyen:
+- Hospedaje de aplicaciones empresariales que requieren control total del sistema operativo.
+- Servidores de desarrollo y pruebas, replicando entornos de producción.
+- Migración de cargas de trabajo on-premise (local/en las instalaciones de la empresa) hacia la nube.
+- Ejecución de aplicaciones legacy que aún no pueden migrar a arquitecturas serverless o de contenedores.
+- Computación de alto rendimiento (HPC), como análisis de datos científicos, simulaciones y modelado financiero.
+- Servidores web y aplicaciones globales, con escalabilidad automática en función de la demanda.
+
+## Componentes principales de una instancia EC2
+
+<Accordion>
+  <AccordionItem title="What is EC2?" defaultOpen>
+
+    EC2 provides **virtual servers** in the AWS cloud.
+
+    - Choose your operating system.
+    - Configure CPU, memory, and storage.
+
+  </AccordionItem>
+  <AccordionItem title="When should I use it?" >
+
+    Use it when you need control over the server and its operating system.
+
+  </AccordionItem>
+</Accordion>
+
+AWS Lambda
+- cronjobs
+- baratas y fáciles de desplegar
+- cosas que no puedo hacer.
+- pensado en tareas pequeñas y rápidas.
