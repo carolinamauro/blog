@@ -1,6 +1,41 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* MDX details: keep content mounted so both directions animate naturally. */
+.mdx-accordion-item > .mdx-accordion-heading {
+  margin: 0;
+}
+
+.mdx-accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 240ms ease, opacity 200ms ease, visibility 0s 240ms;
+}
+
+.mdx-accordion-item[data-open="true"] > .mdx-accordion-panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.mdx-accordion-chevron {
+  transition: transform 240ms ease;
+}
+
+.mdx-accordion-item[data-open="true"] > .mdx-accordion-heading .mdx-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mdx-accordion-panel,
+  .mdx-accordion-chevron {
+    transition: none;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

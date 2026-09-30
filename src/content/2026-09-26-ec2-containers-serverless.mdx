@@ -1,0 +1,242 @@
+---
+title: "Servicios de Cómputo: EC2, Containers y Serverless"
+date: "2026-09-26"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon EC2 (Elastic Compute Cloud)
+
+> Una instancia de *Amazon EC2* es una máquina virtual segura y escalable en la nube de AWS. 
+
+Funciona como una computadora dentro de otra, con su propio:
+- Sistema operativo
+- CPU
+- Memoria RAM
+- Almacenamiento
+- Red
+pero ejecutada sobre la infraestructura de AWS. Con EC2 los usuarios pueden lanzar servidores virtuales en minutos, escalar su capacidad de cómputo según la demanda
+y pagar únicamente por el tiempo y los recursos que utilizan.
+
+EC2 es uno de los servicios fundamentales de AWS dentro del modelo de Infraestructura como Servicio (IaaS), y permite desplegar;
+- aplicaciones
+- bases de datos
+- entornos de prueba
+- servidores web
+y mucho más.
+
+## ¿Para qué se usa EC2?
+
+Los usos más comunes de EC2 incluyen:
+- Hospedaje de aplicaciones empresariales que requieren control total del sistema operativo.
+- Servidores de desarrollo y pruebas, replicando entornos de producción.
+- Migración de cargas de trabajo on-premise (local/en las instalaciones de la empresa) hacia la nube.
+- Ejecución de aplicaciones legacy que aún no pueden migrar a arquitecturas serverless o de contenedores.
+- Computación de alto rendimiento (HPC), como análisis de datos científicos, simulaciones y modelado financiero.
+- Servidores web y aplicaciones globales, con escalabilidad automática en función de la demanda.
+
+## Componentes principales de una instancia EC2
+
+<Accordion>
+  <AccordionItem title="Instancia EC2" defaultOpen>
+    Es un servidor virtual en la nube que proporciona la capacidad de cómputo. Cada instancia se crea a partir de una Amazon Machine Image (AMI), que 
+    define el sistema operativo y el software base; funcionando cada una como un equipo físico tradicional, pero con la flexibilidad de la nube para escalar, 
+    detenerse o reiniciarse.
+  </AccordionItem>
+  <AccordionItem title="Amazon Machine Image (AMI)">
+    Es la plantilla que sirve como punto de partida para crear una insancia. Define que sistema operativo tendrá la maquina y qué configuraciones iniciales
+    estarán disponibles. AWS ofrece AMIs estándar pero también se pueden obtener a través del Marketplace o crear personalizadas.
+  </AccordionItem>
+  <AccordionItem title="Elastic Block Store (EBS)">
+    El almacenamiento asociado a una instancia EC2 se gestiona a través de EBS, que proporciona volúmenes de disco virtual, los cuales pueden ser de 2 tipos principales:
+    - Disco del sistema operativo: contiene el SO y archivos base
+    - Discos adicionales: se utilizan para aplicaciones, beses de datos o almacenamiento persistente.
+    La ventaja clave de EBS es que los vólumenes son persistentes -> los datos se conservan incluso si la instancia se detiene.
+  </AccordionItem>
+  <AccordionItem title="CPU y memoria">
+    Los recursos de cómputo de una instancia están definidos por el tipo seleccionado. AWS ofrece una gran variedad de familias y tamaños que combinan distintos niveles de
+    CPU, memoria y almacenamiento. Por ejemplo:
+    - t3.micro: intancias de uso general
+    - r6i.large: optimizadas para memoria
+    - c7g.xlarge: cómputo intensivo.
+  </AccordionItem>
+  <AccordionItem title="Elastic Network Interface (ENI)">
+    Cada instancia EC2 necesita conectividad, lo cual se logra a través de una intrfaz de red elástica (ENI). Este componente permite que la instancia se conecte a una VPC (Virtual Private Cloud)
+    y cuente con direcciones IP privadas para comunicación interna y una IP pública opcional para acceso externo.
+  </AccordionItem>
+  <AccordionItem title="Security Groups">
+    Los grupos de seguridad funcionan como firewalls virtuales que controlan el tráfico hacia y dede la instancia. Cada gurpo de seguridad se configura con reglas específicas que permiten o deniegan conexiones según:
+    - protocolos (TCP, UDP)
+    - puertos (por ejemplo, 22 para SSH)
+    - direcciones de origen o destino
+    Gracias a este mecanismo, la seguridad de red de EC2 puede gestionarse de forma granular y flexible.
+  </AccordionItem>
+</Accordion>
+
+## Ventajas de usar Amazon EC2
+
+<img 
+  src="/images/ventajas_ec2.png" 
+  alt="Ventajas de EC2" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+Se puede estimar los costos de instancias EC2 usando la calculadora oficial: https://calculator.aws/#/createCalculator/ec2-enhancement  
+
+## Tamaños de máquinas virtuales
+
+<img 
+  src="/images/tamaño_máquinas_virtuales.png" 
+  alt="Ventajas de EC2" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+## Factores a considerar al elegir un tipo de instancia
+
+1. *Tipo de carga de trabajo*: si se requiere CPU intensova, memoria alta o GPU.
+2. *Escalabilidad*: número de usuarios o procesos concurrentes.
+3. *Disponibilidad regional*: no todos los tipos de instancias están en todas las regiones.
+4. *Costo*: considerar presupuesto y modelo de precios (on-demand, spot, reserved, savings plans).
+
+## Componentes de Red en EC2
+
+Cuando se lanza una instancia, se configura automáticamente dentro de una VPC (Virtual Private Cloud), con:
+1. *ENI (Elastic Network Interface)*: Define la IP privada y reglas de conectividad. Puede asociarse a múltiples grupos de seguridad.
+2. *Elastic IP*: Dirección IP pública estática que s epuede asignar a la instancia. Muy útil para servidores que necesitan una IP fija accesible desde Internet.
+3. *Security Groups*: Firewalls virtuales a nivel de insancia. Controlan qué tráfico entra o sale.
+
+# ¿Cómo lograr escalabilidad?
+
+> En AWS, la escalabilidad se refiere a la capacidad de aumentar o disminuir recursos de forma automática o manual según la demanda de la carga de trabajo.
+
+Este principio permite que las aplicaciones mantengan un rendimiento constante y un uso eficiente de los recursos sin necesidad de intervención manual. Lo logramos principalmente a través de 2
+recursos clave:
+1. *Auto Scaling Groups (ASG)*
+2. *Elastic Load Balancing (ELB)*
+
+Estos servicios permiten que una aplicación se adapte al tráfico cambiante, granatizando disponibilidad, resiliencia y optimización de costos.
+
+## AWS Auto Scaling
+
+> Un *Auto Scaling Group (ASG)* es un conjunto de instancias EC2 que se gestionan de manera conjunta para responder dinámicamente a la demanda. El *objetivo principal* es *mantener el número adecuado
+de unstancias en funcionamiento*, agregando nuevas cuando la carga aumenta y eliminando las innecesarias cuando la demanda baja.
+
+Características principales:
+- *Escalado automático*: basado en reglas predefinidas (por ejemplo, cuando el uso de CPU supera 70%).
+- *Elasticidad*: permite manejar picos de tráfico sin necesidad de intervención manual.
+- *Integración con ELB*: se combina con balanceadores de carga para asegurar que las nuevas instancias recibam tráfico inmediatamente al crearse.
+- *Alta disponibilidad*: al distribuir las intancias en múltiples Zonas de Disponibilidad, se garantiza tolerancia a fallos. 
+
+## Elastic Load Balancing (ELB)
+
+> El servicio de *Elastic Load Balancing (ELB)* distribuye automáticamente el tráfico entrante entre múltiples intancias EC2, contenedores o funciones Lambda. Ninguna instancia individual se sobrecarga y
+los usuarios disfrutan de tiempos de respuesta consistentes.
+
+Existen 3 tipos de balanceadores en AWS:
+1. *Application Load Balancer (ALB)*: optimizado para aplicaciones web, funciona a nivel de capa 7 (HTTP/HTTPS) y permite balanceo avanzado con reglas basadas en rutas o cabeceras.
+2. *Network Load Balancer (NLB)*: diseñado para cargas de alto rendimiento y baja latencia, opera a nivel de capa 4 (TCP/UDP).
+3. *Gateway Load Balancer (GWLB)*: permite distribuir tráfico hacia dispositivos virtuales de terceros, como firewalls o sistemas de inspección de red.
+
+Una de las funciones clave del ELB es el uso de health checks que verifican continuamente la salud de las instancias. Si alguna presenta problemas, el balanceador deja de enviarle tráfico hasta que vuelva
+a estar operativa. Además, al integrarse con múltiples zonas de disponibilidad, los ELB proporcionan alta disponibilidad y resiliencia ante fallas e centros de datos específicos.
+
+## Modos de escalado: vertical vs horizontal
+
+| Característica | Escalado vertical (Scale Up) | Escalado horizontal (Scale Out) |
+|---|---|---|
+| **Idea principal** | Aumentar la capacidad de un único servidor o instancia. | Agregar más servidores o instancias que trabajen en paralelo. |
+| **Cómo se logra** | Más CPU, más RAM, mejor almacenamiento, pasar de HDD a SSD o aumentar el tamaño de la VM. | Agregar nodos detrás de un balanceador de carga, replicar bases de datos o aplicar sharding/particionamiento. |
+| **Arquitectura** | Generalmente no requiere modificar la arquitectura. | Requiere una arquitectura preparada para trabajar de forma distribuida. |
+| **Ventaja principal** | Simplicidad de implementación y administración. | Permite escalar agregando nuevos nodos según aumenta la demanda. |
+| **Alta disponibilidad** | Menor: si el único servidor falla, el servicio puede quedar fuera de línea. | Mayor: si un nodo falla, los demás pueden continuar funcionando. |
+| **Limitación** | Existe un límite físico de CPU, RAM y almacenamiento que puede tener una máquina. | Puede aumentar la complejidad de coordinación, comunicación y consistencia entre nodos. |
+| **Ejemplo** | Pasar una VM de 4 CPU y 8 GB de RAM a una de 8 CPU y 16 GB de RAM. | Pasar de 1 servidor a 3 servidores detrás de un Load Balancer. |
+
+<img 
+  src="/images/escalado_vertical_y_horizontal.png" 
+  alt="Diferencias entre escalado vertical y horizontal" 
+  style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+# Contenedores en AWS
+
+> Los contenedores son unidades ligeras que empaquetan una aplicación junto con sus dependencias (librerías, runtimes, binarios) para uqe se ejecute de forma consitente 
+en cualquier entorno. 
+
+Las principales opciones para ejecutar contendores en AWS son:
+- Amazon Elastic Container Service (ECS): servicio de orquestación de contenedores totalmente gestionado
+- Aws Fargate: motor serverless para contenedores que elimina la necesidad de gestionar servidores o clústeres
+
+## Amazon ECS (Elastic Container Service)
+
+> Amazon ECS es un servicio de orquestación que permite ejecutar, detener y administrar contendores en un clúster de instancias EC2 o usando Fargate. 
+
+Los usuarios definen *tareas* (tasks) que describen cómo ejecutar los contenedores: qué imagen usar, cuánta CPU y memoria asignar, variables de entorno, puertos expuestos y volúmenes de almacenamiento. 
+Otras características clave de ECS incluyen:
+- **Orquestación completa**: gestiona despliegues, actualizaciones y escalado de contenedores.
+- **Flexibilidad de infraestructura**: se puede ejecutar en instancias EC2 o en Fargate.
+- **Integración con otros servicios de AWS**: como CloudWatch para monitoreo, IAM para control de acceso y ELB para balanceo de carga.
+- **Alta disponibildiad**: los contenedores se distribuyen automáticamente entre múltiples zonas de disponibilidad.
+
+## AWS Fargate
+
+> AWS Fargate es un motor de cómputo serverless para contenedores que permite ejecutar aplicaciones en contenedores sin necesidad de gestionar servidores o clústeres. Se
+encarga de asignar automáticamente los recursos de CPU y memoria necesarios para cada tarea o servicio.
+
+Ventajas:
+- **Sin gestión de servidores**: no es necesario administrar instancias EC2, ni clústers, ni SO.
+- **Escalado automático**: ajusta automáticamente los recursos según la demanda.
+- **Seguridad mejorada**: cada tarea se ejecuta en su propio entorno aislado.
+- **Pago por uso**: se paga únicamente por los recursos consumidos por los contenedores en ejecución.
+
+Se suele utilizar para
+- Tareas puntuales o batch que requieren ejecución temporal.
+- Aplicaciones web y APIs que necesitan alta disponibilidad y escalabilidad sin gestionar infraestructura.
+- Workloads de microservicios que demandan despliegues rápidos, con independencia del hardware subyacente.
+
+# AWS Lambda
+
+> AWS Lambda es un servicio de computación sin servidor (serverless) que permite ejecutar fragmentos de código en la nube sin necesidad de aprovisionar ni administrar servidores. 
+
+La ejecución esta orientada a eventos: el código se activa únicamente cuando se produce un trigger y el usuario solo paga por el tiempo de ejecución y la cantidad de recursos consumidos. 
+
+## Activación y desencadenadores
+
+Las funciones Lambda pueden activarse mediante diversos eventos, incluyendo:
+
+- Subida de archivos a un bucket de Amazon S3.
+- Llegada de mensajes a una cola en Amazon SQS o a un tema en Amazon SNS.
+- Cambios en tablas de Amazon DynamoDB.
+- Flujos de datos en tiempo real con Amazon Kinesis.
+- Ejecuciones programadas mediante Amazon EventBridge (antes CloudWatch Events).
+- Solicitudes HTTP recibidas a través de Amazon API Gateway.
+
+La integración con el ecosistema AWS permite que Lambda ejecute funciones cada vez que se produce un evento, facilitando la construcción de aplicaciones reactivas y altamente escalables.
+
+## Escalabilidad automática
+
+El servicio ajusta de manera transparente el número de instancias de ejecución de una función en función del volumen de eventos recibidos. El escalado se produce de
+**manera horizontal**: si múltiples eventos llegan al mismo tiempo, Lambda lanza varias instancias de la función en paralelo para atenderlos, garantizando 
+tiempos de respuesta óptimos incluso durante picos de demanda inesperados.
+
+## Lenguajes y despliegue
+
+AWS Lambda soporta una amplia variedad de lenguajes, incluyendo `Python, Node.js, Java, Go, Ruby y C#`. El código puede:
+1. Escribirse directamente en la consola de AWS
+2. Desarrollarse localmente con herramientas como AWS SAM (Serverless Application Model) 
+3. Desplegarse mediante pipelines de CI/CD utilizando frameworks como Serverless Framework.
+
+## Casos de uso y limitacionesz
+
+Es especialmente util para:
+- Procesamiento de datos en tiempo real (por ejemplo, análisis de logs o streaming de datos)
+- Automatización de tareas y flujos de trabajo
+- Integración entre sistemas mediante eventos asincrónicos.
+- Creación de microservicios y APIs ligeras en combinación con API Gateway.
+- Ejecución de trabajos programados recurrentes.
+
+⚠️ Limitaciones:
+- Tiempo máximo de ejecución por invocación: 15 minutos.
+- Memoria limitada: 10 GB
+- No es la mejor opción para cargas de trabajo que requieren cómputo intensivo de larga duración o procesamiento continuo.

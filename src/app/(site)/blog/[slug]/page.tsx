@@ -4,6 +4,7 @@ import { getPostBySlug, getPostSlugs } from "../../../../lib/posts";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Footer from "@/src/components/ui/footer";
 import OllamaPlayground from "@/src/components/OllamaPlayground";
+import { Accordion, AccordionItem } from "@/src/components/Accordion";
 import remarkGfm from "remark-gfm";
 
 export function generateStaticParams() {
@@ -113,6 +114,8 @@ export default async function BlogPostPage({
             source={post.content}
             components={{
               OllamaPlayground,
+              Accordion,
+              AccordionItem,
               img: (props) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
