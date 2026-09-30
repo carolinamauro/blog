@@ -161,10 +161,82 @@ a estar operativa. Además, al integrarse con múltiples zonas de disponibilidad
 
 # Contenedores en AWS
 
+> Los contenedores son unidades ligeras que empaquetan una aplicación junto con sus dependencias (librerías, runtimes, binarios) para uqe se ejecute de forma consitente 
+en cualquier entorno. 
 
+Las principales opciones para ejecutar contendores en AWS son:
+- Amazon Elastic Container Service (ECS): servicio de orquestación de contenedores totalmente gestionado
+- Aws Fargate: motor serverless para contenedores que elimina la necesidad de gestionar servidores o clústeres
 
-AWS Lambda
-- cronjobs
-- baratas y fáciles de desplegar
-- cosas que no puedo hacer.
-- pensado en tareas pequeñas y rápidas.
+## Amazon ECS (Elastic Container Service)
+
+> Amazon ECS es un servicio de orquestación que permite ejecutar, detener y administrar contendores en un clúster de instancias EC2 o usando Fargate. 
+
+Los usuarios definen *tareas* (tasks) que describen cómo ejecutar los contenedores: qué imagen usar, cuánta CPU y memoria asignar, variables de entorno, puertos expuestos y volúmenes de almacenamiento. 
+Otras características clave de ECS incluyen:
+- **Orquestación completa**: gestiona despliegues, actualizaciones y escalado de contenedores.
+- **Flexibilidad de infraestructura**: se puede ejecutar en instancias EC2 o en Fargate.
+- **Integración con otros servicios de AWS**: como CloudWatch para monitoreo, IAM para control de acceso y ELB para balanceo de carga.
+- **Alta disponibildiad**: los contenedores se distribuyen automáticamente entre múltiples zonas de disponibilidad.
+
+## AWS Fargate
+
+> AWS Fargate es un motor de cómputo serverless para contenedores que permite ejecutar aplicaciones en contenedores sin necesidad de gestionar servidores o clústeres. Se
+encarga de asignar automáticamente los recursos de CPU y memoria necesarios para cada tarea o servicio.
+
+Ventajas:
+- **Sin gestión de servidores**: no es necesario administrar instancias EC2, ni clústers, ni SO.
+- **Escalado automático**: ajusta automáticamente los recursos según la demanda.
+- **Seguridad mejorada**: cada tarea se ejecuta en su propio entorno aislado.
+- **Pago por uso**: se paga únicamente por los recursos consumidos por los contenedores en ejecución.
+
+Se suele utilizar para
+- Tareas puntuales o batch que requieren ejecución temporal.
+- Aplicaciones web y APIs que necesitan alta disponibilidad y escalabilidad sin gestionar infraestructura.
+- Workloads de microservicios que demandan despliegues rápidos, con independencia del hardware subyacente.
+
+# AWS Lambda
+
+> AWS Lambda es un servicio de computación sin servidor (serverless) que permite ejecutar fragmentos de código en la nube sin necesidad de aprovisionar ni administrar servidores. 
+
+La ejecución esta orientada a eventos: el código se activa únicamente cuando se produce un trigger y el usuario solo paga por el tiempo de ejecución y la cantidad de recursos consumidos. 
+
+## Activación y desencadenadores
+
+Las funciones Lambda pueden activarse mediante diversos eventos, incluyendo:
+
+- Subida de archivos a un bucket de Amazon S3.
+- Llegada de mensajes a una cola en Amazon SQS o a un tema en Amazon SNS.
+- Cambios en tablas de Amazon DynamoDB.
+- Flujos de datos en tiempo real con Amazon Kinesis.
+- Ejecuciones programadas mediante Amazon EventBridge (antes CloudWatch Events).
+- Solicitudes HTTP recibidas a través de Amazon API Gateway.
+
+La integración con el ecosistema AWS permite que Lambda ejecute funciones cada vez que se produce un evento, facilitando la construcción de aplicaciones reactivas y altamente escalables.
+
+## Escalabilidad automática
+
+El servicio ajusta de manera transparente el número de instancias de ejecución de una función en función del volumen de eventos recibidos. El escalado se produce de
+**manera horizontal**: si múltiples eventos llegan al mismo tiempo, Lambda lanza varias instancias de la función en paralelo para atenderlos, garantizando 
+tiempos de respuesta óptimos incluso durante picos de demanda inesperados.
+
+## Lenguajes y despliegue
+
+AWS Lambda soporta una amplia variedad de lenguajes, incluyendo `Python, Node.js, Java, Go, Ruby y C#`. El código puede:
+1. Escribirse directamente en la consola de AWS
+2. Desarrollarse localmente con herramientas como AWS SAM (Serverless Application Model) 
+3. Desplegarse mediante pipelines de CI/CD utilizando frameworks como Serverless Framework.
+
+## Casos de uso y limitacionesz
+
+Es especialmente util para:
+- Procesamiento de datos en tiempo real (por ejemplo, análisis de logs o streaming de datos)
+- Automatización de tareas y flujos de trabajo
+- Integración entre sistemas mediante eventos asincrónicos.
+- Creación de microservicios y APIs ligeras en combinación con API Gateway.
+- Ejecución de trabajos programados recurrentes.
+
+⚠️ Limitaciones:
+- Tiempo máximo de ejecución por invocación: 15 minutos.
+- Memoria limitada: 10 GB
+- No es la mejor opción para cargas de trabajo que requieren cómputo intensivo de larga duración o procesamiento continuo.
