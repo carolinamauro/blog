@@ -43,6 +43,7 @@
   "Soy": "I'm a",
   "Ingeniera en Informática": "Computer Engineer",
   "y trabajo actualmente como": "and currently work as a",
+  "en": "at",
   "Mi experiencia laboral se concentra en productos web y mobile, con foco en": "My professional experience is focused on web and mobile products, with an emphasis on",
   "aunque también tengo experiencia con": "though I also have experience with",
   "Soy ayudante de catedra en": "I'm a teaching assistant at",
@@ -94,7 +95,9 @@
   "Memoria": "Memory",
   "Punteros": "Pointers",
 
-  "Empecé desarrollando la app móvil de TurismoCity en React Native. En 2025 pasé al equipo web (Vue + Nuxt), donde desarrollo funcionalidades de la vertical de paquetes en frontend y backend con Node.js.": "I started building the TurismoCity mobile app in React Native. In 2025 I moved to the web team (Vue + Nuxt), where I develop features for the packages vertical on both frontend and backend with Node.js.",
+  "Empecé desarrollando la app móvil de TurismoCity en React Native. En 2025 pasé al equipo web (Vue + Nuxt), donde desarrollé funcionalidades de la vertical de paquetes en frontend y backend con Node.js. Estuve hasta septiembre de 2026.": "I started building the TurismoCity mobile app in React Native. In 2025 I moved to the web team (Vue + Nuxt), where I developed features for the packages vertical on both frontend and backend with Node.js. I was there until September 2026.",
+  "En septiembre de 2026 dejé BROSOFT y me sumé a Innovid como Software Engineer II, un nuevo paso en mi carrera como ingeniera de software.": "In September 2026 I left BROSOFT and joined Innovid as a Software Engineer II, a new step in my career as a software engineer.",
+  "Software Engineering": "Software Engineering",
 
   "Trabajo Profesional": "Capstone Project",
   "Sistema de Prescripción · Hospital Garrahan": "Prescription System · Garrahan Hospital",

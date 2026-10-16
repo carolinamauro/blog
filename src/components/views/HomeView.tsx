@@ -110,7 +110,9 @@ export default function HomeView({ lang }: { lang: Lang }) {
                   {t("Soy", lang)}{" "}
                   <span className="font-semibold text-cyan-300">{t("Ingeniera en Informática", lang)}</span>{" "}
                   {t("y trabajo actualmente como", lang)}{" "}
-                  <span className="font-semibold text-pink-300">{t("Frontend Developer", lang)}</span>.{" "}
+                  <span className="font-semibold text-pink-300">{t("Software Engineer II", lang)}</span>{" "}
+                  {t("en", lang)}{" "}
+                  <span className="font-semibold text-pink-300">Innovid</span>.{" "}
                   {t("Mi experiencia laboral se concentra en productos web y mobile, con foco en", lang)}{" "}
                   <span className="font-semibold text-pink-300">{t("frontend", lang)}</span>,{" "}
                   {t("aunque también tengo experiencia con", lang)}{" "}

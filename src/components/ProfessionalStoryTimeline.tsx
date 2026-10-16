@@ -43,9 +43,8 @@ const events: TimelineEvent[] = [
     title: "BROSOFT",
     subtitle: "Frontend Developer · TurismoCity",
     type: "work",
-    ongoing: true,
     description:
-      "Empecé desarrollando la app móvil de TurismoCity en React Native. En 2025 pasé al equipo web (Vue + Nuxt), donde desarrollo funcionalidades de la vertical de paquetes en frontend y backend con Node.js.",
+      "Empecé desarrollando la app móvil de TurismoCity en React Native. En 2025 pasé al equipo web (Vue + Nuxt), donde desarrollé funcionalidades de la vertical de paquetes en frontend y backend con Node.js. Estuve hasta septiembre de 2026.",
     focus: ["Vue", "Nuxt", "TypeScript", "React Native", "Node.js"],
   },
   {
@@ -78,6 +77,17 @@ const events: TimelineEvent[] = [
     description:
       "Retomé Fundamentos de Programación y sumé Ingeniería de Software II. En Fundamentos acompaño a los alumnos en sus primeros pasos con C. En IS II trabajamos con Ruby usando BDD + TDD, arquitectura hexagonal, code reviews y metodología ágil. Dos cátedras muy distintas que se complementan.",
     focus: ["C", "Ruby", "BDD/TDD", "Arq. Hexagonal", "POO", "Docencia"],
+  },
+  {
+    id: "innovid",
+    year: "2026",
+    title: "INNOVID",
+    subtitle: "Software Engineer II",
+    type: "work",
+    ongoing: true,
+    description:
+      "En septiembre de 2026 dejé BROSOFT y me sumé a Innovid como Software Engineer II, un nuevo paso en mi carrera como ingeniera de software.",
+    focus: ["Software Engineering"],
   },
   {
     id: "now",
