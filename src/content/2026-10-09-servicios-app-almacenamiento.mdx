@@ -1,0 +1,241 @@
+---
+title: "Servicios de Aplicación y Almacenamiento"
+date: "2026-10-09"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon S3 (Simple Storage Service)
+
+> Amazon S3 es el servicio de almacenamiento de objetos de AWS, diseñado para almacenar y recuperar grandes volúmenes de información de forma segura, escalable y altamente disponible. 
+
+S3 utiliza un modelo orientado a objetos, lo que permite gestinonar datos de manera mucho más flexible y eficiente en entornos cloud. Podríamos pensar a S3 como un repositorio global donde se pueden
+guardar desde archivos simples (imagenes o documentos), hasta datasets masivos. Su arquitectura esta pensada para escalar automáticamente.
+
+## ¿Para qué se usa S3?
+
+- Almacenamiento de archivos (imágenes, videos, documentos, backups).
+- Hosting de sitios web estáticos.
+- Distribución de contenido junto con CDN (CloudFront).
+- Almacenamiento de datos para análisis (data lakes).
+- Backup y recuperación ante desastres (disaster recovery).
+- Almacenamiento de contenido multimedia para aplicaciones.
+
+## Modelo de almacenamiento: buckets y objetos
+
+Los conceptos fundamentales de S3 son los buckets y los objetos.
+
+<Accordion>
+    <AccordionItem title="Bucket" defaultOpen>
+        Es un contendor lógico donde se almacenan los datos, cada uno con un nombre único a nivel global dentro de AWS y se crea en una región específica. Podemos pensar un bucket como una carpeta que contiene objetos y a S3
+        como todo el disco disponible. Dentro de un bucket podemos tener objetos, que son los archivos que se están almacenando.
+    </AccordionItem>
+    <AccordionItem title="Objetos" defaultOpen>
+        Cada objeto es un archivo que se almacena dentro de un bucket y tiene un nombre único dentro del mismo. Los objetos pueden ser de cualquier tipo de archivo, como imágenes, documentos, videos, etc. 
+        Cada objeto incluye datos y su información asociada. Identificamos a cada objeto con una clave única.
+    </AccordionItem>
+    <AccordionItem title="Clave (key)">
+        Es el identificador único de cada objeto dentro de un bucket. Funciona como la “ruta” o nombre del archivo dentro del almacenamiento.
+    </AccordionItem>
+    <AccordionItem title="Metadatos (Metadata)">
+        Información adicional sobre los objetos, como tipo de archivo, fecha de creación, tamaño, etc. AWS S3 genera automáticamente algunos metadatos, pero también podemos agregar metadatos personalizados para organizar
+        y gestionar mejor los objetos.
+    </AccordionItem>
+    <AccordionItem title="Clases de almacenamiento (Storage Classes)">
+        Definen cómo se almacenan los datos según su frecuencia de acceso (por ejemplo: Standard, Infrequent Access, Glacier). Permiten optimizar costos. Por ejemplo, Glacier es una clase de almacenamiento 
+        más lenta en la lectura y restringe la cantidad de accesos, siendo ideal para archivos que se deben guardar pero no se acceden con frecuencia, como logs. Es más económico.
+    </AccordionItem>
+    <AccordionItem title="Permisos y Políticas de acceso (Security and Access Control)">
+        Mecanismos para controlar quién puede acceder a datos, incluyendo políticas de bucket, ACLs e integración con IAM
+    </AccordionItem>
+</Accordion>
+
+## Clases de almacenamiento
+
+Unos de los aspectos más importantes de S3 es la posibilidad de elegir la clase de almacenamiento según la frecuencia de acceso y el costo. Las clases más comunes son:
+- **S3 Standard**: Para datos de acceso frecuente, con alta durabilidad y bajo tiempo de acceso.
+- **S3 Intelligent-Tiering**: Para datos con patrones de acceso desconocidos o cambiantes, optimizando automáticamente los costos al mover los datos entre niveles de acceso según su uso.
+- **S3 Standard-IA (Infrequent Access)**: Para datos que se acceden con poca frecuencia, con menor costo de almacenanamiento pero mayor costo de acceso.
+- **S3 Glacier y Glacier Deep Archive**: Diseñadas para almacenamiento a largo plazo y archivado, con costos muy bajos pero tiempos de recuperación más largos.
+
+## Seguridad en S3
+
+La seguridad en S3 es altamente configurable y permite controlar quién puede acceder a los datos y cómo. Algunas de las prácticas recomendadas incluyen:
+- Políticas de acceso (Bucket Policies e IAM)
+- Control de acceso a nivel de objeto
+- Cifrado de datos en reposo y en tránsito
+- Bloqueo de acceso público para evitar exposición accidental de datos
+
+# Amazon CloudFront
+
+> Amazon CloudFront es ek servicio de distribución de contenido (CDN, Content Delivery Network) de AWS, diseñado para entregar contenido a usuarios finales con baja latencia, alta velocidad y alta disponibilidad. 
+
+Su **principal objetivo** es **mejorar la experiencia del usuario** reduciendo el tiempo que tarda en cargarse un sitio web, una API o cualquier tipo de contenido distribuido a través de internet. CloudFont logra
+esto utilizando una red global de servidores distribuidos geográgicamente, conocidos como **edge locations**, que almacenan copias del contenido más cerca de los usuarios. Esto permite que las solicitudes
+se resuelvan desde un punto cercano, reduciento la distancia física y mejorando la velocidad de entrega.
+
+## ¿Cómo funciona CloudFront?
+
+Se basa en el concepto de **cache distribuida**. Cuando un usuario solicita un recurso (ejemplo, una imagen) la solicitud es redirigida automáticamente a la ubicación de borde más cercana (edge location). 
+
+Si el recurso ya está en caché, se entrega inmediatamente; si no, CloudFront lo obtiene del origen (por ejemplo, un bucket de S3) y lo almacena en caché para futuras solicitudes. Esto permite que, a medida
+que más usuarios acceden al contenido, el sistema se vuelva más eficiente, ya que reduce la cantidad de solicitudes que llegan al origen.
+
+## ¿Para qué se usa CloudFront?
+
+- Escenarios donde el rendimiento y la experiencia del usuario son críticos, como sitios web, aplicaciones móviles y APIs.
+- Distribución de contenido estático y dinámico, incluyendo imágenes, videos o páginas web completas.
+- Streaming de contenido multimedia, como video bajo demanda o transmisiones en vivo.
+- Capa de APIs para mejorar la latencia y seguridad de las aplicaciones web.
+- Combinado con S3, donde CloudFront actúa como la capa de distribución para entregar contenido almacenado en S3 a nivel global.
+
+## Conceptos
+
+<Accordion>
+    <AccordionItem title="Distribución (Distribution)" defaultOpen>
+        Es la configuración principal, donde se define qué contenido se distribuye, desde dónde se obtiene (origen) y bajo que reglas.
+    </AccordionItem>
+    <AccordionItem title="Origen (Origin)">
+        Es la fuente del contenido, que puede ser un bucket de S3, un servidor web, una instancia EC2 o cualquier otro recurso accesible a través de internet. 
+    </AccordionItem>
+    <AccordionItem title="Edge Locations">
+        Son los puntos de presencia distribuidos globalmente donde se almacena el contenido caché.
+    </AccordionItem>
+    <AccordionItem title="Cache Behavior">
+        Define cómo CloudFront maneja las solicitudes para diferentes tipos de contenido, incluyendo reglas de caché, métodos HTTP permitidos y configuraciones de seguridad.
+    </AccordionItem>
+</Accordion>
+
+## Características principales y seguridad
+
+CloudFront ofrece una serie de capacidades que lo convienten en un componente clave:
+- Red global de distribución
+- Baja latencia
+- Escalabilidad automática
+- Compatibilidad con contenido dinámico y estático
+
+Por otro lado, uno de los aspectos más importantes es la seguridad, que incluye:
+- Soporte para HTTPS y certificados SSL/TLS
+- Integración con AWS WAF (Web Application Firewall) para proteger contra ataques web
+- Integración con AWS Shield para protección DDoS
+- Control de acceso mediante políticas y firmas de URLs
+
+# Amazon Elastic Beanstalk
+
+> Amazon Elastic Beanstalk es un servicio del tipo PaaS que permite desplegar y administrar aplicaciones web sin necesidad de gestionar directamente la infrastructura subyacente. 
+
+Su **objetivo principal** es **simplificar el proceso de llevar una aplicación a producción**, reduciendo la carga operativa asociada a servidores, redes, escalabilidad y monitoreo.
+
+A diferencia de trabajar directamente con servicios como EC2, donde el usuario debe configurar manualmente cada componente, Elastic Beanstalk automatiza todo el proceso de aprovisionamiento. Sin embargo,
+Elastic Beanstalk no oculta completamente los recusos subyacentes. Internamente utiliza servicios como EC2, Auto Scaling y Elastic Load Balancing, lo que permite mantener cierto nivel de control y visibilidad sobre la arquitectura desplegada.
+
+## Funcionamiento y arquitectura interna
+
+Se basa en el siguiente flujo: el usuario sube su aplicación, selecciona una plataforma y el servicio se encarga del resto. AWS crea automáticamente todos los recusos necesarios para ejecutar la aplicación 
+en entrono productivo.
+
+Cuando se despliega una aplicación, Elastic Beanstalk aprovisiona una arquitectura completa que suele incluir instancias EC2 donde corre la aplicación, un balanceador de carga para distribuir el tráfico, un grupo de 
+Auto Scaling para ajustar la capacidad según la demanda, almacenamiento (como volúmenes EBS) y herramientas de monitoreo.
+
+El servicio estructura los recursos en distintos niveles:
+- **Application**: representa el proyecto lógico.
+- **Application Version**: define versiones especificas del código.
+- **Environment**: es el entorno donde se ejecuta la aplicación (por ejemplo, desarrollo o producción).
+
+Cada entorno es completamente independiente y puede tener su propia configuración, lo que permite trabajar con múltiples versiones y entornos en paralelo.
+
+## Escalabilidad, disponibilidad y operación
+
+Uno de los pilares de Elastic Beanstalk es su capacidad de escalar automáticamente y garantizat alta disponibilidad sin intervención manual.
+
+Se utiliza:
+- **Auto Scaling Groups** para ajustar dinámicamente la cantidad de instancias en función de métricas como uso de CPU o tráfico.
+- **Elastic Load Balancing** que distribuye el tráfico entre múltiples intancias, evitando que una sola se sobrecargue. En caso de que alguna falle, el sistema la reemplaza automáticamente.
+
+Además, Elastic Beanstalk permite desplegar aplicaciones en múltiples zonas de disponibilidad dentro de una región, lo que incrementa la resiliencia ante fallos de infraestructura. 
+
+## Configuración, integración y casos de uso
+----
+
+siempre necesitamos un bucket -> mas utilizados
+podemos guardar desde
+- archivo
+- logs
+- hsoting de sitios web estaticos -> ejemplo una landing page
+- modelos de MLs
+- distribucion de contenido (CDN) -> ejemplo imagenes, videos, etc
+- alamcenar datos para analizar (data lake, athina) -> se puede hacer un reporte automatico por mes ejemplo con una lambda
+- backups
+-> se puede guardar lo que sea
+Pensarlo coomo un disco virtual, pero en la nube.
+Podemos hacerle seguimiento, al estar en la nube podemos agregarle mas espacio (escalarlo). No nos preocupamos por la capacidad e infraestructura.
+
+Componenetes principales:
+- buckets: contenedores logico -> carpetas. S3 es todo el disco diponible, cada carpeta es un bucket. Dentro de un backet vamos a tener objetos -> los objetos van a ser los archivos que se estan almacenando
+dentro de un bucket. -> ingresamos a un bucket y vemos los objetos que hay dentro. Cada objeto tiene un nombre unico dentro del bucket. 
+- clave es un identificador unico para cada objeto dentro del bucket.
+- metadatos: info automatica que podemos agregarle. Tambien podemos agregarle tags para organizarlo.
+- Clases de almacenamiento
+    - glacier: mas lenta la lectura, restrinje la cantidad de accesos. Sirve por ejemplo para archivos de logs que si o si hay que guardar pero no se acceden casi nunca. Es mas barato.
+- Ver como lo vamos a disponibilizar -> politicas de acceso. -> politicas de bucket, politicas de objetos, politicas de usuarios.
+
+# Amazon CloudFront
+
+Pensado para distribuir contenido desde AWS. Ejemplo aplicacion web
+- baja latencia
+- alta velocidad 
+- alta disponibilidad -> esta distribuido en varias regiones del mundo.
+
+Averiguar sobre las edge locations.
+Provee la capa de abstraccion logica par apoder distribur mi contenido.
+
+# Amazon Elastic Beanstalk
+
+Hacer un despliegue facil, administrar apps webs -> no tenemos que gestionar directaente la infraestructura.
+Simplificar el proceso de llevar una aplicacion a produccion.
+
+# AWS Amplify
+
+Pensado para aplicaciones web y moviles. 
+Acelerar el desarrollo desde el lado del front end. El backend se lo damos al proveedor
+
+- autenticacion de usuarios, autorizacion
+- APIs REST y GraphQL
+- Almacenamiento de archivos, integrando servicios como S3 
+- bases de datos, dyamodb, aurora serverless
+- hosting
+- gestionar entronos con los pipelines de CI/CD
+
+# Automatización del desarrollo de software CI/CD
+
+Dev > QA > Prod
+- dev: hacemos el desarrollo, en teoria si se rompe no es tan grave proque no afecta al usuario. 
+- QA: es un entorno de pruebas / testeo -> deberia replicar en de produccion. Se debe testear todo lo maximo posible para que en prod 
+todo fluya bien. Si se detecta un error, vuelve a Dev.
+- Prod: 
+
+Puede ser lento trabajar de esta forma al pasar por distintos ambientes. Lo mejoramos con las tecnicas de CI/CD -> forma de estucturar la
+jerarquia dentro de la nube
+
+## CI/CD
+
+Que sea rapido poder integrar cambios (pasar de ambientes) y que esa entrega sea continua -> todo el pipeline de trabajo sea mas rapido
+
+En la nuve hay formas de estructurar la organizacion (cuenta root/ org). Primero siempre la ORG
+- la org arma 3 ambientes (dev, qa, prod) y replica los proyesctos en cada uno.
+    - ejemplo 3: ML, Front, Back
+
+Pero tambien se puede separar en mas -> porque puede haber vairos subgrupos
+
+Lo pensamos como 
+ORG
+- DEV
+    - IT
+    - RH
+    - ....
+- QA
+- PROD 
+
+En cada ambiente tenemos los distintos proyectos. cADA PROYECTO REPLICADO EN CADA AMBIENTE.
+
