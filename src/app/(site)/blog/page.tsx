@@ -1,7 +1,12 @@
 import { getAllPostsMeta } from "../../../lib/posts";
 import BlogList from "../../../components/BlogList";
 
-export default function BlogIndex() {
+export default async function BlogIndex({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; tag?: string }>;
+}) {
+  const { category, tag } = await searchParams;
   const posts = getAllPostsMeta();
 
   return (
@@ -30,7 +35,12 @@ export default function BlogIndex() {
           </p>
         </div>
 
-        <BlogList posts={posts} />
+        <BlogList
+          key={`${category ?? ""}|${tag ?? ""}`}
+          posts={posts}
+          initialCategory={category}
+          initialTag={tag}
+        />
       </div>
     </main>
   );

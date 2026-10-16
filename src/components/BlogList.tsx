@@ -9,6 +9,7 @@ interface PostSummary {
   date: string;
   summary?: string;
   category?: string;
+  tags?: string[];
 }
 
 function categoryDot(cat: string) {
@@ -20,17 +21,32 @@ function categoryDot(cat: string) {
   return map[cat] ?? "bg-zinc-400";
 }
 
-export default function BlogList({ posts }: { posts: PostSummary[] }) {
+export default function BlogList({
+  posts,
+  initialCategory,
+  initialTag,
+}: {
+  posts: PostSummary[];
+  initialCategory?: string;
+  initialTag?: string;
+}) {
   const categories = [
     "Todos",
     ...Array.from(new Set(posts.map((p) => p.category ?? "General"))),
   ];
-  const [active, setActive] = useState("Todos");
+  const [active, setActive] = useState(
+    initialCategory && categories.includes(initialCategory)
+      ? initialCategory
+      : "Todos",
+  );
 
-  const filtered =
-    active === "Todos"
-      ? posts
-      : posts.filter((p) => (p.category ?? "General") === active);
+  const tagKey = initialTag?.trim().toLowerCase();
+  const filtered = posts
+    .filter((p) => active === "Todos" || (p.category ?? "General") === active)
+    .filter(
+      (p) =>
+        !tagKey || (p.tags ?? []).some((t) => t.trim().toLowerCase() === tagKey),
+    );
 
   return (
     <>
@@ -51,6 +67,18 @@ export default function BlogList({ posts }: { posts: PostSummary[] }) {
           </button>
         ))}
       </div>
+
+      {initialTag && (
+        <p className="mb-6 flex flex-wrap items-center gap-2 text-sm text-zinc-400">
+          Filtrando por
+          <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+            #{initialTag}
+          </span>
+          <Link href="/blog" className="text-zinc-400 underline-offset-4 transition hover:text-white hover:underline">
+            Quitar filtro
+          </Link>
+        </p>
+      )}
 
       <ul className="space-y-5">
         {filtered.map((p) => {
@@ -105,7 +133,7 @@ export default function BlogList({ posts }: { posts: PostSummary[] }) {
 
       {filtered.length === 0 && (
         <p className="mt-12 text-center text-zinc-500">
-          No hay posts en esta categoría todavía.
+          No hay posts que coincidan todavía.
         </p>
       )}
     </>

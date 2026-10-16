@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   t,
   langFromPathname,
@@ -15,6 +15,23 @@ export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const pathname = usePathname();
+    const [lastPathname, setLastPathname] = useState(pathname);
+    // Close the drawer whenever the route changes (adjusting state during render
+    // avoids an extra effect pass).
+    if (pathname !== lastPathname) {
+        setLastPathname(pathname);
+        setIsMenuOpen(false);
+    }
+
+    useEffect(() => {
+        if (!isMenuOpen) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setIsMenuOpen(false);
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [isMenuOpen]);
+
     const lang = langFromPathname(pathname);
     const canonical = stripLangPrefix(pathname);
   
@@ -49,7 +66,7 @@ export default function NavBar() {
     }
 
     return (
-      <nav className="absolute top-0 left-0 w-full z-50 bg-transparent backdrop-blur-sm">
+      <nav className={`absolute top-0 left-0 w-full z-50 backdrop-blur-sm ${isMenuOpen ? "bg-[#05050f] shadow-lg shadow-black/60 sm:bg-transparent sm:shadow-none" : "bg-transparent"}`}>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -57,6 +74,9 @@ export default function NavBar() {
                   type="button"
                   data-command="--toggle"
                   data-commandfor="mobile-menu"
+                  aria-controls="mobile-menu"
+                  aria-expanded={isMenuOpen}
+                  aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
                   className="relative inline-flex items-center justify-center rounded-md p-2 text-zinc-300 hover:bg-white/10 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-pink-300"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
@@ -84,14 +104,15 @@ export default function NavBar() {
             </div>
           </div>
           {isMenuOpen && (
-            <div className="sm:hidden" id="mobile-menu">
+            <div className="border-t border-white/10 bg-[#05050f] sm:hidden" id="mobile-menu">
               <div className="space-y-1 px-2 pt-2 pb-3">
                 {navigation.map((item) => (
-                  <Link href={item.href} key={item.pathname} className={isActive(item.pathname) ? selectedStyle : unselectedStyle}>
+                  <Link href={item.href} key={item.pathname} onClick={() => setIsMenuOpen(false)} className={`block ${isActive(item.pathname) ? selectedStyle : unselectedStyle}`}>
                     {item.name}
                   </Link>
                 ))}
-                <div className="px-1 pt-2">
+                {/* Clicks bubble up from the ES/EN links, so choosing a language also closes the drawer. */}
+                <div className="px-1 pt-2" onClick={() => setIsMenuOpen(false)}>
                   <LangSwitch />
                 </div>
               </div>

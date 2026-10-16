@@ -89,6 +89,7 @@ export default function CoursesView({ lang }: { lang: Lang }) {
           </div>
         </section>
 
+        {upcoming && upcoming.length > 0 && (
         <section className="mt-20" aria-labelledby="upcoming-title">
           <div className="mb-7 flex items-center gap-4">
             <h2 id="upcoming-title" className="text-2xl font-bold">{t("Lo que sigue", lang)}</h2>
@@ -110,6 +111,7 @@ export default function CoursesView({ lang }: { lang: Lang }) {
             ))}
           </div>
         </section>
+      )}
 
         
       </div>

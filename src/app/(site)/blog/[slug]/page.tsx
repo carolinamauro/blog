@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPostSlugs } from "../../../../lib/posts";
-import { MDXRemote } from "next-mdx-remote/rsc";
+import {
+  getPostBySlug,
+  getPostSlugs,
+  getRelatedPosts,
+  getTopics,
+} from "../../../../lib/posts";
+import { compileMDX } from "next-mdx-remote/rsc";
+import { rehypeCollectHeadings, type TocHeading } from "@/src/lib/headings";
+import TableOfContents from "@/src/components/TableOfContents";
+import PostSidebar from "@/src/components/PostSidebar";
 import Footer from "@/src/components/ui/footer";
 import OllamaPlayground from "@/src/components/OllamaPlayground";
 import remarkGfm from "remark-gfm";
@@ -24,11 +32,39 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const tags = post.meta.tags ?? [];
+  const tags = (post.meta.tags ?? []).filter((t) => t.trim().length > 0);
   const category = post.meta.category ?? "General";
 
+  // Compile up front so the heading collector has run before the ToC renders.
+  const headings: TocHeading[] = [];
+  const { content } = await compileMDX({
+    source: post.content,
+    components: {
+      OllamaPlayground,
+      img: (props) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          {...props}
+          alt={props.alt ?? ""}
+          loading="lazy"
+          decoding="async"
+          className="mx-auto h-auto w-full max-w-full rounded-xl border border-white/10"
+        />
+      ),
+    },
+    options: {
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [rehypeCollectHeadings(headings)],
+      },
+    },
+  });
+
+  const related = getRelatedPosts(slug);
+  const topics = getTopics();
+
   return (
-    <div className="relative z-10 min-h-screen overflow-hidden pt-5">
+    <div className="relative z-10 min-h-screen overflow-x-clip pt-5">
 
       {/* Nebula blobs */}
       <div
@@ -40,21 +76,32 @@ export default async function BlogPostPage({
         style={{ bottom: "0", left: "-4rem", width: "32rem", height: "32rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.10), transparent 78%)", animationDelay: "4s" }}
       />
 
-      <article className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
 
         {/* Back link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 transition hover:text-white"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.05] py-1.5 pl-1.5 pr-4 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-cyan-400/10 hover:text-cyan-100 focus-visible:-translate-y-0.5 focus-visible:border-cyan-300/60 focus-visible:text-cyan-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 active:translate-y-0"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-colors duration-200 group-hover:bg-cyan-400/20 group-focus-visible:bg-cyan-400/20">
+            <svg
+              className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5 group-focus-visible:-translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+          </span>
           Volver al blog
         </Link>
 
+        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-10">
+        <article className="min-w-0">
+
         {/* Header card */}
-        <header className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm sm:p-8">
+        <header className="rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm sm:p-8">
           {/* Category + tags */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-200">
@@ -92,6 +139,8 @@ export default async function BlogPostPage({
           )}
         </header>
 
+        <TableOfContents headings={headings} variant="mobile" />
+
         {/* Divider */}
         <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
@@ -108,32 +157,21 @@ export default async function BlogPostPage({
           prose-ul:text-zinc-300 prose-ol:text-zinc-300
           prose-li:marker:text-cyan-400
           prose-th:text-white prose-td:text-zinc-300
+          prose-headings:scroll-mt-8
         ">
-          <MDXRemote
-            source={post.content}
-            components={{
-              OllamaPlayground,
-              img: (props) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  {...props}
-                  alt={props.alt ?? ""}
-                  loading="lazy"
-                  decoding="async"
-                  className="mx-auto h-auto w-full max-w-full rounded-xl border border-white/10"
-                />
-              ),
-            }}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkGfm],
-              },
-            }}
-          />
+          {content}
+        </div>
+
+        </article>
+
+        <aside aria-label="Contenido relacionado" className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:pr-1">
+          <TableOfContents headings={headings} variant="desktop" />
+          <PostSidebar related={related.posts} isFallback={related.isFallback} topics={topics} />
+        </aside>
         </div>
 
         <Footer />
-      </article>
+      </div>
     </div>
   );
 }
