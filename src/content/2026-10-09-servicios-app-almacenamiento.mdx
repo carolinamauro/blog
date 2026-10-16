@@ -10,8 +10,8 @@ summary: ""
 
 > Amazon S3 es el servicio de almacenamiento de objetos de AWS, diseñado para almacenar y recuperar grandes volúmenes de información de forma segura, escalable y altamente disponible. 
 
-S3 utiliza un modelo orientado a objetos, lo que permite gestinonar datos de manera mucho más flexible y eficiente en entornos cloud. Podríamos pensar a S3 como un repositorio global donde se pueden
-guardar desde archivos simples (imagenes o documentos), hasta datasets masivos. Su arquitectura esta pensada para escalar automáticamente.
+S3 utiliza un modelo orientado a objetos, lo que permite gestionar datos de manera mucho más flexible y eficiente en entornos cloud. Podríamos pensar a S3 como un repositorio global donde se pueden
+guardar desde archivos simples (imágenes o documentos), hasta datasets masivos. Su arquitectura esta pensada para escalar automáticamente.
 
 ## ¿Para qué se usa S3?
 
@@ -28,7 +28,7 @@ Los conceptos fundamentales de S3 son los buckets y los objetos.
 
 <Accordion>
     <AccordionItem title="Bucket" defaultOpen>
-        Es un contendor lógico donde se almacenan los datos, cada uno con un nombre único a nivel global dentro de AWS y se crea en una región específica. Podemos pensar un bucket como una carpeta que contiene objetos y a S3
+        Es un contenedor lógico donde se almacenan los datos, cada uno con un nombre único a nivel global dentro de AWS y se crea en una región específica. Podemos pensar un bucket como una carpeta que contiene objetos y a S3
         como todo el disco disponible. Dentro de un bucket podemos tener objetos, que son los archivos que se están almacenando.
     </AccordionItem>
     <AccordionItem title="Objetos" defaultOpen>
@@ -56,7 +56,7 @@ Los conceptos fundamentales de S3 son los buckets y los objetos.
 Unos de los aspectos más importantes de S3 es la posibilidad de elegir la clase de almacenamiento según la frecuencia de acceso y el costo. Las clases más comunes son:
 - **S3 Standard**: Para datos de acceso frecuente, con alta durabilidad y bajo tiempo de acceso.
 - **S3 Intelligent-Tiering**: Para datos con patrones de acceso desconocidos o cambiantes, optimizando automáticamente los costos al mover los datos entre niveles de acceso según su uso.
-- **S3 Standard-IA (Infrequent Access)**: Para datos que se acceden con poca frecuencia, con menor costo de almacenanamiento pero mayor costo de acceso.
+- **S3 Standard-IA (Infrequent Access)**: Para datos que se acceden con poca frecuencia, con menor costo de almacenamiento pero mayor costo de acceso.
 - **S3 Glacier y Glacier Deep Archive**: Diseñadas para almacenamiento a largo plazo y archivado, con costos muy bajos pero tiempos de recuperación más largos.
 
 ## Seguridad en S3
@@ -72,8 +72,8 @@ La seguridad en S3 es altamente configurable y permite controlar quién puede ac
 > Amazon CloudFront es ek servicio de distribución de contenido (CDN, Content Delivery Network) de AWS, diseñado para entregar contenido a usuarios finales con baja latencia, alta velocidad y alta disponibilidad. 
 
 Su **principal objetivo** es **mejorar la experiencia del usuario** reduciendo el tiempo que tarda en cargarse un sitio web, una API o cualquier tipo de contenido distribuido a través de internet. CloudFont logra
-esto utilizando una red global de servidores distribuidos geográgicamente, conocidos como **edge locations**, que almacenan copias del contenido más cerca de los usuarios. Esto permite que las solicitudes
-se resuelvan desde un punto cercano, reduciento la distancia física y mejorando la velocidad de entrega.
+esto utilizando una red global de servidores distribuidos geográficamente, conocidos como **edge locations**, que almacenan copias del contenido más cerca de los usuarios. Esto permite que las solicitudes
+se resuelvan desde un punto cercano, reduciendo la distancia física y mejorando la velocidad de entrega.
 
 ## ¿Cómo funciona CloudFront?
 
@@ -109,7 +109,7 @@ que más usuarios acceden al contenido, el sistema se vuelva más eficiente, ya 
 
 ## Características principales y seguridad
 
-CloudFront ofrece una serie de capacidades que lo convienten en un componente clave:
+CloudFront ofrece una serie de capacidades que lo convierten en un componente clave:
 - Red global de distribución
 - Baja latencia
 - Escalabilidad automática
@@ -123,16 +123,16 @@ Por otro lado, uno de los aspectos más importantes es la seguridad, que incluye
 
 # Amazon Elastic Beanstalk
 
-> Amazon Elastic Beanstalk es un servicio del tipo PaaS que permite desplegar y administrar aplicaciones web sin necesidad de gestionar directamente la infrastructura subyacente. 
+> Amazon Elastic Beanstalk es un servicio del tipo PaaS que permite desplegar y administrar aplicaciones web sin necesidad de gestionar directamente la infraestructura subyacente. 
 
 Su **objetivo principal** es **simplificar el proceso de llevar una aplicación a producción**, reduciendo la carga operativa asociada a servidores, redes, escalabilidad y monitoreo.
 
 A diferencia de trabajar directamente con servicios como EC2, donde el usuario debe configurar manualmente cada componente, Elastic Beanstalk automatiza todo el proceso de aprovisionamiento. Sin embargo,
-Elastic Beanstalk no oculta completamente los recusos subyacentes. Internamente utiliza servicios como EC2, Auto Scaling y Elastic Load Balancing, lo que permite mantener cierto nivel de control y visibilidad sobre la arquitectura desplegada.
+Elastic Beanstalk no oculta completamente los recursos subyacentes. Internamente utiliza servicios como EC2, Auto Scaling y Elastic Load Balancing, lo que permite mantener cierto nivel de control y visibilidad sobre la arquitectura desplegada.
 
 ## Funcionamiento y arquitectura interna
 
-Se basa en el siguiente flujo: el usuario sube su aplicación, selecciona una plataforma y el servicio se encarga del resto. AWS crea automáticamente todos los recusos necesarios para ejecutar la aplicación 
+Se basa en el siguiente flujo: el usuario sube su aplicación, selecciona una plataforma y el servicio se encarga del resto. AWS crea automáticamente todos los recursos necesarios para ejecutar la aplicación 
 en entrono productivo.
 
 Cuando se despliega una aplicación, Elastic Beanstalk aprovisiona una arquitectura completa que suele incluir instancias EC2 donde corre la aplicación, un balanceador de carga para distribuir el tráfico, un grupo de 
@@ -147,11 +147,11 @@ Cada entorno es completamente independiente y puede tener su propia configuraci�
 
 ## Escalabilidad, disponibilidad y operación
 
-Uno de los pilares de Elastic Beanstalk es su capacidad de escalar automáticamente y garantizat alta disponibilidad sin intervención manual.
+Uno de los pilares de Elastic Beanstalk es su capacidad de escalar automáticamente y garantizar alta disponibilidad sin intervención manual.
 
 Se utiliza:
 - **Auto Scaling Groups** para ajustar dinámicamente la cantidad de instancias en función de métricas como uso de CPU o tráfico.
-- **Elastic Load Balancing** que distribuye el tráfico entre múltiples intancias, evitando que una sola se sobrecargue. En caso de que alguna falle, el sistema la reemplaza automáticamente.
+- **Elastic Load Balancing** que distribuye el tráfico entre múltiples instancias, evitando que una sola se sobrecargue. En caso de que alguna falle, el sistema la reemplaza automáticamente.
 
 Además, Elastic Beanstalk permite desplegar aplicaciones en múltiples zonas de disponibilidad dentro de una región, lo que incrementa la resiliencia ante fallos de infraestructura. 
 
@@ -159,7 +159,7 @@ Además, Elastic Beanstalk permite desplegar aplicaciones en múltiples zonas de
 
 Ofrece un nivel considerable de personalización, permitiendo ajustar parámetros como el tipo de instancia, la configuración de red, las variables de entorno y las políticas de escalado.
 
-Es muy adecuaso para aplicaciones web, APIs y proyectos que requieren despliegue rápido y escalabilidad automática. Es muy utilizado en etapas de desarollo inicial, prototipos
+Es muy adecuado para aplicaciones web, APIs y proyectos que requieren despliegue rápido y escalabilidad automática. Es muy utilizado en etapas de desarrollo inicial, prototipos
 o MVPs, donde la prioridad es la velocidad de despliegue y la facilidad de gestión.
 
 # AWS Amplify
