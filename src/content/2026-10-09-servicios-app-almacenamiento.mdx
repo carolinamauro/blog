@@ -1,9 +1,9 @@
 ---
 title: "Servicios de Aplicación y Almacenamiento"
 date: "2026-10-09"
-tags: [""]
+tags: ["Amazon S3, Amazon CloudFront, Amazon Elastic Beanstalk, AWS Amplify, CI/CD"]
 category: "AWS"
-summary: ""
+summary: "Exploramos un conjunto de servicios fundamentales de AWS orientados al almacenamiento, la distribución de contenido y el desarrollo de aplicaciones modernas"
 ---
 
 # Amazon S3 (Simple Storage Service)
@@ -71,7 +71,7 @@ La seguridad en S3 es altamente configurable y permite controlar quién puede ac
 
 > Amazon CloudFront es ek servicio de distribución de contenido (CDN, Content Delivery Network) de AWS, diseñado para entregar contenido a usuarios finales con baja latencia, alta velocidad y alta disponibilidad. 
 
-Su **principal objetivo** es **mejorar la experiencia del usuario** reduciendo el tiempo que tarda en cargarse un sitio web, una API o cualquier tipo de contenido distribuido a través de internet. CloudFont logra
+Su **principal objetivo** es **mejorar la experiencia del usuario** reduciendo el tiempo que tarda en cargarse un sitio web, una API o cualquier tipo de contenido distribuido a través de internet. CloudFront logra
 esto utilizando una red global de servidores distribuidos geográficamente, conocidos como **edge locations**, que almacenan copias del contenido más cerca de los usuarios. Esto permite que las solicitudes
 se resuelvan desde un punto cercano, reduciendo la distancia física y mejorando la velocidad de entrega.
 
@@ -164,88 +164,93 @@ o MVPs, donde la prioridad es la velocidad de despliegue y la facilidad de gesti
 
 # AWS Amplify
 
+> AWS Amplify es un conjunto de herramientas y servicios diseñados para facilitar el desarrollo de aplicaciones web desde el lado del front-end.
+
+Su objetivo principal es simplificar la creación de aplicaciones full-stack. Está pensado para acelerar el desarrollo desde el lado del cliente, integrando funcionalidades como autenticación,
+almacenamiento, APIs y hosting. En un contexto donde dominan las aplicaciones tipo SPA (Single Page Application) y apps móviles que consumen APIs. Amplify permite a los desarrolladores centrarse en la experiencia del usuario mientras AWS se encarga de la infraestructura del backend.
+
+Es ampliamente utilizado en aplicaciones de e-commerce, redes sociales, apps corporativas y soluciones móviles para startups.
+
+## Funcionamiento y arquitectura
+
+Amplify ofrece varias formas de trabajo:
+- **Amplify Library**: Conjunto de bibliotecas que permiten integrar funcionalidades de AWS en aplicaciones web y móviles.
+- **Amplify CLI**: Herramienta de línea de comandos que facilita la creación y gestión de recursos en la nube.
+- **Hosting y despliegue**: Permite desplegar aplicaciones frontend directamente desde repositorios de código, 
+- **Integración con pipelines de CI/CD**: permite automatizar el proceso de build, test y despliegue de aplicaciones móviles.
+
+A nivel de arquitectura, Amplify actúa como una capa de abstracción sobre múltiples servicios de AWS. Por ejemplo, cuando se implementa autenticación, internamente se utiliza Amazon Cognito; para almacenamiento de archivos, se integra con Amazon S3; y para APIs, puede trabajar con 
+API Gateway. Esto permite a los desarrolladores centrarse en la lógica de la aplicación sin preocuparse por la complejidad de la infraestructura subyacente.
+
+Además, Amplify facilita el manejo de datos en tiempo real y sincronización offline, lo cual es fundamental en aplicaciones móviles que pueden operar con conectividad limitada. Esto permite que los usuario interactúen con la aplicación incluso sin conexión, y que los cambios se sincronicen automáticamente 
+cuando la conectividad se restablece.
+
+## Capacidades principales y automatización
+
+Uno de los puntos fuertes de Amplify es su capacidad para automatizar tareas repetitivas y complejas, permitiendo incorporar rápidamente nuevas funcionalidades sin necesidad de configurar manualmente cada servicio. Esto incluye:
+- **Autenticación de usuarios**, incluyendo registro, login y gestión de identidades
+- **APIs (REST y GraphQL)** para comunicación entre frontend y backend
+- **Almacenamiento de archivos**, integrando servicios como S3
+- **Bases de datos**, generalmente mediante DynamoDB
+- **Hosting y despliegue continuo**, integrando con repositorios de código para automatizar el pipeline de CI/CD
+- **Gestión de entornos**, permitiendo crear y administrar múltiples entornos de desarrollo, prueba y producción.
+
+# Automatización del desarrollo de software (CI/CD)
+
+> La automatización del desarrollo de software mediante CI/CD (Continuous Integration / Continuous Delivery) es una práctica fundamental en el desarrollo de software moderno que busca
+mejorar la calidad del software y acelerar su entrega. CI/CD propone automatizar distintas etapas del ciclo de vida de una aplicación.
+
+La **integración continua (CI)** consiste en integrar de forma frecuente los cambios de código en un repositorio central. Cada vez que un desarrollador realiza un cambio, el sistema ejecuta automáticamente
+procesos como compilación y pruebas, lo que permite detectar errores de manera temprana.
+
+La **entrega continua (CD)** se enfoca en automatizar el proceso de despliegue, asegurando que el software esté siempre listo para ser publicado en producción. Puede extenderse a un deployment continuo, donde 
+los cambios se despliegan automáticamente en producción tras pasar las pruebas.
+
+## ¿Cómo funciona un pipeline de CI/CD?
 
 
--------
+El corazón de CI/CD es el **pipeline**, que representa una serie de pasos automatizados que el código recorre desde que se desarrolla hasta que se despliega.
 
-siempre necesitamos un bucket -> mas utilizados
-podemos guardar desde
-- archivo
-- logs
-- hsoting de sitios web estaticos -> ejemplo una landing page
-- modelos de MLs
-- distribucion de contenido (CDN) -> ejemplo imagenes, videos, etc
-- alamcenar datos para analizar (data lake, athina) -> se puede hacer un reporte automatico por mes ejemplo con una lambda
-- backups
--> se puede guardar lo que sea
-Pensarlo coomo un disco virtual, pero en la nube.
-Podemos hacerle seguimiento, al estar en la nube podemos agregarle mas espacio (escalarlo). No nos preocupamos por la capacidad e infraestructura.
+Un pipeline típico incluye varias etapas:
+- **Build (compilación)**: Se prepara el código para su ejecución, generando artefactos como aplicaciones o contenedores.
+- **Test (pruebas)**: Se ejecutan pruebas automatizadas para verificar que el código funciona correctamente.
+- **Deploy (despliegue)**: Se publica la aplicación en un entorno (testing, staging o producción)
 
-Componenetes principales:
-- buckets: contenedores logico -> carpetas. S3 es todo el disco diponible, cada carpeta es un bucket. Dentro de un backet vamos a tener objetos -> los objetos van a ser los archivos que se estan almacenando
-dentro de un bucket. -> ingresamos a un bucket y vemos los objetos que hay dentro. Cada objeto tiene un nombre unico dentro del bucket. 
-- clave es un identificador unico para cada objeto dentro del bucket.
-- metadatos: info automatica que podemos agregarle. Tambien podemos agregarle tags para organizarlo.
-- Clases de almacenamiento
-    - glacier: mas lenta la lectura, restrinje la cantidad de accesos. Sirve por ejemplo para archivos de logs que si o si hay que guardar pero no se acceden casi nunca. Es mas barato.
-- Ver como lo vamos a disponibilizar -> politicas de acceso. -> politicas de bucket, politicas de objetos, politicas de usuarios.
+Ante un cambio en el repositorio, el pipeline se ejecuta automáticamente. Esto mejora ls calidad del software además de reducir el tiempo necesario para implementar nuevas funcionalidades o correcciones.
 
-# Amazon CloudFront
+## Herramientas de CI/CD en AWS
 
-Pensado para distribuir contenido desde AWS. Ejemplo aplicacion web
-- baja latencia
-- alta velocidad 
-- alta disponibilidad -> esta distribuido en varias regiones del mundo.
+<Accordion>
+    <AccordionItem title="AWS CodeCommit" defaultOpen>
+        Repositorio de código similar a Github, donde se almacenan los proyectos.
+    </AccordionItem>
+    <AccordionItem title="AWS CodeBuild">
+        Servicio que compila el código y ejecuta pruebas automáticamente.
+    </AccordionItem>
+    <AccordionItem title="AWS CodeDeploy">
+        Herramienta que automatiza el despliegue de aplicaciones en servicios como EC2 o Lambda.
+    </AccordionItem>
+    <AccordionItem title="AWS CodePipeline">
+        Servicio que orquesta todo el proceso, conectando las distintas etapas del pipeline.
+    </AccordionItem>
+</Accordion>
 
-Averiguar sobre las edge locations.
-Provee la capa de abstraccion logica par apoder distribur mi contenido.
+## Beneficios de implementar CI/CD
 
-# Amazon Elastic Beanstalk
+1. Permite detectar errores de manera temprana: reduce costos y el impacto de los fallos en producción.
+2. Mejora la velocidad de desarrollo: los despliegues pueden realizarse de forma frecuente y segura.
+3. Reducción de errores humanos: los procesos manuales se reemplazan por automatizaciones.
+4. Fomenta buenas prácticas de desarrollo: colaboración entre equipos, pruebas automatizadas y la entrega continua de valor.
 
-Hacer un despliegue facil, administrar apps webs -> no tenemos que gestionar directaente la infraestructura.
-Simplificar el proceso de llevar una aplicacion a produccion.
+## Casos de uso y buenas prácticas
 
-# AWS Amplify
+Lo usamos en:
+- Proyectos de desarrollo de software donde se requiere alta frecuencia de despliegue.
+- Equipos que buscan mejorar la calidad del software y reducir el tiempo de entrega.
+- Proyectos que necesitan mantener múltiples entornos (desarrollo, pruebas, producción) de manera eficiente.
 
-Pensado para aplicaciones web y moviles. 
-Acelerar el desarrollo desde el lado del front end. El backend se lo damos al proveedor
-
-- autenticacion de usuarios, autorizacion
-- APIs REST y GraphQL
-- Almacenamiento de archivos, integrando servicios como S3 
-- bases de datos, dyamodb, aurora serverless
-- hosting
-- gestionar entronos con los pipelines de CI/CD
-
-# Automatización del desarrollo de software CI/CD
-
-Dev > QA > Prod
-- dev: hacemos el desarrollo, en teoria si se rompe no es tan grave proque no afecta al usuario. 
-- QA: es un entorno de pruebas / testeo -> deberia replicar en de produccion. Se debe testear todo lo maximo posible para que en prod 
-todo fluya bien. Si se detecta un error, vuelve a Dev.
-- Prod: 
-
-Puede ser lento trabajar de esta forma al pasar por distintos ambientes. Lo mejoramos con las tecnicas de CI/CD -> forma de estucturar la
-jerarquia dentro de la nube
-
-## CI/CD
-
-Que sea rapido poder integrar cambios (pasar de ambientes) y que esa entrega sea continua -> todo el pipeline de trabajo sea mas rapido
-
-En la nuve hay formas de estructurar la organizacion (cuenta root/ org). Primero siempre la ORG
-- la org arma 3 ambientes (dev, qa, prod) y replica los proyesctos en cada uno.
-    - ejemplo 3: ML, Front, Back
-
-Pero tambien se puede separar en mas -> porque puede haber vairos subgrupos
-
-Lo pensamos como 
-ORG
-- DEV
-    - IT
-    - RH
-    - ....
-- QA
-- PROD 
-
-En cada ambiente tenemos los distintos proyectos. cADA PROYECTO REPLICADO EN CADA AMBIENTE.
-
+Entre las buenas prácticas más importantes se destacan:
+- Mantener pipelines simples y progresivos.
+- Automatizar pruebas desde etapas tempranas.
+- Utilizar entornos separados (dev, QA, prod).
+- Monitorear los despliegues y resultados.
