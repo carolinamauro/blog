@@ -26,6 +26,45 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Learn More
 
+### Expandable details in MDX
+
+`Accordion` and `AccordionItem` are available in every blog `.mdx` file without imports.
+Use one item on its own, or group several items:
+
+```mdx
+<Accordion>
+  <AccordionItem title="What is EC2?">
+
+    EC2 provides **virtual servers** in the AWS cloud.
+
+    - Choose your operating system.
+    - Configure CPU, memory, and storage.
+
+  </AccordionItem>
+  <AccordionItem title="When should I use it?" defaultOpen>
+
+    Use it when you need control over the server and its operating system.
+
+  </AccordionItem>
+</Accordion>
+```
+
+Keep blank lines around Markdown inside each item. Details support normal Markdown,
+including lists, links, and code blocks. Each item opens independently; clicking its
+title again closes it. Native buttons support Tab, Enter, and Space, and animations
+respect reduced-motion preferences. Omit `defaultOpen` to start collapsed. Titles
+use an `h3` by default; set `headingLevel={2}` (or 3–6) to fit your article structure.
+
+For a single detail:
+
+```mdx
+<AccordionItem title="Learn more">
+
+  Write your detailed explanation here.
+
+</AccordionItem>
+```
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.

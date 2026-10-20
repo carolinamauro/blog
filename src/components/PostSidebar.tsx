@@ -6,8 +6,8 @@ type Topics = {
   tags: { label: string; count: number }[];
 };
 
-const widget = "rounded-2xl border border-white/10 bg-black/40 p-5";
-const widgetTitle = "mb-4 text-xs font-semibold uppercase tracking-wider text-zinc-500";
+const widget = "rounded-2xl border border-white/10 bg-[#0a0a14] p-5";
+const widgetTitle = "mb-4 text-xs font-semibold uppercase tracking-wider text-zinc-400";
 const chip =
   "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-zinc-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10 hover:text-cyan-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300";
 
@@ -34,7 +34,7 @@ export default function PostSidebar({
                   href={`/blog/${p.slug}`}
                   className="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
                 >
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-zinc-400">
                     {p.category ?? "General"} · {p.date}
                   </span>
                   <span className="mt-1 block text-sm font-semibold leading-5 text-zinc-100 transition-colors group-hover:text-cyan-200">
@@ -64,7 +64,7 @@ export default function PostSidebar({
 
         {topics.tags.length > 0 && (
           <>
-            <h3 className="mb-3 mt-5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            <h3 className="mb-3 mt-5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
               Temas populares
             </h3>
             <ul className="flex flex-wrap gap-2">

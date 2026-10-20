@@ -110,7 +110,7 @@ export default function TableOfContents({
     return (
       <details
         ref={detailsRef}
-        className="group mt-6 rounded-2xl border border-white/10 bg-black/40 lg:hidden"
+        className="group mt-6 rounded-2xl border border-white/10 bg-[#0a0a14] lg:hidden"
       >
         <summary className="flex cursor-pointer list-none items-center justify-between rounded-2xl px-5 py-3.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 [&::-webkit-details-marker]:hidden">
           En este post
@@ -134,9 +134,9 @@ export default function TableOfContents({
   return (
     <nav
       aria-label="Tabla de contenidos"
-      className="hidden rounded-2xl border border-white/10 bg-black/40 p-5 lg:block"
+      className="hidden rounded-2xl border border-white/10 bg-[#0a0a14] p-5 lg:block"
     >
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
         En este post
       </h2>
       <List headings={headings} active={active} onNavigate={goTo} />

@@ -12,6 +12,7 @@ import TableOfContents from "@/src/components/TableOfContents";
 import PostSidebar from "@/src/components/PostSidebar";
 import Footer from "@/src/components/ui/footer";
 import OllamaPlayground from "@/src/components/OllamaPlayground";
+import { Accordion, AccordionItem } from "@/src/components/Accordion";
 import remarkGfm from "remark-gfm";
 
 export function generateStaticParams() {
@@ -41,6 +42,8 @@ export default async function BlogPostPage({
     source: post.content,
     components: {
       OllamaPlayground,
+      Accordion,
+      AccordionItem,
       img: (props) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -101,7 +104,7 @@ export default async function BlogPostPage({
         <article className="min-w-0">
 
         {/* Header card */}
-        <header className="rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm sm:p-8">
+        <header className="rounded-2xl border border-white/10 bg-[#0a0a14] p-6 sm:p-8">
           {/* Category + tags */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-200">
@@ -111,7 +114,7 @@ export default async function BlogPostPage({
               tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-zinc-400"
+                  className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-zinc-300"
                 >
                   #{t}
                 </span>
@@ -124,7 +127,7 @@ export default async function BlogPostPage({
           </h1>
 
           {/* Date */}
-          <div className="mt-3 flex items-center gap-2 text-sm text-zinc-500">
+          <div className="mt-3 flex items-center gap-2 text-sm text-zinc-400">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -133,7 +136,7 @@ export default async function BlogPostPage({
 
           {/* Summary */}
           {post.meta.summary && (
-            <p className="mt-4 text-base leading-7 text-zinc-300">
+            <p className="mt-4 text-base leading-7 text-zinc-200">
               {post.meta.summary}
             </p>
           )}
@@ -141,25 +144,28 @@ export default async function BlogPostPage({
 
         <TableOfContents headings={headings} variant="mobile" />
 
-        {/* Divider */}
-        <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-        {/* MDX content */}
-        <div className="prose prose-invert max-w-none
-          prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight
-          prose-p:text-zinc-300 prose-p:leading-8
-          prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:text-cyan-200
-          prose-strong:text-white
-          prose-code:text-pink-300 prose-code:bg-white/[0.06] prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-          prose-pre:rounded-xl prose-pre:border prose-pre:border-white/10 prose-pre:bg-black/60 prose-pre:overflow-x-auto
-          prose-blockquote:border-l-cyan-400 prose-blockquote:text-zinc-400
-          prose-hr:border-white/10
-          prose-ul:text-zinc-300 prose-ol:text-zinc-300
-          prose-li:marker:text-cyan-400
-          prose-th:text-white prose-td:text-zinc-300
-          prose-headings:scroll-mt-8
-        ">
-          {content}
+        {/* MDX content: solid reading surface so the starfield never sits behind text */}
+        <div className="mt-6 rounded-2xl border border-white/10 bg-[#0a0a14] px-4 py-7 sm:px-10 sm:py-12">
+          <div className="prose prose-invert max-w-none font-sans text-[1.0625rem]
+            [&>:first-child]:mt-0
+            prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight prose-headings:scroll-mt-8
+            prose-h1:mb-6 prose-h1:mt-14 prose-h1:border-b prose-h1:border-white/10 prose-h1:pb-3 prose-h1:text-3xl prose-h1:font-extrabold
+            prose-h2:mb-4 prose-h2:mt-12 prose-h2:text-2xl
+            prose-h3:mb-3 prose-h3:mt-9 prose-h3:text-xl
+            prose-p:leading-8 prose-p:text-zinc-200
+            prose-a:text-cyan-300 prose-a:underline prose-a:decoration-cyan-400/40 prose-a:underline-offset-4 hover:prose-a:text-cyan-100 hover:prose-a:decoration-cyan-200
+            prose-strong:font-semibold prose-strong:text-white
+            prose-code:rounded prose-code:bg-white/[0.08] prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.9em] prose-code:text-pink-200 prose-code:before:content-none prose-code:after:content-none
+            prose-pre:overflow-x-auto prose-pre:rounded-xl prose-pre:border prose-pre:border-white/10 prose-pre:bg-black prose-pre:text-sm
+            prose-blockquote:rounded-r-lg prose-blockquote:border-l-cyan-400 prose-blockquote:bg-cyan-400/[0.06] prose-blockquote:px-4 prose-blockquote:py-0.5 sm:prose-blockquote:px-5 sm:prose-blockquote:py-1 prose-blockquote:leading-7 prose-blockquote:font-normal prose-blockquote:text-zinc-200
+            prose-hr:border-white/10
+            prose-ul:text-zinc-200 prose-ol:text-zinc-200
+            prose-li:my-1.5 prose-li:leading-8 prose-li:text-zinc-200 prose-li:marker:text-cyan-400
+            prose-th:text-white prose-td:text-zinc-200
+            prose-thead:border-white/20 prose-tr:border-white/10
+          ">
+            {content}
+          </div>
         </div>
 
         </article>

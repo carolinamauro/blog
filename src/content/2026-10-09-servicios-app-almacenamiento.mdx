@@ -1,0 +1,256 @@
+---
+title: "Servicios de Aplicación y Almacenamiento"
+date: "2026-10-09"
+tags: ["Amazon S3, Amazon CloudFront, Amazon Elastic Beanstalk, AWS Amplify, CI/CD"]
+category: "AWS"
+summary: "Exploramos un conjunto de servicios fundamentales de AWS orientados al almacenamiento, la distribución de contenido y el desarrollo de aplicaciones modernas"
+---
+
+# Amazon S3 (Simple Storage Service)
+
+> Amazon S3 es el servicio de almacenamiento de objetos de AWS, diseñado para almacenar y recuperar grandes volúmenes de información de forma segura, escalable y altamente disponible. 
+
+S3 utiliza un modelo orientado a objetos, lo que permite gestionar datos de manera mucho más flexible y eficiente en entornos cloud. Podríamos pensar a S3 como un repositorio global donde se pueden
+guardar desde archivos simples (imágenes o documentos), hasta datasets masivos. Su arquitectura esta pensada para escalar automáticamente.
+
+## ¿Para qué se usa S3?
+
+- Almacenamiento de archivos (imágenes, videos, documentos, backups).
+- Hosting de sitios web estáticos.
+- Distribución de contenido junto con CDN (CloudFront).
+- Almacenamiento de datos para análisis (data lakes).
+- Backup y recuperación ante desastres (disaster recovery).
+- Almacenamiento de contenido multimedia para aplicaciones.
+
+## Modelo de almacenamiento: buckets y objetos
+
+Los conceptos fundamentales de S3 son los buckets y los objetos.
+
+<Accordion>
+    <AccordionItem title="Bucket" defaultOpen>
+        Es un contenedor lógico donde se almacenan los datos, cada uno con un nombre único a nivel global dentro de AWS y se crea en una región específica. Podemos pensar un bucket como una carpeta que contiene objetos y a S3
+        como todo el disco disponible. Dentro de un bucket podemos tener objetos, que son los archivos que se están almacenando.
+    </AccordionItem>
+    <AccordionItem title="Objetos" defaultOpen>
+        Cada objeto es un archivo que se almacena dentro de un bucket y tiene un nombre único dentro del mismo. Los objetos pueden ser de cualquier tipo de archivo, como imágenes, documentos, videos, etc. 
+        Cada objeto incluye datos y su información asociada. Identificamos a cada objeto con una clave única.
+    </AccordionItem>
+    <AccordionItem title="Clave (key)">
+        Es el identificador único de cada objeto dentro de un bucket. Funciona como la “ruta” o nombre del archivo dentro del almacenamiento.
+    </AccordionItem>
+    <AccordionItem title="Metadatos (Metadata)">
+        Información adicional sobre los objetos, como tipo de archivo, fecha de creación, tamaño, etc. AWS S3 genera automáticamente algunos metadatos, pero también podemos agregar metadatos personalizados para organizar
+        y gestionar mejor los objetos.
+    </AccordionItem>
+    <AccordionItem title="Clases de almacenamiento (Storage Classes)">
+        Definen cómo se almacenan los datos según su frecuencia de acceso (por ejemplo: Standard, Infrequent Access, Glacier). Permiten optimizar costos. Por ejemplo, Glacier es una clase de almacenamiento 
+        más lenta en la lectura y restringe la cantidad de accesos, siendo ideal para archivos que se deben guardar pero no se acceden con frecuencia, como logs. Es más económico.
+    </AccordionItem>
+    <AccordionItem title="Permisos y Políticas de acceso (Security and Access Control)">
+        Mecanismos para controlar quién puede acceder a datos, incluyendo políticas de bucket, ACLs e integración con IAM
+    </AccordionItem>
+</Accordion>
+
+## Clases de almacenamiento
+
+Unos de los aspectos más importantes de S3 es la posibilidad de elegir la clase de almacenamiento según la frecuencia de acceso y el costo. Las clases más comunes son:
+- **S3 Standard**: Para datos de acceso frecuente, con alta durabilidad y bajo tiempo de acceso.
+- **S3 Intelligent-Tiering**: Para datos con patrones de acceso desconocidos o cambiantes, optimizando automáticamente los costos al mover los datos entre niveles de acceso según su uso.
+- **S3 Standard-IA (Infrequent Access)**: Para datos que se acceden con poca frecuencia, con menor costo de almacenamiento pero mayor costo de acceso.
+- **S3 Glacier y Glacier Deep Archive**: Diseñadas para almacenamiento a largo plazo y archivado, con costos muy bajos pero tiempos de recuperación más largos.
+
+## Seguridad en S3
+
+La seguridad en S3 es altamente configurable y permite controlar quién puede acceder a los datos y cómo. Algunas de las prácticas recomendadas incluyen:
+- Políticas de acceso (Bucket Policies e IAM)
+- Control de acceso a nivel de objeto
+- Cifrado de datos en reposo y en tránsito
+- Bloqueo de acceso público para evitar exposición accidental de datos
+
+# Amazon CloudFront
+
+> Amazon CloudFront es ek servicio de distribución de contenido (CDN, Content Delivery Network) de AWS, diseñado para entregar contenido a usuarios finales con baja latencia, alta velocidad y alta disponibilidad. 
+
+Su **principal objetivo** es **mejorar la experiencia del usuario** reduciendo el tiempo que tarda en cargarse un sitio web, una API o cualquier tipo de contenido distribuido a través de internet. CloudFront logra
+esto utilizando una red global de servidores distribuidos geográficamente, conocidos como **edge locations**, que almacenan copias del contenido más cerca de los usuarios. Esto permite que las solicitudes
+se resuelvan desde un punto cercano, reduciendo la distancia física y mejorando la velocidad de entrega.
+
+## ¿Cómo funciona CloudFront?
+
+Se basa en el concepto de **cache distribuida**. Cuando un usuario solicita un recurso (ejemplo, una imagen) la solicitud es redirigida automáticamente a la ubicación de borde más cercana (edge location). 
+
+Si el recurso ya está en caché, se entrega inmediatamente; si no, CloudFront lo obtiene del origen (por ejemplo, un bucket de S3) y lo almacena en caché para futuras solicitudes. Esto permite que, a medida
+que más usuarios acceden al contenido, el sistema se vuelva más eficiente, ya que reduce la cantidad de solicitudes que llegan al origen.
+
+## ¿Para qué se usa CloudFront?
+
+- Escenarios donde el rendimiento y la experiencia del usuario son críticos, como sitios web, aplicaciones móviles y APIs.
+- Distribución de contenido estático y dinámico, incluyendo imágenes, videos o páginas web completas.
+- Streaming de contenido multimedia, como video bajo demanda o transmisiones en vivo.
+- Capa de APIs para mejorar la latencia y seguridad de las aplicaciones web.
+- Combinado con S3, donde CloudFront actúa como la capa de distribución para entregar contenido almacenado en S3 a nivel global.
+
+## Conceptos
+
+<Accordion>
+    <AccordionItem title="Distribución (Distribution)" defaultOpen>
+        Es la configuración principal, donde se define qué contenido se distribuye, desde dónde se obtiene (origen) y bajo que reglas.
+    </AccordionItem>
+    <AccordionItem title="Origen (Origin)">
+        Es la fuente del contenido, que puede ser un bucket de S3, un servidor web, una instancia EC2 o cualquier otro recurso accesible a través de internet. 
+    </AccordionItem>
+    <AccordionItem title="Edge Locations">
+        Son los puntos de presencia distribuidos globalmente donde se almacena el contenido caché.
+    </AccordionItem>
+    <AccordionItem title="Cache Behavior">
+        Define cómo CloudFront maneja las solicitudes para diferentes tipos de contenido, incluyendo reglas de caché, métodos HTTP permitidos y configuraciones de seguridad.
+    </AccordionItem>
+</Accordion>
+
+## Características principales y seguridad
+
+CloudFront ofrece una serie de capacidades que lo convierten en un componente clave:
+- Red global de distribución
+- Baja latencia
+- Escalabilidad automática
+- Compatibilidad con contenido dinámico y estático
+
+Por otro lado, uno de los aspectos más importantes es la seguridad, que incluye:
+- Soporte para HTTPS y certificados SSL/TLS
+- Integración con AWS WAF (Web Application Firewall) para proteger contra ataques web
+- Integración con AWS Shield para protección DDoS
+- Control de acceso mediante políticas y firmas de URLs
+
+# Amazon Elastic Beanstalk
+
+> Amazon Elastic Beanstalk es un servicio del tipo PaaS que permite desplegar y administrar aplicaciones web sin necesidad de gestionar directamente la infraestructura subyacente. 
+
+Su **objetivo principal** es **simplificar el proceso de llevar una aplicación a producción**, reduciendo la carga operativa asociada a servidores, redes, escalabilidad y monitoreo.
+
+A diferencia de trabajar directamente con servicios como EC2, donde el usuario debe configurar manualmente cada componente, Elastic Beanstalk automatiza todo el proceso de aprovisionamiento. Sin embargo,
+Elastic Beanstalk no oculta completamente los recursos subyacentes. Internamente utiliza servicios como EC2, Auto Scaling y Elastic Load Balancing, lo que permite mantener cierto nivel de control y visibilidad sobre la arquitectura desplegada.
+
+## Funcionamiento y arquitectura interna
+
+Se basa en el siguiente flujo: el usuario sube su aplicación, selecciona una plataforma y el servicio se encarga del resto. AWS crea automáticamente todos los recursos necesarios para ejecutar la aplicación 
+en entrono productivo.
+
+Cuando se despliega una aplicación, Elastic Beanstalk aprovisiona una arquitectura completa que suele incluir instancias EC2 donde corre la aplicación, un balanceador de carga para distribuir el tráfico, un grupo de 
+Auto Scaling para ajustar la capacidad según la demanda, almacenamiento (como volúmenes EBS) y herramientas de monitoreo.
+
+El servicio estructura los recursos en distintos niveles:
+- **Application**: representa el proyecto lógico.
+- **Application Version**: define versiones especificas del código.
+- **Environment**: es el entorno donde se ejecuta la aplicación (por ejemplo, desarrollo o producción).
+
+Cada entorno es completamente independiente y puede tener su propia configuración, lo que permite trabajar con múltiples versiones y entornos en paralelo.
+
+## Escalabilidad, disponibilidad y operación
+
+Uno de los pilares de Elastic Beanstalk es su capacidad de escalar automáticamente y garantizar alta disponibilidad sin intervención manual.
+
+Se utiliza:
+- **Auto Scaling Groups** para ajustar dinámicamente la cantidad de instancias en función de métricas como uso de CPU o tráfico.
+- **Elastic Load Balancing** que distribuye el tráfico entre múltiples instancias, evitando que una sola se sobrecargue. En caso de que alguna falle, el sistema la reemplaza automáticamente.
+
+Además, Elastic Beanstalk permite desplegar aplicaciones en múltiples zonas de disponibilidad dentro de una región, lo que incrementa la resiliencia ante fallos de infraestructura. 
+
+## Configuración, integración y casos de uso
+
+Ofrece un nivel considerable de personalización, permitiendo ajustar parámetros como el tipo de instancia, la configuración de red, las variables de entorno y las políticas de escalado.
+
+Es muy adecuado para aplicaciones web, APIs y proyectos que requieren despliegue rápido y escalabilidad automática. Es muy utilizado en etapas de desarrollo inicial, prototipos
+o MVPs, donde la prioridad es la velocidad de despliegue y la facilidad de gestión.
+
+# AWS Amplify
+
+> AWS Amplify es un conjunto de herramientas y servicios diseñados para facilitar el desarrollo de aplicaciones web desde el lado del front-end.
+
+Su objetivo principal es simplificar la creación de aplicaciones full-stack. Está pensado para acelerar el desarrollo desde el lado del cliente, integrando funcionalidades como autenticación,
+almacenamiento, APIs y hosting. En un contexto donde dominan las aplicaciones tipo SPA (Single Page Application) y apps móviles que consumen APIs. Amplify permite a los desarrolladores centrarse en la experiencia del usuario mientras AWS se encarga de la infraestructura del backend.
+
+Es ampliamente utilizado en aplicaciones de e-commerce, redes sociales, apps corporativas y soluciones móviles para startups.
+
+## Funcionamiento y arquitectura
+
+Amplify ofrece varias formas de trabajo:
+- **Amplify Library**: Conjunto de bibliotecas que permiten integrar funcionalidades de AWS en aplicaciones web y móviles.
+- **Amplify CLI**: Herramienta de línea de comandos que facilita la creación y gestión de recursos en la nube.
+- **Hosting y despliegue**: Permite desplegar aplicaciones frontend directamente desde repositorios de código, 
+- **Integración con pipelines de CI/CD**: permite automatizar el proceso de build, test y despliegue de aplicaciones móviles.
+
+A nivel de arquitectura, Amplify actúa como una capa de abstracción sobre múltiples servicios de AWS. Por ejemplo, cuando se implementa autenticación, internamente se utiliza Amazon Cognito; para almacenamiento de archivos, se integra con Amazon S3; y para APIs, puede trabajar con 
+API Gateway. Esto permite a los desarrolladores centrarse en la lógica de la aplicación sin preocuparse por la complejidad de la infraestructura subyacente.
+
+Además, Amplify facilita el manejo de datos en tiempo real y sincronización offline, lo cual es fundamental en aplicaciones móviles que pueden operar con conectividad limitada. Esto permite que los usuario interactúen con la aplicación incluso sin conexión, y que los cambios se sincronicen automáticamente 
+cuando la conectividad se restablece.
+
+## Capacidades principales y automatización
+
+Uno de los puntos fuertes de Amplify es su capacidad para automatizar tareas repetitivas y complejas, permitiendo incorporar rápidamente nuevas funcionalidades sin necesidad de configurar manualmente cada servicio. Esto incluye:
+- **Autenticación de usuarios**, incluyendo registro, login y gestión de identidades
+- **APIs (REST y GraphQL)** para comunicación entre frontend y backend
+- **Almacenamiento de archivos**, integrando servicios como S3
+- **Bases de datos**, generalmente mediante DynamoDB
+- **Hosting y despliegue continuo**, integrando con repositorios de código para automatizar el pipeline de CI/CD
+- **Gestión de entornos**, permitiendo crear y administrar múltiples entornos de desarrollo, prueba y producción.
+
+# Automatización del desarrollo de software (CI/CD)
+
+> La automatización del desarrollo de software mediante CI/CD (Continuous Integration / Continuous Delivery) es una práctica fundamental en el desarrollo de software moderno que busca
+mejorar la calidad del software y acelerar su entrega. CI/CD propone automatizar distintas etapas del ciclo de vida de una aplicación.
+
+La **integración continua (CI)** consiste en integrar de forma frecuente los cambios de código en un repositorio central. Cada vez que un desarrollador realiza un cambio, el sistema ejecuta automáticamente
+procesos como compilación y pruebas, lo que permite detectar errores de manera temprana.
+
+La **entrega continua (CD)** se enfoca en automatizar el proceso de despliegue, asegurando que el software esté siempre listo para ser publicado en producción. Puede extenderse a un deployment continuo, donde 
+los cambios se despliegan automáticamente en producción tras pasar las pruebas.
+
+## ¿Cómo funciona un pipeline de CI/CD?
+
+
+El corazón de CI/CD es el **pipeline**, que representa una serie de pasos automatizados que el código recorre desde que se desarrolla hasta que se despliega.
+
+Un pipeline típico incluye varias etapas:
+- **Build (compilación)**: Se prepara el código para su ejecución, generando artefactos como aplicaciones o contenedores.
+- **Test (pruebas)**: Se ejecutan pruebas automatizadas para verificar que el código funciona correctamente.
+- **Deploy (despliegue)**: Se publica la aplicación en un entorno (testing, staging o producción)
+
+Ante un cambio en el repositorio, el pipeline se ejecuta automáticamente. Esto mejora ls calidad del software además de reducir el tiempo necesario para implementar nuevas funcionalidades o correcciones.
+
+## Herramientas de CI/CD en AWS
+
+<Accordion>
+    <AccordionItem title="AWS CodeCommit" defaultOpen>
+        Repositorio de código similar a Github, donde se almacenan los proyectos.
+    </AccordionItem>
+    <AccordionItem title="AWS CodeBuild">
+        Servicio que compila el código y ejecuta pruebas automáticamente.
+    </AccordionItem>
+    <AccordionItem title="AWS CodeDeploy">
+        Herramienta que automatiza el despliegue de aplicaciones en servicios como EC2 o Lambda.
+    </AccordionItem>
+    <AccordionItem title="AWS CodePipeline">
+        Servicio que orquesta todo el proceso, conectando las distintas etapas del pipeline.
+    </AccordionItem>
+</Accordion>
+
+## Beneficios de implementar CI/CD
+
+1. Permite detectar errores de manera temprana: reduce costos y el impacto de los fallos en producción.
+2. Mejora la velocidad de desarrollo: los despliegues pueden realizarse de forma frecuente y segura.
+3. Reducción de errores humanos: los procesos manuales se reemplazan por automatizaciones.
+4. Fomenta buenas prácticas de desarrollo: colaboración entre equipos, pruebas automatizadas y la entrega continua de valor.
+
+## Casos de uso y buenas prácticas
+
+Lo usamos en:
+- Proyectos de desarrollo de software donde se requiere alta frecuencia de despliegue.
+- Equipos que buscan mejorar la calidad del software y reducir el tiempo de entrega.
+- Proyectos que necesitan mantener múltiples entornos (desarrollo, pruebas, producción) de manera eficiente.
+
+Entre las buenas prácticas más importantes se destacan:
+- Mantener pipelines simples y progresivos.
+- Automatizar pruebas desde etapas tempranas.
+- Utilizar entornos separados (dev, QA, prod).
+- Monitorear los despliegues y resultados.
