@@ -1,0 +1,478 @@
+---
+title: " Redes Virtuales y Conectividad"
+date: "2026-10-24"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon VPC (Virtual Private Cloud)
+
+> Amazon VPC (Virtual Private Cloud) es un servicio de red de AWS que permite crear una red virtual aislada dentro de la nube. Funciona como una red privada dentro de AWS, donde el usuario puede
+definir cómo se conectan sus recursos, qué direcciones IP utilizan y quién puede acceder a ellos.
+
+Toda la estructura se encuentra virtualizada = no hay un hardware físico que nos limite, podemos crear y destruir recursos a voluntad. El propósito principal de una VPC es **brindar control total
+sobre la red**, permitiendo definir 
+- direccionamientoIP
+- segmentación en subredes
+- reglas de seguridad
+- conexiones hacia internet y otras redes
+
+## Funcionamiento de una VPC
+
+Cuando se crea una VPC, se le asigna un rango de direcciones IP privadas (ej, `10.0.0.0/16`). Este rango define el espacio de direcciones disponibles para los recursos que se desplegarán dentro de esa red.
+
+<Accordion>
+    <AccordionItem title="Subredes" defaultOpen>
+        Permite dividir el rango principal en segmentos más pequeños para organizar los recursos según su función (ej: separar servidores públicos de bases de datos) o nivel de exposición a internet (subredes públicas y privadas).
+    </AccordionItem>
+    <AccordionItem title="Enrutamiento" defaultOpen>
+        Permite configurar reglas de enrutamiento y seguridad para controlar con precisión cómo circula el tráfico de entrada y salida.
+    </AccordionItem>
+</Accordion>
+
+## Características principales
+
+- **Aislamiento lógico:** cada vpc está separada de otras redes en AWS garantizando seguridad y privacidad para sus datos.
+- **Control de direccionamiento IP:** el usuario puede definir los rangos de direcciones IP que utilizará su red.
+- **Segmentación de red:** permite la creación de subredes
+- **Control de tráfico: **gestión del flujo de datos mediante tablas de enrutamiento y reglas de seguridad.
+- **Conectividad flexible:** facilita la conexión con internet, otras VPCs y redes locales mediante VPN o AWS Direct Connect.
+
+## ¿Para qué se utiliza una VPC?
+
+Prácticamente todos los escenarios en AWS requieren una VPC ya que cualquier aplicación necesita una red donde ejecutarse. Los casos de uso más comunes incluyen:
+1. Despliegue de aplicaciones web con **frontend público y backend privado**.
+2. Aislar **bases de datos** para garantizar la máxima seguridad de la información.
+3. Crear **entornos separados** y aislar (desarrollo, testing, producción)
+4. Conectar la nube con uns **red corporativa local** (Híbrida).
+5. Implementar **arquitecturas seguras** y altamente escalables.
+
+## Importancia de Amazon VPC en arquitecturas cloud
+
+**Amazon VPC** es la base sobre la que se construye toda la infraestructura en AWS, ya que cualquier recurso (instancias EC2, bases de datos, contenedores) vive dentro de una VPC o
+se conecta a ella. Nos permite trasladar conceptos de redes tradicionales de redes (segmentación, seguridad, direccionamiento) al mundo cloud. Dejamos de depender de hardware físico y el
+usuario puede diseñar su red de forma lógica.
+
+> Cuando hablamos de seguridad, la VPC es clave porque nos permite **aislar recursos críticos**. Por ejemplo, una aplicación puede tener servidores web accesibles desde internet en una subred pública,
+mientras que la base de datos se ubica en una subred privada sin acceso directo externo.
+
+## IPv4 e IPv6 en Amazon VPC
+
+<Comparison>
+    <ComparisonColumn title="Protocolo IPv4 (Obligatorio)">
+    **Estructura:** 32 bits (Ej: 192.168.1.1).
+    **Configuración:** 4 números separados por puntos, cada uno entre 0 y 255 (Ej: 10.0.0.0/16).
+        - 2³² direcciones, unas 4.300 millones
+        - Número limitado de direcciones.
+        - Estándar más utilizado actualmente.
+        - Esencial para el funcionamiento base.
+    </ComparisonColumn>
+    <ComparisonColumn title="Protocolo IPv6 (Opcional)">
+        **Estructura:** 128 bits (Ej: 2001:db8::1).
+        **Configuración:** 8 bloques de caracteres hexadecimales separados por dos puntos (Ej: 2001:0db8:85a3:0000:0000:8a2e:0370:7334).
+            - 2¹²⁸ direcciones posibles
+            - Espacio de direcciones ilimitado.
+            - No requiere NAT (conexión directa).
+            - Diseñado para el futuro de internet.
+    </ComparisonColumn>
+</Comparison>
+
+#### Costo de las direcciones IPv4 en la nube
+
+Las direcciones IPv4 son escasas, los proveedores cloud cobran por usarlas. En AWS, cada dirección IPv4 pública tiene un costo por hora, este en uso o no. Por eso nos conviene liberar las que no necesitemos en lugar
+de tenerlas reservadas sin usar.
+
+En cada subred, AWS cadas dirección reserva 5 direcciones para su propio funcionamiento 
+- la dirección de red
+- el router de la VPC
+- el DNS
+- una reserva para el futuro
+- la dirección de broadcast
+Por eso, siempre tenemos 5 direcciones menos de las que indica el rango.
+
+Ejemplo `10.0.0.0/29`:
+- El `/29` indica que 29 bits indican la red y que 3 bits para los hosts. 
+- Eso da 2^(32−29) = 2³ = 8 direcciones, de `10.0.0.0` a `10.0.0.7`.
+- Restando las 5 reservadas por AWS, nos quedan 3 direcciones para usar.
+
+El misma tamaño de bloque puede empezar en otro punto, siempre que sea múltiplo de su tamaño: `10.0.0.16/29` va de `10.0.0.16` a `10.0.0.23`
+
+Al definir una subred hay que calcular cuántas direcciones vamos a necesitar y elegir un rango que las cubra:
+
+`10.0.0.0/23` → 2⁹ = 512 direcciones → 507 utilizables
+`10.0.0.0/22` → 2¹⁰ = 1024 direcciones → 1019 utilizables
+
+Si necesitamos más de 507 hosts, un /23 no alcanza y tenemos que pasar a un /22. Cuanto más chico es el número después de la barra, más grande es el rango.
+
+# Subredes públicas y privadas
+
+Dentro de una VPC, las subredes (subnets) permiten dividir el espacio de direcciones IP en segmentos más pequeños. Esto nos permite separar los distintos recursos de una 
+aplicación.
+
+Cada subred está asociada a una zona de disponibilidad específica contribuyendo a la alta disponibilidad.
+
+## Subred pública
+
+> Una **subred pública** es aquella que permite que los recursos dentro de ella puedan comunicarse directamente con internet.
+
+Para que una subred sea pública, debe cumplir con las siguientes condiciones, ya que por si sola no es pública automáticamente:
+- Tener una tabla de enrutamiento que dirija el tráfico hacia un **Internet Gateway (IGW)**.
+- Que los recursos tengan una dirección IP pública (Elastic IP).
+- Que las reglas de seguridad permitan acceso.
+
+Lo usamos generalmente en:
+- servidores web
+- balanceadores de carga
+- APIs expuestas a usuarios.
+
+## Subred privada
+
+> Una **subred privada** es aquella donde los recursos no tienen acceso directo a internet, ni pueden ser accedidos desde el exterior, permitiendo aislar componentes críticos que no deben estar expuestos.
+
+Lo logramos mediante:
+- La ausencia de una ruta directa al **Internet Gateway** en la tabla de enrutamiento.
+- La falta de direcciones **IP públicas** en los recursos.
+
+En este tipo de subred se suelen ubicar:
+- Bases de datos
+- Aplicaciones backend
+- Servicios internos
+
+### Principales ventajas
+- **Mayor seguridad** al no exponer recursos críticos a internet.
+- **Reducción** de la superficie de ataque.
+- **Mayor control **del tráfico interno.
+
+## Internet Gateway (IGW)
+
+> El **Internet Gateway (IGW)** es un componente que permite la comunicación entre una VPC e internet. Es un recurso que se adjunta a la VPC y actúa como punto de entrada y salida del tráfico hacia la red pública.
+
+Permite que los recursos dentro de la VPC envíen y reciban tráfico desde internet. Para el acceso a internet mediante un IGW se necesita se necesita:
+- La VPC debe tener un Internet Gateway asociado.
+- La subred debe tener una ruta hacia el IGW.
+- El recurso debe tener una IP pública.
+- Las reglas de seguridad deben permitir el tráfico.
+
+<Highlight tone="info">
+El **IGW** por sí solo no expone automáticamente los recursos: todo depende de la configuración completa de la red.
+</Highlight>
+
+## NAT Gateway (Network Address Translation)
+
+> El **NAT Gateway** es un servicio que permite a los recursos en una subred privada acceder a internet, pero sin permitir conexiones entrantes desde el exterior.
+
+Es clave en servicios seguros, donde necesitamos que ciertos recursos puedan comunicarse con servicios externos, pero sin exponerse públicamente. El NAT Gateway se despliega en una **subred pública** y 
+utiliza una IP pública para comunicarse con internet. Actúa como intermediario para el tráfico saliente de las subredes privadas.
+
+**Funcionamiento:**
+1. Un recurso en subred privada envía tráfico hacia internet.
+2. El tráfico pasa por el NAT Gateway.
+3. El NAT Gateway reemplaza IP privada por una IP pública.
+4. La repuesta vuelve al NAT y luego al recurso original.
+
+**Entre sus ventajas principales se encuentran:**
+1. **Permite acceso a internet** sin exponer recursos.
+2. **Mejora la seguridad** de la arquitectura.
+3. **Servicios gestionado** que escala automáticamente según la demanda.
+
+## Arquitectura típica en AWS
+
+<Accordion>
+    <AccordionItem title="Subred Pública" defaultOpen>
+        Aloja recursos accesibles desde el exterior.
+        - Internet Gateway (IGW)
+        - NAT Gateway 
+        - Load Balancers
+    </AccordionItem>
+    <AccordionItem title="Subred Privada" defaultOpen>
+        Protege componentes internos críticos
+        - Backend
+        - Bases de datos
+        - Servicios de procesamiento interno
+    </AccordionItem>
+    <AccordionItem title="Internet Gateway" defaultOpen>
+        Habilita la conexión directa y bidireccional con internet para recursos públicos.
+    </AccordionItem>
+    <AccordionItem title="NAT Gateway" defaultOpen>
+        Permite que recursos privados salgan a internet (actualizaciones) sin exponerse a conexiones entrantes.
+    </AccordionItem>
+</Accordion>
+
+# Tablas de enrutamiento, ACLs y Security Groups
+
+Una vez que una red ha sido diseñada dentro de Amazon VPC, el siguiente paso es comprender cómo se gestiona el tráfico dentro de esa red. Es decir,
+cómo los datos se mueven entre recursos, cómo se decide su destino y qué mecanismos determinan si una comunicación está permitida o bloqueada.
+
+## Tablas de enrutamiento (Route Tables)
+
+> Las **tablas de enrutamiento** actúan como el sistema de navegación de la VPC, definiendo el destino de cada paquete de datos mediante reglas específicas.
+
+<Comparison>
+    <ComparisonColumn title="Destino (Rango IP)">
+        1) 10.0.0.0/16 (Ejemplo)
+        2) 0.0.0.0/0 (Todo el tráfico)
+        3) 0.0.0.0/0 (Tráfico controlado)
+    </ComparisonColumn>
+    <ComparisonColumn title="Objetivo (Target)">
+        1) Local: comunicación interna dentro de la VPC
+        2) Internet Gateway (IGW): salida a internet desde subredes públicas
+        3) NAT Gateway: salida protegida a internet desde subredes privadas
+    </ComparisonColumn>
+</Comparison>
+
+## Listas de control de acceso (Network ACLs)
+
+> Las **Network ACLs** actúan como un cortafuegos (firewall) a nivel de subred, filtrando el tráfico entrante y saliente mediante reglas personalizadas.
+
+- **Nivel de operación:** Subred
+- **Evaluación:** Reglas numeradas evaluadas en orden secuencial.
+- **Tipo de reglas:** Permitir o Denegar tráfico.
+
+<Highlight tone="info">
+**Concepto Crítico: Stateless (Sin Estado)**: Las ACLs no mantienen memoria de las conexiones. Si permites la entrada de un paquete, debes permitir explícitamente la salida. Cada
+dirección de tráfico se evalúa de manera independiente, lo que significa que si un paquete entra, la respuesta no se permite automáticamente a menos que exista una regla específica para ello.
+</Highlight>
+
+Las ACLs evalúan el tráfico basándose en la IP (origen/destino), el protocolo (TCP/UDP) y el puerto. Debido a su flexibilidad para denegar tráfico específico, se utilizan como una capa adicional de seguridad.
+
+## Grupos de seguridad (Security Groups)
+
+> Un **Security Groups** actúa como un firewall virtual que controla qué tipo de tráfico puede entrar o salir de un recurso.
+
+Operan a nivel de recurso individual. Nos permiten definir reglas basadas en puertos, protocolos y direcciones IP pero la diferencia clave esta en que son **stateful (con estado)**. 
+
+Esto significa que mantienen el estado de las conexiones. En la práctica, si una regla permite una conexión entrante, la respuesta saliente se permite automáticamente, sin necesidad de definir una regla adicional.
+
+Otra diferencia importante es que los Security Groups solo permiten definir reglas de tipo “allow”, es decir, no se pueden crear reglas explícitas de denegación. Modelo de seguridad basado en “permitir lo que se necesita y denegar todo lo demás” (default deny).
+
+Son el mecanismo principal de seguridad utilizado en AWS debido a su facilidad de uso y su integración con los recursos. 
+
+## Integración de conceptos
+
+Cuando un paquete de datos intenta llegar a un recurso dentro de AWS, primero se evalúa si existe una ruta válida hacia su destino, lo cual depende de la tabla de enrutamiento. 
+Si la ruta existe, el tráfico avanza hacia la subred correspondiente.
+
+En ese punto, entra en juego la ACL, que verifica si el tráfico está permitido a nivel de subred. Si supera este filtro, el paquete llega finalmente al recurso, 
+donde el Security Group determina si la comunicación está autorizada.
+
+Solo cuando el tráfico pasa por estos tres niveles —enrutamiento, ACL y Security Group— la conexión se establece correctamente. Si cualquiera de estos componentes 
+bloquea el tráfico, la comunicación no se concreta.
+
+Este enfoque en capas permite construir sistemas altamente seguros, donde cada nivel agrega un control adicional sobre el flujo de datos.
+
+# Conectividad: VPN, Direct Connect y VPC Peering
+
+Es muy común que una VPC necesite comunicarse con otros entornos. Vamos a ver las distintas que AWS ofrece para conectar redes, ya sea con otras VPCs, con la red corporativa local o con internet.
+
+## VPN (Virtual Private Network)
+
+> Una **VPN** permite conectar una red local con una VPC de forma segura. El tráfico viaja con el internet público, pero se protege mediante un "túnel" cifrado que garantiza la confidencialidad e integridad de los datos.
+
+Tenemos diferentes tipos de conexiones:
+1. **Site-to-Site VPN**: Conecta una VPC completa con una red corporativa u oficina física.
+2. **Client VPN**: Permite que usuarios individuales accedan de forma remota a los recursos de la nube.
+
+<Accordion>
+    <AccordionItem title="Agilidad" defaultOpen>
+        Implementación rápida y sencilla de la conectividad entre redes.
+    </AccordionItem>
+    <AccordionItem title="Eficiencia" defaultOpen>
+        Bajo costo inicial de adopción.
+    </AccordionItem>
+    <AccordionItem title="Híbrido" defaultOpen>
+        Ideal para entornos iniciales.
+    </AccordionItem>
+</Accordion>
+
+Al depender del internet público, la VPN puede verse afectada por la latencia y el ancho de banda disponible. 
+
+## AWS Direct Connect
+
+> **AWS Direct Connect** establece un enlace físico directo entre tu datacenter on-premise y AWS. EL tráfico no pasa por internet, 
+lo que mejora la seguridad, reduce la latencia y ofrece un ancho de banda más consistente. Es un enlace físico dedicado.
+
+Entre sus características principales se encuentran:
+- Conexión privada fuera del internet público.
+- Mayor ancho de banda
+- Latencia más baja y máxima estabilidad de red.
+- Seguridad robusta a nivel de infraestructura física.
+
+## VPC Peering
+
+> El **VPC Peering** permite conectar dos VPCs de forma directa, funcionando como una sola red privada sin pasar por internet ni gateways adicionales. Es
+clave para la comunicación interna en AWS.
+
+<Accordion>
+    <AccordionItem title="Privacidad" defaultOpen>
+        Tráfico siempre dentro de la red global de AWS, sin exposición a internet.
+    </AccordionItem>
+    <AccordionItem title="Baja latencia" defaultOpen>
+        Conexión directa punto a punto entre recursos.
+    </AccordionItem>
+    <AccordionItem title="Simplicidad" defaultOpen>
+        Más fácil de implementar que una VPN o Direct Connect, sin necesidad de hardware adicional.
+    </AccordionItem>
+</Accordion>
+
+<Highlight tone="warning">
+    **Limitación Importante: No es Transitivo**: Si la VPC A está conectada con la VPC B, y la VPC B con la VPC C, la VPC A NO puede comunicarse con la VPC C automáticamente. Se requiere un peering directo entre A y C.
+</Highlight>
+
+Escenarios comunes de uso incluyen:
+1. Conectar entornos de desarrollo y producción en VPCs separadas.
+2. Comunicación entre diferentes aplicaciones de una misma organización.
+3. Interconexión entre cuentas separadas de AWS.
+
+# Amazon Route 53
+
+Chequea (este post)[https://blog-lovat-six.vercel.app/blog/2026-05-11-dns] para entender cómo funciona DNS.
+
+> **Amazon Route 53** es un servicio altamente disponible y escalable que permite registrar dominios, gestionar registros DNS y dirigir el tráfico de red de forma inteligente. 
+
+El nombre “Route 53” hace referencia al puerto 53, que es el puerto estándar utilizado por el protocolo DNS.
+
+Este servicio no solo traduce nombres a IPs, sino que también permite aplicar reglas para decidir cómo y hacia dónde enviar el tráfico, basándose en distintos criterios 
+como la ubicación del usuario, la latencia o el estado de los recursos.
+
+## Componentes principales de Route 53
+
+Primero comprendamos los elementos clave que componen Route 53
+
+### Hosted Zones (Zonas Hospedadas)
+
+> Una **Hosted Zone** es un contenedor lógico que agrupa los registros DNS de un dominio. Si registras el dominio google.com, la zona contendrá las configuraciones para dirigir el tráfico a sus servicios asociados.
+
+Encontramos dos tipos de zonas hospedadas:
+1. **Zonas públicas:** Dirigen el tráfico de internet hacia recursos accesibles públicamente
+2. **Zonas privadas:** Dirigen el tráfico dentro de una VPC.
+
+### Registros DNS
+
+> Son las reglas que indican cómo se debe resolver un dominio.
+
+Route 53 soporta varios tipos de registros, entre los más comunes se encuentran:
+
+<img src="/images/registros_dns.png" 
+alt="Tipos de registros DNS en Route 53" 
+style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+### Health Checks (Verificaciones de Estado)
+
+> Permiten monitorear la disponibilidad de los recursos. 
+
+Route 53 verifica si un servidor responde correctamente y toma decisiones automatizadas.
+
+<Highlight tone="info">
+Impacto en Alta Disponibilidad: Si un recurso falla, Route 53 puede redirigir el tráfico a otro recurso saludable (Failover)., mejorando la resiliencia de la aplicación.
+</Highlight>
+
+## Casos de uso de Route 53
+
+1. Publicación de sitios web y aplicaciones con alta disponibilidad.
+2. Implementación de arquitecturas altamente disponibles.
+3. Distribución global de tráfico.
+4. Redundancia entre regiones de AWS.
+5. Gestión de dominios y subdominios de manera centralizada.
+
+# Glosario de conceptos clave
+
+<Accordion>
+    <AccordionItem title="Amazon VPC (Virtual Private Cloud)" defaultOpen>
+        Servicio que permite crear una red virtual aislada dentro de AWS, donde se pueden definir direcciones IP, subredes, rutas y reglas de seguridad.
+    </AccordionItem>
+    <AccordionItem title="CIDR (Classless Inter-Domain Routing)" >
+        Formato utilizado para definir rangos de direcciones IP (por ejemplo, 10.0.0.0/16) dentro de una VPC o subred.
+    </AccordionItem>
+    <AccordionItem title="Subred (Subnet)" >
+        Segmento de una VPC que divide el rango de direcciones IP en partes más pequeñas, asociado a una zona de disponibilidad.
+    </AccordionItem>
+    <AccordionItem title="IPv4" >
+        Protocolo de direccionamiento IP de 32 bits, obligatorio en AWS y el más utilizado actualmente.
+    </AccordionItem>
+    <AccordionItem title="IPv6" >
+        Versión más moderna del protocolo IP, con direcciones de 128 bits y un espacio de direcciones prácticamente ilimitado.
+    </AccordionItem>
+    <AccordionItem title="Subred pública" >
+        Subred que tiene una ruta hacia un Internet Gateway, permitiendo acceso directo a internet.
+    </AccordionItem>
+    <AccordionItem title="Subred privada" >
+        Subred que no tiene acceso directo a internet y se utiliza para alojar recursos internos.
+    </AccordionItem>
+    <AccordionItem title="Internet Gateway (IGW)">
+        Componente que permite la comunicación entre una VPC e internet, habilitando tráfico entrante y saliente.
+    </AccordionItem>
+    <AccordionItem title="NAT Gateway">
+        Servicio que permite a recursos en subredes privadas acceder a internet sin ser accesibles desde el exterior.
+    </AccordionItem>
+    <AccordionItem title="Route Table (Tabla de enrutamiento)">
+        Conjunto de reglas que determinan hacia dónde se dirige el tráfico dentro de una VPC.
+    </AccordionItem>
+    <AccordionItem title="Ruta (Route)">
+        Regla dentro de una tabla de enrutamiento que define un destino y un objetivo (por ejemplo, IGW o NAT).
+    </AccordionItem>
+    <AccordionItem title="Network ACL (Access Control List)">
+        Firewall a nivel de subred que controla el tráfico entrante y saliente mediante reglas de allow y deny.
+    </AccordionItem>
+    <AccordionItem title="Stateless">
+        Modelo donde cada solicitud se evalúa de forma independiente (caso de las ACLs).
+    </AccordionItem>
+    <AccordionItem title="Security Group">
+        Firewall a nivel de instancia que controla el tráfico entrante y saliente, permitiendo únicamente reglas de tipo allow.
+    </AccordionItem>
+    <AccordionItem title="Stateful">
+        Modelo donde se mantiene el estado de la conexión, permitiendo automáticamente las respuestas (caso de Security Groups).
+    </AccordionItem>
+    <AccordionItem title="VPN (Virtual Private Network)">
+        Conexión segura entre una red local y una VPC a través de internet mediante cifrado.
+    </AccordionItem>
+    <AccordionItem title="Site-to-Site VPN">
+        Tipo de VPN que conecta un datacenter on-premise con una VPC.
+    </AccordionItem>
+    <AccordionItem title="Client VPN">
+        Tipo de VPN que permite a usuarios individuales conectarse a recursos en AWS.
+    </AccordionItem>
+    <AccordionItem title="AWS Direct Connect">
+        Conexión privada y dedicada entre un datacenter y AWS, sin pasar por internet, con mayor rendimiento y menor latencia.
+    </AccordionItem>
+    <AccordionItem title="VPC Peering">
+        Conexión directa entre dos VPCs que permite comunicación privada sin pasar por internet.
+    </AccordionItem>
+    <AccordionItem title="No transitivo">
+        Característica del VPC Peering que impide que una VPC se comunique con otra a través de una tercera.
+    </AccordionItem>
+    <AccordionItem title="Amazon Route 53">
+        Servicio de DNS de AWS que permite traducir nombres de dominio en direcciones IP y dirigir tráfico de forma inteligente.
+    </AccordionItem>
+    <AccordionItem title="DNS (Domain Name System)">
+        Sistema que traduce nombres de dominio en direcciones IP.
+    </AccordionItem>
+    <AccordionItem title="Hosted Zone">
+        Contenedor lógico en Route 53 que almacena los registros DNS de un dominio.
+    </AccordionItem>
+    <AccordionItem title="Registro DNS">
+        Regla que define cómo se resuelve un dominio (ej: A, AAAA, CNAME, MX).
+    </AccordionItem>
+    <AccordionItem title="Registro A">
+        Asocia un dominio a una dirección IPv4.
+    </AccordionItem>
+    <AccordionItem title="Registro AAAA">
+        Asocia un dominio a una dirección IPv6.
+    </AccordionItem>
+    <AccordionItem title="CNAME">
+        Permite redirigir un dominio hacia otro dominio.
+    </AccordionItem>
+    <AccordionItem title="Alias Record">
+        Tipo de registro propio de AWS que apunta a servicios internos como Load Balancers o S3.
+    </AccordionItem>
+    <AccordionItem title="Routing Policy">
+        Regla que define cómo Route 53 distribuye el tráfico (simple, weighted, latency, failover, geolocation).
+    </AccordionItem>
+    <AccordionItem title="Failover">
+        Estrategia de enrutamiento que permite redirigir el tráfico a otro recurso en caso de falla.
+    </AccordionItem>
+    <AccordionItem title="Health Check">
+        Mecanismo que monitorea el estado de un recurso y permite redirigir tráfico en caso de fallas.
+    </AccordionItem>
+</Accordion>
