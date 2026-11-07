@@ -28,16 +28,6 @@ const events: TimelineEvent[] = [
     focus: ["FIUBA", "Algoritmos", "Matemática", "Física"],
   },
   {
-    id: "ta-foundations-1",
-    year: "2021",
-    title: "Ayudantía I",
-    subtitle: "Fundamentos de Programación · FIUBA",
-    type: "ta",
-    description:
-      "Primera experiencia como ayudante de cátedra. Acompañé a los alumnos en su primer contacto con la programación: variables, estructuras de control, funciones y algoritmos, todo en C. Me di cuenta rápido que explicar bien algo es tan difícil como entenderlo.",
-    focus: ["C", "TDAs", "Memoria", "Punteros", "Docencia"],
-  },
-  {
     id: "brosoft",
     year: "2022",
     title: "BROSOFT",
@@ -70,13 +60,13 @@ const events: TimelineEvent[] = [
   {
     id: "ta-2025",
     year: "2025",
-    title: "Dos ayudantías en paralelo",
-    subtitle: "Fundamentos de Programación · Ingeniería de Software II · FIUBA",
+    title: "Ayudante de Cátedra",
+    subtitle: "Ingeniería del Software II · FIUBA",
     type: "ta",
     ongoing: true,
     description:
-      "Retomé Fundamentos de Programación y sumé Ingeniería de Software II. En Fundamentos acompaño a los alumnos en sus primeros pasos con C. En IS II trabajamos con Ruby usando BDD + TDD, arquitectura hexagonal, code reviews y metodología ágil. Dos cátedras muy distintas que se complementan.",
-    focus: ["C", "Ruby", "BDD/TDD", "Arq. Hexagonal", "POO", "Docencia"],
+      "Desde marzo de 2025 soy ayudante en Ingeniería del Software II. Hago code review con foco en Clean Code, diseño orientado a objetos y patrones de repositorio. Acompaño la implementación de BDD/TDD con escenarios Gherkin y arquitectura hexagonal en Ruby, y cumplo el rol de PO en el proyecto del bot de Telegram.",
+    focus: ["Ruby", "BDD/TDD", "Gherkin", "Arq. Hexagonal", "Clean Code", "Product Owner"],
   },
   {
     id: "innovid",
