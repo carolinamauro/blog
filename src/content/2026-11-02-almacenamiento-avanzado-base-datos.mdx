@@ -1,0 +1,105 @@
+---
+title: "Almacenamiento Avanzado y Bases de Datos"
+date: "2026-11-02"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon S3 avanzado
+
+## Versionado en S3 (Versioning)
+
+> El versionado es una funcionalidad que permite mantener múltiples versiones de un mismo objeto dentro de un bucket.
+
+Cuando lo tenemos habilitado, cada vez que se modifica o elimina un objeto, S3 conserva la versión anterior. Al borramos un objeto en un bucket 
+con versionado habilitado, el objeto se agrega un "delate maker", que oculta la versión actual del objeto, pero no lo elimina permanentemente. 
+
+Entre las ventajas del versionado se encuentran:
+1. Protección contra eliminación accidental de datos.
+2. Posibilidad de restaurar versiones anteriores de un objeto.
+3. Historial de cambios.
+
+## Políticas de ciclo de vida (Lifecycle Policies)
+
+> Las políticas de ciclo de vida permiten automatizar la gestión de los objetos almacenados en S3 a lo largo del tiempo. Definen que debe ocurrir con los objetos 
+después de cierto período.
+
+Por ejemplo, es posible configurar que un archivo pase automáticamente de una clase de almacenamiento más costosa (como S3 Standard) a una más económica (como S3 Glacier) después de cierta cantidad de días. 
+
+Estas políticas son especialmente útiles en escenarios donde se generan grandes volúmenes de datos, como logs o backups que no requieren acceso frecuente.
+
+Algunas acciones comunes dentro de una política de ciclo de vida incluyen:
+- Transición de objetos a clases de almacenamiento más económicas
+- Eliminación automática de objetos después de un tiempo definido
+- Gestión de versiones antiguas en buckets versionados
+
+## Políticas de bucket (Bucket Policies)
+
+> Las políticas de bucket son reglas de seguridad que definen quién puede acceder a los objetos dentro de un bucket y qué acciones puede realizar.
+
+Las políticas se aplican directamente al recurso. Se puede configurar una política por ejemplo para:
+- Permitir acceso público a un sitio web estático
+- Restringir al acceso a ciertas direcciones IP
+- Permitir el acceso únicamente a usuarios o roles específicos.
+
+<Highlight tone="important">
+Las políticas de bucket son una herramienta clave para asegurar los datos y evitar accesos no autorizados. Una mala configuración puede exponer información sensible, por lo
+que es fundamental entender su funcionamiento.
+</Highlight>
+
+## Buenas prácticas en S3
+
+En conjunto, las siguientes prácticas permiten aprovechar al máximo las capacidades avanzadas de S3. Debemos entender que Amazon S3 no es solo un servicio de almacenamiento,sino una plataforma
+completa de gestión de datos. 
+<img src="/images/buenas_practicas_amazons3.png" 
+alt="Buenas prácticas en S3" 
+style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+En resumen:
+- **Versionado:** aporta resiliencia y protección frente a errores
+- **Las políticas se ciclo de vida:** automatizan la administración del almacenamiento y optimizan costos.
+- **Las políticas de bucket**: aseguran control preciso del acceso.
+
+# Tipos de almacenamiento en AWS
+
+En AWS existen diferentes formas de almacenar datos, y elegir el tipo adecuado es clave para el rendimiento, el costo y la arquitectura de una solución. En términos generales, el almacenamiento se puede clasificar en tres grandes categorías: 
+1. almacenamiento de objetos (como S3)
+2. almacenamiento en bloque 
+3. almacenamiento de archivos.
+
+Nos enfocaremos en comprender las diferencias entre el **almacenamiento en bloque** y el **almacenamiento de archivos** 
+
+## Almacenamiento en bloque (Block Storage)
+
+> El almacenamiento en bloque organiza los datos en bloques de tamaño fijo que se almacenan de manera independiente. Cada bloque tiene una dirección única y el SO es el encargado de organizarlos y gestionarlos como si ses tratara de un disco físico.
+
+En AWS, el principal servicio de almacenamiento en bloque es** Amazon EBS (Elastic Block Store)**, que se utiliza principalmente junto a instancias EC2. 
+
+Entre sus características principales se destacan:
+- Acceso a nivel de sistema operativo
+- Alta performance y baja latencia
+- Persistencia de datos independientes de la instancia
+- Soporte para snapshots
+
+Los casos de uso más comunes incluyen bases de **datos relacionales, sistemas operativos, aplicaciones empresariales** y sistemas que requieren acceso rápido y constante a los datos.
+
+## Almacenamiento de archivos (File Storage)
+
+> El almacenamiento de archivos organiza los datos en una estructura jerárquica de carpetas y archivos.
+
+Este es un modelo más intuitivo y fácil de usar cuando múltiples usuarios o sistemas necesitan acceder a los mismos datos. En AWS, el servicio principal para este tipo de almacenamiento
+es **Amazon EFS (Elastic File System).**  EFS permite montar un sistema de archivos compartido en múltiples instancias EC2 al mismo tiempo, lo que lo hace ideal para entornos distribuidos.
+
+Entre sus características principales se destacan:
+
+- Acceso compartido entre múltiples instancias
+- Escalabilidad automática
+- Estructura de carpetas y archivos
+- Alta disponibilidad dentro de una región
+
+Los casos de uso más comunes incluyen aplicaciones web distribuidas, sistemas de contenido compartido, entornos de desarrollo colaborativo y procesamiento de datos en paralelo.
+
+## Diferencias clave entre bloque y archivo
+
