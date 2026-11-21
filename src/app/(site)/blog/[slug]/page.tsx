@@ -13,7 +13,11 @@ import PostSidebar from "@/src/components/PostSidebar";
 import Footer from "@/src/components/ui/footer";
 import OllamaPlayground from "@/src/components/OllamaPlayground";
 import { Accordion, AccordionItem } from "@/src/components/Accordion";
-import { Comparison, ComparisonColumn } from "@/src/components/Comparison";
+import {
+  Comparison,
+  ComparisonColumn,
+  ComparisonItem,
+} from "@/src/components/Comparison";
 import { Highlight } from "@/src/components/Highlight";
 import remarkGfm from "remark-gfm";
 
@@ -48,6 +52,7 @@ export default async function BlogPostPage({
       AccordionItem,
       Comparison,
       ComparisonColumn,
+      ComparisonItem,
       Highlight,
       img: (props) => (
         // eslint-disable-next-line @next/next/no-img-element
