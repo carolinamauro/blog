@@ -14,11 +14,11 @@ interface PostSummary {
 
 function categoryDot(cat: string) {
   const map: Record<string, string> = {
-    "Cloud & Redes": "bg-cyan-400",
-    General: "bg-pink-400",
-    Linux: "bg-violet-400",
+    "Cloud & Redes": "bg-ball",
+    General: "bg-clay",
+    Linux: "bg-court",
   };
-  return map[cat] ?? "bg-zinc-400";
+  return map[cat] ?? "bg-faint";
 }
 
 export default function BlogList({
@@ -31,7 +31,7 @@ export default function BlogList({
   initialTag?: string;
 }) {
   const categories = [
-    "Todos",
+ "Todos",
     ...Array.from(new Set(posts.map((p) => p.category ?? "General"))),
   ];
   const [active, setActive] = useState(
@@ -57,10 +57,10 @@ export default function BlogList({
             key={cat}
             type="button"
             onClick={() => setActive(cat)}
-            className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${
+            className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
               active === cat
-                ? "border border-white/30 bg-white/10 text-white shadow-[0_0_14px_rgba(255,255,255,0.1)]"
-                : "border border-white/10 bg-white/[0.04] text-zinc-400 hover:border-white/25 hover:text-white"
+                ? "border border-ink bg-ink text-bg"
+                : "border border-line bg-surface text-muted hover:border-ink/30 hover:text-ink"
             }`}
           >
             {cat}
@@ -69,18 +69,18 @@ export default function BlogList({
       </div>
 
       {initialTag && (
-        <p className="mb-6 flex flex-wrap items-center gap-2 text-sm text-zinc-400">
+        <p className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted">
           Filtrando por
-          <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+          <span className="rounded-full border border-line bg-ball/15 px-3 py-1 text-xs font-semibold text-accent">
             #{initialTag}
           </span>
-          <Link href="/blog" className="text-zinc-400 underline-offset-4 transition hover:text-white hover:underline">
+          <Link href="/blog" className="text-muted underline-offset-4 transition hover:text-ink hover:underline">
             Quitar filtro
           </Link>
         </p>
       )}
 
-      <ul className="space-y-5">
+      <ul className="divide-y divide-line border-y border-line">
         {filtered.map((p) => {
           const cat = p.category ?? "General";
           const dot = categoryDot(cat);
@@ -88,43 +88,29 @@ export default function BlogList({
             <li key={p.slug} className="animate-fade-in-up">
               <Link
                 href={`/blog/${p.slug}`}
-                className="group block rounded-xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-black/60 hover:shadow-xl hover:shadow-cyan-950/30"
+                className="group grid gap-2 py-7 transition-colors sm:grid-cols-[8rem_1fr_auto] sm:items-baseline sm:gap-8"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className={`inline-block h-2 w-2 rounded-full ${dot}`} />
-                      <span className="text-xs font-medium text-zinc-500">{cat}</span>
-                      <span className="text-xs text-zinc-600">·</span>
-                      <span className="text-xs text-zinc-500">{p.date}</span>
-                    </div>
-                    <h2 className="text-xl font-semibold text-zinc-100 transition group-hover:text-cyan-200">
-                      {p.title}
-                    </h2>
-                    {p.summary && (
-                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-400">
-                        {p.summary}
-                      </p>
-                    )}
+                <time dateTime={p.date} className="font-mono text-xs text-faint">{p.date}</time>
+                <div className="min-w-0">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className={`inline-block h-2 w-2 rounded-full ${dot}`} />
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted">{cat}</span>
                   </div>
+                  <h2 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-ink sm:text-3xl">
+                    <span className="bg-[linear-gradient(var(--ball),var(--ball))] bg-[length:0%_35%] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 group-hover:bg-[length:100%_35%]">
+                      {p.title}
+                    </span>
+                  </h2>
+                  {p.summary && (
+                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">{p.summary}</p>
+                  )}
                 </div>
-
-                <div className="mt-4 flex items-center gap-1.5 text-sm font-medium text-cyan-400 opacity-0 transition group-hover:opacity-100">
-                  Leer post
-                  <svg
-                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </div>
+                <span
+                  aria-hidden
+                  className="hidden h-11 w-11 items-center justify-center rounded-full border border-line text-lg transition group-hover:-rotate-45 group-hover:border-transparent group-hover:bg-ball group-hover:text-ball-ink sm:flex"
+                >
+                  →
+                </span>
               </Link>
             </li>
           );
@@ -132,7 +118,7 @@ export default function BlogList({
       </ul>
 
       {filtered.length === 0 && (
-        <p className="mt-12 text-center text-zinc-500">
+        <p className="mt-12 text-center text-faint">
           No hay posts que coincidan todavía.
         </p>
       )}

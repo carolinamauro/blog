@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { t, type Lang } from "@/src/lib/i18n";
+import { SectionHeading } from "./home/Reveal";
 
 const ICON_BASE = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
 
@@ -21,7 +21,7 @@ const stack: { name: string; icon: string; category: Category; invert?: boolean 
   { name: "Ruby",         icon: `${ICON_BASE}/ruby/ruby-original.svg`,                                 category: "Lenguajes" },
   { name: "C",            icon: `${ICON_BASE}/c/c-original.svg`,                                       category: "Lenguajes" },
   { name: "Docker",       icon: `${ICON_BASE}/docker/docker-original.svg`,                             category: "DevOps" },
-  // { name: "AWS",          icon: `${ICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,  category: "DevOps",   invert: true },
+  { name: "AWS",          icon: `${ICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,  category: "DevOps",   invert: true },
   { name: "Git",          icon: `${ICON_BASE}/git/git-original.svg`,                                   category: "DevOps" },
   { name: "GitHub",       icon: `${ICON_BASE}/github/github-original.svg`,                             category: "DevOps",   invert: true },
   { name: "Linux",        icon: `${ICON_BASE}/linux/linux-original.svg`,                               category: "DevOps" },
@@ -35,85 +35,88 @@ const stack: { name: string; icon: string; category: Category; invert?: boolean 
 const categoryOrder: Category[] = ["Frontend", "Backend", "Lenguajes", "DevOps", "Testing"];
 const tabs: Array<"All" | Category> = ["All", ...categoryOrder];
 
+function TechIcon({ name, icon, invert, className = "h-10 w-10" }: { name: string; icon: string; invert?: boolean; className?: string }) {
+  return (
+    // Plain <img>: remote SVG icons don't benefit from next/image optimisation.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={icon}
+      alt=""
+      aria-hidden
+      loading="lazy"
+      width={40}
+      height={40}
+      className={`${className} object-contain ${invert ? "dark:invert" : ""}`}
+      title={name}
+    />
+  );
+}
+
 function TechCard({ name, icon, invert }: { name: string; icon: string; invert?: boolean }) {
   return (
-    <div className="group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-all duration-200 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/[0.08] hover:shadow-xl hover:shadow-black/40">
-      <Image
-        src={icon}
-        alt={name}
-        width={48}
-        height={48}
-        className="h-12 w-12 object-contain"
-        style={invert ? { filter: "invert(1) brightness(1.8)" } : undefined}
-      />
-      <span className="text-center text-xs font-medium leading-tight text-zinc-400 transition group-hover:text-white">
-        {name}
+    <li className="group flex flex-col items-center gap-3 rounded-3xl border border-line bg-surface p-5 transition duration-200 hover:-translate-y-1 hover:-rotate-2 hover:border-ink/25 hover:shadow-card">
+      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-2 transition group-hover:bg-ball/25">
+        <TechIcon name={name} icon={icon} invert={invert} />
       </span>
-    </div>
+      <span className="text-center text-xs font-bold leading-tight text-muted transition group-hover:text-ink">{name}</span>
+    </li>
   );
 }
 
 export default function TechStackShowcase({ lang }: { lang: Lang }) {
   const [active, setActive] = useState<"All" | Category>("All");
-
-  const grouped = categoryOrder.reduce<Record<Category, typeof stack>>((acc, cat) => {
-    acc[cat] = stack.filter((i) => i.category === cat);
-    return acc;
-  }, {} as Record<Category, typeof stack>);
-
-  const filtered = active === "All" ? null : stack.filter((i) => i.category === active);
+  const filtered = active === "All" ? stack : stack.filter((i) => i.category === active);
 
   return (
-    <section id="stack" className="section-shell py-16 text-white">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p className="text-sm font-semibold uppercase tracking-wide text-pink-300">
-          Tech stack
-        </p>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-          {t("Herramientas que uso", lang)}
-        </h2>
+    <section id="stack" className="scroll-mt-24 py-24">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Tech stack"
+          title={t("Mi bolso", lang)}
+          accent={t("de raquetas.", lang)}
+          intro={t("Las herramientas que llevo a cada partido. Algunas las uso todos los días, otras las saco para ocasiones especiales.", lang)}
+        />
 
-        <div className="mt-8 flex flex-wrap gap-2 border-b border-white/10 pb-4">
+        <div role="tablist" aria-label={t("Categorías", lang)} className="mb-8 flex flex-wrap gap-2">
           {tabs.map((tab) => (
             <button
               key={tab}
               type="button"
+              role="tab"
+              aria-selected={active === tab}
               onClick={() => setActive(tab)}
-              className={`rounded-lg px-4 py-1.5 text-sm font-semibold transition-all ${
+              className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
                 active === tab
-                  ? "bg-white/10 text-white border border-white/20"
-                  : "text-zinc-500 hover:text-zinc-200"
+                  ? "border-ink bg-ink text-bg"
+                  : "border-line bg-surface text-muted hover:border-ink/30 hover:text-ink"
               }`}
             >
-              {t(tab, lang)}
+              {t(tab === "All" ? "Todo" : tab, lang)}
+              <span className="ml-1.5 font-mono text-xs opacity-60">
+                {tab === "All" ? stack.length : stack.filter((i) => i.category === tab).length}
+              </span>
             </button>
           ))}
         </div>
 
-        {filtered && (
-          <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {filtered.map((item) => (
-              <TechCard key={item.name} {...item} />
-            ))}
-          </div>
-        )}
+        <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+          {filtered.map((item) => (
+            <TechCard key={item.name} {...item} />
+          ))}
+        </ul>
+      </div>
 
-        {!filtered && (
-          <div className="mt-8 space-y-10">
-            {categoryOrder.map((cat) => (
-              <div key={cat}>
-                <p className="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">
-                  {t(cat, lang)}
-                </p>
-                <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-                  {grouped[cat].map((item) => (
-                    <TechCard key={item.name} {...item} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Endless strip of icons */}
+      <div className="marquee-paused mt-16 overflow-hidden border-y border-line bg-surface py-5" aria-hidden>
+        <div className="animate-marquee flex w-max items-center gap-10">
+          {[...stack, ...stack].map((item, i) => (
+            <span key={i} className="flex items-center gap-3 font-display text-lg font-bold text-muted">
+              <TechIcon name={item.name} icon={item.icon} invert={item.invert} className="h-7 w-7" />
+              {item.name}
+              <span className="tennis-ball ml-6 h-2.5 w-2.5" />
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

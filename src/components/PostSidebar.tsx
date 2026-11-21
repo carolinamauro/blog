@@ -6,10 +6,10 @@ type Topics = {
   tags: { label: string; count: number }[];
 };
 
-const widget = "rounded-2xl border border-white/10 bg-[#0a0a14] p-5";
-const widgetTitle = "mb-4 text-xs font-semibold uppercase tracking-wider text-zinc-400";
+const widget = "card rounded-3xl p-5";
+const widgetTitle = "mb-4 text-xs font-semibold uppercase tracking-wider text-muted";
 const chip =
-  "inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-zinc-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10 hover:text-cyan-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300";
+ "inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 py-1 text-xs font-medium text-muted transition hover:border-ink/25 hover:bg-ball/15 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 export default function PostSidebar({
   related,
@@ -32,12 +32,12 @@ export default function PostSidebar({
               <li key={p.slug}>
                 <Link
                   href={`/blog/${p.slug}`}
-                  className="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+                  className="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                 >
-                  <span className="text-xs text-zinc-400">
+                  <span className="text-xs text-muted">
                     {p.category ?? "General"} · {p.date}
                   </span>
-                  <span className="mt-1 block text-sm font-semibold leading-5 text-zinc-100 transition-colors group-hover:text-cyan-200">
+                  <span className="mt-1 block text-sm font-semibold leading-5 text-ink transition-colors group-hover:text-accent">
                     {p.title}
                   </span>
                 </Link>
@@ -56,7 +56,7 @@ export default function PostSidebar({
             <li key={c.name}>
               <Link href={`/blog?category=${encodeURIComponent(c.name)}`} className={chip}>
                 {c.name}
-                <span className="text-zinc-500">{c.count}</span>
+                <span className="text-faint">{c.count}</span>
               </Link>
             </li>
           ))}
@@ -64,7 +64,7 @@ export default function PostSidebar({
 
         {topics.tags.length > 0 && (
           <>
-            <h3 className="mb-3 mt-5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <h3 className="mb-3 mt-5 text-xs font-semibold uppercase tracking-wider text-muted">
               Temas populares
             </h3>
             <ul className="flex flex-wrap gap-2">
