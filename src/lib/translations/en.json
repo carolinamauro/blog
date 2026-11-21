@@ -88,13 +88,6 @@
   "Matemática": "Math",
   "Física": "Physics",
 
-  "Ayudantía I": "Teaching Assistant I",
-  "Fundamentos de Programación · FIUBA": "Programming Fundamentals · FIUBA",
-  "Primera experiencia como ayudante de cátedra. Acompañé a los alumnos en su primer contacto con la programación: variables, estructuras de control, funciones y algoritmos, todo en C. Me di cuenta rápido que explicar bien algo es tan difícil como entenderlo.": "My first experience as a teaching assistant. I guided students through their first contact with programming: variables, control structures, functions and algorithms, all in C. I quickly realized that explaining something well is as hard as understanding it.",
-  "TDAs": "ADTs",
-  "Memoria": "Memory",
-  "Punteros": "Pointers",
-
   "Empecé desarrollando la app móvil de TurismoCity en React Native. En 2025 pasé al equipo web (Vue + Nuxt), donde desarrollé funcionalidades de la vertical de paquetes en frontend y backend con Node.js. Estuve hasta septiembre de 2026.": "I started building the TurismoCity mobile app in React Native. In 2025 I moved to the web team (Vue + Nuxt), where I developed features for the packages vertical on both frontend and backend with Node.js. I was there until September 2026.",
   "En septiembre de 2026 dejé BROSOFT y me sumé a Innovid como Software Engineer II, un nuevo paso en mi carrera como ingeniera de software.": "In September 2026 I left BROSOFT and joined Innovid as a Software Engineer II, a new step in my career as a software engineer.",
   "Software Engineering": "Software Engineering",
@@ -107,9 +100,9 @@
   "Me gradué de Ingeniería en Informática en la UBA. Cinco años que cubrieron algoritmos, sistemas distribuidos, inteligencia artificial, seguridad informática y más. Un camino largo e intenso que valió cada materia.": "I graduated as a Computer Engineer from UBA. Five years covering algorithms, distributed systems, artificial intelligence, security and more. A long and intense path that was worth every course.",
   "Graduación": "Graduation",
 
-  "Dos ayudantías en paralelo": "Two teaching roles in parallel",
-  "Fundamentos de Programación · Ingeniería de Software II · FIUBA": "Programming Fundamentals · Software Engineering II · FIUBA",
-  "Retomé Fundamentos de Programación y sumé Ingeniería de Software II. En Fundamentos acompaño a los alumnos en sus primeros pasos con C. En IS II trabajamos con Ruby usando BDD + TDD, arquitectura hexagonal, code reviews y metodología ágil. Dos cátedras muy distintas que se complementan.": "I returned to Programming Fundamentals and added Software Engineering II. In Fundamentals I guide students through their first steps with C. In SE II we work with Ruby using BDD + TDD, hexagonal architecture, code reviews and agile methodology. Two very different courses that complement each other.",
+  "Ayudante de Cátedra": "Teaching Assistant",
+  "Ingeniería del Software II · FIUBA": "Software Engineering II · FIUBA",
+  "Desde marzo de 2025 soy ayudante en Ingeniería del Software II. Hago code review con foco en Clean Code, diseño orientado a objetos y patrones de repositorio. Acompaño la implementación de BDD/TDD con escenarios Gherkin y arquitectura hexagonal en Ruby, y cumplo el rol de PO en el proyecto del bot de Telegram.": "Since March 2025 I've been a teaching assistant in Software Engineering II. I do code reviews focused on Clean Code, object-oriented design and repository patterns. I guide the implementation of BDD/TDD with Gherkin scenarios and hexagonal architecture in Ruby, and I act as PO for the Telegram bot project.",
   "Arq. Hexagonal": "Hexagonal Arch.",
 
   "Explorando y construyendo": "Exploring and building",
