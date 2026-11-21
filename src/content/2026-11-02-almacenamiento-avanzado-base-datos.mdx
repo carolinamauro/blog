@@ -1,0 +1,431 @@
+---
+title: "Almacenamiento Avanzado y Bases de Datos"
+date: "2026-11-02"
+tags: [""]
+category: "AWS"
+summary: ""
+---
+
+# Amazon S3 avanzado
+
+## Versionado en S3 (Versioning)
+
+> El versionado es una funcionalidad que permite mantener múltiples versiones de un mismo objeto dentro de un bucket.
+
+Cuando lo tenemos habilitado, cada vez que se modifica o elimina un objeto, S3 conserva la versión anterior. Al borramos un objeto en un bucket 
+con versionado habilitado, el objeto se agrega un "delate maker", que oculta la versión actual del objeto, pero no lo elimina permanentemente. 
+
+Entre las ventajas del versionado se encuentran:
+1. Protección contra eliminación accidental de datos.
+2. Posibilidad de restaurar versiones anteriores de un objeto.
+3. Historial de cambios.
+
+## Políticas de ciclo de vida (Lifecycle Policies)
+
+> Las políticas de ciclo de vida permiten automatizar la gestión de los objetos almacenados en S3 a lo largo del tiempo. Definen que debe ocurrir con los objetos 
+después de cierto período.
+
+Por ejemplo, es posible configurar que un archivo pase automáticamente de una clase de almacenamiento más costosa (como S3 Standard) a una más económica (como S3 Glacier) después de cierta cantidad de días. 
+
+Estas políticas son especialmente útiles en escenarios donde se generan grandes volúmenes de datos, como logs o backups que no requieren acceso frecuente.
+
+Algunas acciones comunes dentro de una política de ciclo de vida incluyen:
+- Transición de objetos a clases de almacenamiento más económicas
+- Eliminación automática de objetos después de un tiempo definido
+- Gestión de versiones antiguas en buckets versionados
+
+## Políticas de bucket (Bucket Policies)
+
+> Las políticas de bucket son reglas de seguridad que definen quién puede acceder a los objetos dentro de un bucket y qué acciones puede realizar.
+
+Las políticas se aplican directamente al recurso. Se puede configurar una política por ejemplo para:
+- Permitir acceso público a un sitio web estático
+- Restringir al acceso a ciertas direcciones IP
+- Permitir el acceso únicamente a usuarios o roles específicos.
+
+<Highlight tone="important">
+Las políticas de bucket son una herramienta clave para asegurar los datos y evitar accesos no autorizados. Una mala configuración puede exponer información sensible, por lo
+que es fundamental entender su funcionamiento.
+</Highlight>
+
+## Buenas prácticas en S3
+
+En conjunto, las siguientes prácticas permiten aprovechar al máximo las capacidades avanzadas de S3. Debemos entender que Amazon S3 no es solo un servicio de almacenamiento,sino una plataforma
+completa de gestión de datos. 
+<img src="/images/buenas_practicas_amazons3.png" 
+alt="Buenas prácticas en S3" 
+style={{ width: "100%", maxWidth: "900px", height: "auto" }} 
+/>
+
+En resumen:
+- **Versionado:** aporta resiliencia y protección frente a errores
+- **Las políticas se ciclo de vida:** automatizan la administración del almacenamiento y optimizan costos.
+- **Las políticas de bucket**: aseguran control preciso del acceso.
+
+# Tipos de almacenamiento en AWS
+
+En AWS existen diferentes formas de almacenar datos, y elegir el tipo adecuado es clave para el rendimiento, el costo y la arquitectura de una solución. En términos generales, el almacenamiento se puede clasificar en tres grandes categorías: 
+1. almacenamiento de objetos (como S3)
+2. almacenamiento en bloque 
+3. almacenamiento de archivos.
+
+Nos enfocaremos en comprender las diferencias entre el **almacenamiento en bloque** y el **almacenamiento de archivos** 
+
+## Almacenamiento en bloque (Block Storage)
+
+> El almacenamiento en bloque organiza los datos en bloques de tamaño fijo que se almacenan de manera independiente. Cada bloque tiene una dirección única y el SO es el encargado de organizarlos y gestionarlos como si ses tratara de un disco físico.
+
+En AWS, el principal servicio de almacenamiento en bloque es** Amazon EBS (Elastic Block Store)**, que se utiliza principalmente junto a instancias EC2. 
+
+Entre sus características principales se destacan:
+- Acceso a nivel de sistema operativo
+- Alta performance y baja latencia
+- Persistencia de datos independientes de la instancia
+- Soporte para snapshots
+
+Los casos de uso más comunes incluyen bases de **datos relacionales, sistemas operativos, aplicaciones empresariales** y sistemas que requieren acceso rápido y constante a los datos.
+
+## Almacenamiento de archivos (File Storage)
+
+> El almacenamiento de archivos organiza los datos en una estructura jerárquica de carpetas y archivos.
+
+Este es un modelo más intuitivo y fácil de usar cuando múltiples usuarios o sistemas necesitan acceder a los mismos datos. En AWS, el servicio principal para este tipo de almacenamiento
+es **Amazon EFS (Elastic File System).**  EFS permite montar un sistema de archivos compartido en múltiples instancias EC2 al mismo tiempo, lo que lo hace ideal para entornos distribuidos.
+
+Entre sus características principales se destacan:
+
+- Acceso compartido entre múltiples instancias
+- Escalabilidad automática
+- Estructura de carpetas y archivos
+- Alta disponibilidad dentro de una región
+
+Los casos de uso más comunes incluyen aplicaciones web distribuidas, sistemas de contenido compartido, entornos de desarrollo colaborativo y procesamiento de datos en paralelo.
+
+## Diferencias clave entre bloque y archivo
+
+<Comparison rows={3}>
+    <ComparisonColumn title="Almacenamiento en bloque">
+        <ComparisonItem>Orientado a alto rendimiento y control a bajo nivel</ComparisonItem>
+        <ComparisonItem>Ideal para aplicaciones que requieren acceso rápido y directo a los datos</ComparisonItem>
+        <ComparisonItem>Suele estar asociado a una sola instancia</ComparisonItem>
+    </ComparisonColumn>
+    <ComparisonColumn title="Almacenamiento de archivos">
+        <ComparisonItem>Diseñado para facilitar el acceso compartido y la organización de la información</ComparisonItem>
+        <ComparisonItem>Ideal para entornos colaborativos o distribuidos</ComparisonItem>
+        <ComparisonItem>Puede ser utilizado simultáneamente por múltiples instancias</ComparisonItem>
+    </ComparisonColumn>
+</Comparison>
+
+# AWS Backup
+
+Los datos son uno de los archivos más importante, teniendo desde registros de clientes hasta transacciones. Sin embargo, estos datos
+están expuestos a multiples riesgos: errores humanos (como borrar información por accidente), fallas técnicas, ataques o incluso problemas 
+en la infraestructura. en la nube no alcanza solo con “guardar datos”, sino que es fundamental contar con una estrategia de respaldo. En AWS,
+esta necesidad se cubre con** AWS Backup**
+
+## ¿Qué es?
+
+>**AWS Backup** es un servicio administrado que permite crear y gestionar copias de seguridad de distintos recursos dentro de AWS desde un único lugar.
+
+Se pueden definir políticas automáticas que aseguren que los datos se respalden correctamente todos los días, semanas o meses. 
+
+AWS Backup permite:
+- Proteger información crítica de forma automática
+- Reducir el riesgo de pérdida de datos
+- Cumplir con normativas de retención de información
+- Facilitar la recuperación ante fallos o desastres
+
+## ¿Cómo funciona AWS Backup?
+
+Se basa en una idea muy sencilla: definir reglas que indiquen qué datos respaldar, cuándo hacerlo y cuánto tiempo guardarlos.
+
+1) Creación plan de backup: política que define la frecuencia de las copias (ej, todos los días a la noche) y cuánto tiempo se almacenarán (ej, 30 días).
+2) Selección recursos a proteger: como BD, disco o un sistema de archivos.
+3) AWS Backup se encarga de ejecutar automáticamente las copias según lo definido, sin intervención manual.
+
+## Componentes principales de AWS Backup
+
+Es útil pensar sus componentes como parte de un sistema organizado:
+
+<Accordion>
+    <AccordionItem title="Backup Plan" defaultOpen>
+        Es el "plan de acción" que define cuándo se hacen las copias y cada cuánto tiempo.
+    </AccordionItem>
+    <AccordionItem title="Backup Vault" defaultOpen>
+        Es el lugar donde se guardan las copias, funcionando como una "caja fuerte" de backups.
+    </AccordionItem>
+    <AccordionItem title="Reglas (Backup Rules)" defaultOpen>
+        Son las instrucciones dentro del plan (por ejemplo, backup diario + retención de 30 días).
+    </AccordionItem>
+    <AccordionItem title="Recursos protegidos" defaultOpen>
+        Son los elementos que se respaldan (bases de datos, discos, etc.).
+    </AccordionItem>
+</Accordion>
+
+## Automatización y ahorro de tiempo
+
+Una de las principales ventajas de AWS Backup es la automatización, ya que el proceso de backups queda definido por reglas.
+
+Esto nos trae las siguientes ventajas:
+- Evita olvidos o errores humanos.
+- Asegura consistencia en las copias.
+- Reduce el tiempo operativo.
+- Permite escalar fácilmente (más recursos sin más trabajo manual).
+- Si la infraestructura crece, se pueden incluir automáticamente los backup.
+
+## Retención y optimización de costos
+
+Las políticas de retención sirven para definir cuanto tiempo se almacenan las copias. Por ejemplo:
+- Backups diarios durante 7 días.
+- Backups semanales durante 1 mes.
+- Backups mensuales durante 1 año.
+
+Esto es importante porque almacenar datos tiene un costo por lo que hay que gestionarlo correctamente para que no crezcan sin control.
+
+Gracias a las políticas de retención, AWS elimina automáticamente las copias antiguas, optimizando costos sin intervención manual.
+
+## Seguridad en AWS Backup
+
+Incluye varias funcionalidades para proteger la información.
+
+- **Cifrado automático** de las copias.
+- Control de acceso mediante permisos (**IAM**).
+- Protección contra **eliminación accidental.**
+- Posibilidad de **copiar backups a otras regiones o cuentas.**
+
+<Highlight tone="info">
+Tener backups en otra región permite recuperar datos incluso si ocurre un problema grave en una región completa de AWS.
+</Highlight>
+
+## Recuperación de datos (Restore)
+
+> El objetivo final de un backup es guardar datos y poder recuperarlos cuando sea necesario.
+
+AWS Backup permite restaurar los datos fácilmente a partir de una copia, en el mismo recurso original o uno nuevo.
+
+Por ejemplo:
+- Restaurar una base de datos a un estado anterior
+- Recuperar un volumen de disco eliminado
+- Volver a una versión previa después de un error
+
+# Bases de datos relacionales - Amazon RDS
+
+Las bases de datos son unos de los componentes más importantes, utilizados para almacenar información estructurada en tablas, con 
+relaciones entre ellas, utilizando el lenguaje SQL
+
+Tradicionalmente, administrar una base de datos implicaba instalar software, configurar servidores, realizar backups, aplicar parches y garantizar la disponibilidad. 
+En la nube, AWS simplifica todo este proceso mediante** Amazon RDS (Relational Database Service)**. Veamos en detalle de que se trata.
+
+## ¿Qué es Amazon RDS?
+
+>**Amazon RDS** es un servicio de bases de datos relacionales completamente administrado 
+
+AWS se encarga de todas las tareas administrativas tales como:
+- Aprovisionamiento del hardware
+- Actualizaciones del sistema
+- Backups automáticos 
+- Monitoreo
+
+Con RDS, es posible crear una base de datos en pocos minutos, seleccionar el motor deseado, configurar almacenamiento, seguridad y escalabilidad, y comenzar a trabajar inmediatamente.
+
+## Motores soportados
+
+Una de las ventajas principales de RDS es que soporta múltiples motores de bases de datos.
+
+Entre los más usados:
+1) PostgreSQL 
+2) MySQL 
+3) Microsoft SQL Server
+4) MariaDB 
+5) Oracle Database 
+6) Amazon Aurora
+
+## Características principales de RDS
+
+<Accordion>
+    <AccordionItem title="Automatización de tares administrativas" defaultOpen>
+        Actualizaciones, parches y mantenimiento gestionados por AWS.
+    </AccordionItem>
+    <AccordionItem title="Escalabilidad" defaultOpen>
+        Posibilidad de aumentar recursos (CPU, memoria, almacenamiento) fácilmente.
+    </AccordionItem>
+    <AccordionItem title="Alta disponibilidad" defaultOpen>
+        Opción de despliegue Multi-AZ para tolerancia a fallos.
+    </AccordionItem>
+    <AccordionItem title="Backups automáticos" defaultOpen>
+        Copias de seguridad configurables sin intervención manual.
+    </AccordionItem>
+    <AccordionItem title="Seguridad integrada" defaultOpen>
+        Cifrado, control de acceso manual mediante IAM y redes privadas (VPC)
+    </AccordionItem>
+</Accordion>
+
+## Casos de uso
+
+Amazon RDS es ideal para aplicaciones que requieren bases de datos estructuradas y consistencia en los datos. Los casos más comunes son:
+- Aplicaciones web y móvil (usuario, productos, transacciones)
+- Sistemas de gestión empresarial
+- Plataformas de e-commerce
+- Aplicaciones financieras
+- Sistemas que requieren integridad de datos y transacciones ACID
+
+## Alta disponibilidad y Multi-AZ
+
+Contamos con la opción de desplegar la base de datos en modo **Multi-AZ (Multi Availability Zone)**, lo que implica que AWS mantiene
+una copia sincronizada de la base de datos en otra zona de disponibilidad dentro de la misma región. Si ocurre una falla en la instancia principal, 
+AWS realiza automáticamente un failover hacia la instancia secundaria, minimizando el tiempo de inactividad.
+
+## Backups en Amazon RDS
+
+La protección de datos es un aspecto central en cualquier base de datos, y RDS los maneja de forma. RDS ofrece dos tipos principales de backup:
+- **Backups automáticos:** permiten recuperar la base de datos a cualquier punto en el tiempo dentro de un período de retención configurado. Esto se conoce como
+Point-in-Time Recovery
+- **Snapshots manuales:** Son copias completas de la base de datos que el usuario puede crear en cualquier momento. No se eliminan automáticamente y pueden utilizarse para restaurar bases de datos en el futuro.
+
+## Ventajas y limitaciones
+
+
+<Comparison rows={5}>
+    <ComparisonColumn title="Ventajas">
+        <ComparisonItem>Reduce carga operativa</ComparisonItem>
+        <ComparisonItem>Mejora la seguridad y confiabilidad</ComparisonItem>
+        <ComparisonItem>Facilita la escalabilidad</ComparisonItem>
+        <ComparisonItem>Permite enfocarse en el desarrollo de una aplicación</ComparisonItem>
+        <ComparisonItem>Ofrece integración con otros servicios de AWS</ComparisonItem>
+    </ComparisonColumn>
+    <ComparisonColumn title="Limitaciones">
+        <ComparisonItem>Menor control sobre la infraestructura subyacente</ComparisonItem>
+        <ComparisonItem>Costos más altos que soluciones autogestionadas en algunos casos</ComparisonItem>
+        <ComparisonItem>No es ideal para cargas NoSQL o altamente distribuidas</ComparisonItem>
+    </ComparisonColumn>
+</Comparison>
+
+# Bases de datos NoSQL - Amazon DynamoDB
+
+No todas las soluciones caen en resolverse con bases de datos relacionales. Cuando las aplicaciones crecen en volumen, velocidad y escala, aparecen necesidades como
+manejas grandes volúmenes de datos no estructurados o responder en milisegundos a millones de solicitudes. 
+
+AWS ofrece **Amazon DynamoDB**, una base de datos NoSQL completamente administrada, diseñada para ofrecer alto rendimiento, baja latencia y escalabilidad ilimitada.
+
+## ¿Qué es Amazon DynamoDB?
+
+> **Amazon DynamoDB** es una base de datos NoSQL que almacena datos en forma de clave-valor o documentos. 
+
+A diferencia de las bases de datos relacionales, no utiliza tablas con relaciones complejas, sino estructuras más flexibles. Cada registro puede tener diferentes atributos.
+DynamoDB está diseñado para ofrecer (y es ideal para aplicaciones que necesitan):
+- Respuestas en milisegundos
+- Escalado automático sin intervención
+- Alta disponibilidad por defecto.
+
+Se suele usar en:
+- Aplicaciones web y móviles de alto tráfico
+- Sistemas de gaming (leaderboards, sesiones)
+- IoT (datos de sensores en tiempo real)
+- Aplicaciones serverless (integración con Lambda)
+- Sistemas de recomendaciones o personalización
+
+## Características principales
+
+<Accordion>
+    <AccordionItem title="Escalabilidad automática" defaultOpen>
+        Crece según la demanda sin intervención.
+    </AccordionItem>
+    <AccordionItem title="Baja latencia" defaultOpen>
+        Tiempos de respuesta en mili segundos.
+    </AccordionItem>
+    <AccordionItem title="Alta disponibilidad" defaultOpen>
+        Replicación automática en múltiples zonas.
+    </AccordionItem>
+    <AccordionItem title="Sin administración" defaultOpen>
+        AWS gestiona toda la infraestructura
+    </AccordionItem>
+    <AccordionItem title="Integración" defaultOpen>
+        Con otros servicios AWS
+    </AccordionItem>
+</Accordion>
+
+Podemos elegir entre dos modos de capacidad:
+- **Provisioned**: se define la capacidad esperada
+- **On-Demand:** escala automáticamente según el uso
+
+## Backup en Amazon DynamoDB
+
+- Ofrece backups bajo demanda: son copias completas de la tabla que el usuario puede ejecutar manualmente en cualquier momento.
+- Point-in-Time Recovery (PITR)
+
+# Comparativa entre DynamoDB y Amazon RDS
+
+<Comparison rows={5}>
+    <ComparisonColumn title="RDS">
+        <ComparisonItem>Base de datos relacional que utiliza SQL, con una estructura rígida basada en tablas y relaciones</ComparisonItem>
+        <ComparisonItem>Ideal para aplicaciones que necesitan consistencia fuerte y transacciones complejas</ComparisonItem>
+        <ComparisonItem>Suele estar asociado a una sola instancia</ComparisonItem>
+    </ComparisonColumn>
+    <ComparisonColumn title="DynamoDB">
+        <ComparisonItem>Mundo NoSQL, modelo flexible que no requiere esquema fijo</ComparisonItem>
+        <ComparisonItem>Ideal en escenarios donde la velocidad, la escalabilidad y la simplicidad son prioritarias</ComparisonItem>
+        <ComparisonItem>USO: escalar de forma masiva sin preocuparse por la infra, datos sin estructura definida/cambiantes y cuando la app requiere tiempos de respuesta muy bajos</ComparisonItem>
+        <ComparisonItem>Buena opción en arq. serverless</ComparisonItem>
+        <ComparisonItem>NO USO: relaciones complejas entre datos, consultas avanzadas con joins o estructuras altamente normalizadas</ComparisonItem>
+    </ComparisonColumn>
+</Comparison>
+
+
+# Glosario de conceptos clave
+
+<Accordion>
+    <AccordionItem title="Amazon S3 (Simple Storage Service)" defaultOpen>
+        Servicio de almacenamiento de objetos que permite guardar y recuperar archivos de forma escalable.
+    </AccordionItem>
+    <AccordionItem title="Versionado (Versioning)">
+        Funcionalidad de S3 que permite mantener múltiples versiones de un mismo objeto, protegiendo contra eliminaciones o sobreescrituras accidentales.
+    </AccordionItem>
+    <AccordionItem title="Políticas de ciclo de vida (Lifecycle Policies)" >
+        Reglas que automatizan la transición o eliminación de objetos en S3 a lo largo del tiempo, optimizando costos.
+    </AccordionItem>
+    <AccordionItem title="Almacenamiento en bloque (Block Storage)" >
+        Tipo de almacenamiento que organiza los datos en bloques y permite el acceso a bajo nivel, ideal para sistemas operativos y base de datos (EBS)
+    </AccordionItem>
+    <AccordionItem title="Amazon EBS (Elastic Block Store)" >
+        Servicio de almacenamiento en bloque utilizado principalmente con instancias EC2, funcionando como discos virtuales
+    </AccordionItem>
+    <AccordionItem title="Almacenamiento de archivos (File Storage)" >
+        Modelo de almacenamiento basado en archivos y carpetas. pensado para acceso compartido entre múltiples sistemas.
+    </AccordionItem>
+    <AccordionItem title="Amazon EFS (Elastic File System)">
+        Servicio de almacenamiento de archivos escalable que permite compartir datos entre múltiples instancias.
+    </AccordionItem>
+    <AccordionItem title="AWS Backup">
+        Servicio que permite centralizar y automatizar copias de seguridad de distintos recursos de AWS.
+    </AccordionItem>
+    <AccordionItem title="Backup Plan">
+        Configuración dentro de AWS Backup que define cuándo y cómo se realizan las copias de seguridad.
+    </AccordionItem>
+    <AccordionItem title="Backup Vault">
+        Contenedor donde se almacenan las copias de seguridad.
+    </AccordionItem>
+    <AccordionItem title="Point-in-Time Recovery (PITR)">
+        Funcionalidad que permite restaurar los datos a un momento específico dentro de un rango de tiempo.
+    </AccordionItem>
+    <AccordionItem title="Amazon RDS (Relational Database Service)">
+        Servicio administrado de base de datos relacionales que simplifica la creación, operación y escalado.
+    </AccordionItem>
+    <AccordionItem title="Multi-AZ">
+        Configuración de alta disponibilidad en RDS que replica la base de datos en otra zona de disponibilidad.
+    </AccordionItem>
+    <AccordionItem title="Snapshot">
+        Copia de seguridad manual de una base de datos o volumen que puede utilizarse para restauraciones.
+    </AccordionItem>
+    <AccordionItem title="Amazon DynamoDB">
+        Base de datos NoSQL administrada, diseñada para alta velocidad, baja latencia y escalabilidad automática.
+    </AccordionItem>
+    <AccordionItem title="NoSQL">
+        Modelo de base de datos no relacional que permite estructuras flexibles y escalables.
+    </AccordionItem>
+    <AccordionItem title="Escalabilidad automática">
+        Capacidad de un servicio para aumentar o disminuir recursos según la demanda sin intervención manual.
+    </AccordionItem>
+    <AccordionItem title="Latencia">
+        Tiempo que tarda una operación en ejecutarse; en DynamoDB suele ser de milisegundos.
+    </AccordionItem>
+</Accordion>
