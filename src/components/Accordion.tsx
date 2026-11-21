@@ -25,7 +25,7 @@ export function AccordionItem({
   const Heading = `h${headingLevel}` as const;
 
   return (
-    <div className="mdx-accordion-item my-3 overflow-hidden rounded-xl border border-white/10 bg-black/30" data-open={open}>
+    <div className="mdx-accordion-item my-3 overflow-hidden rounded-xl border border-line bg-surface" data-open={open}>
       <Heading className="mdx-accordion-heading">
         <button
           type="button"
@@ -33,12 +33,12 @@ export function AccordionItem({
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen((value) => !value)}
-          className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-xl px-5 py-4 text-left text-base font-semibold text-white transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-cyan-400 motion-reduce:transition-none"
+          className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-xl px-5 py-4 text-left text-base font-semibold text-ink transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none"
         >
           <span className="min-w-0 break-words">{title}</span>
           <svg
             aria-hidden="true"
-            className="mdx-accordion-chevron h-5 w-5 shrink-0 text-cyan-300"
+            className="mdx-accordion-chevron h-5 w-5 shrink-0 text-accent"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -57,7 +57,7 @@ export function AccordionItem({
         className="mdx-accordion-panel"
       >
         <div className="min-h-0 overflow-hidden">
-          <div className="mx-5 border-t border-white/10 py-4 text-zinc-300 [&>:first-child]:mt-0 [&>:last-child]:mb-0">
+          <div className="mx-5 border-t border-line py-4 text-muted [&>:first-child]:mt-0 [&>:last-child]:mb-0">
             {children}
           </div>
         </div>

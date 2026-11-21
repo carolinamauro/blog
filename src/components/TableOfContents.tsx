@@ -52,7 +52,7 @@ function List({
   const base = Math.min(...headings.map((h) => h.level));
 
   return (
-    <ol className="space-y-0.5 border-l border-white/10">
+    <ol className="space-y-0.5 border-l border-line">
       {headings.map((h) => {
         const isActive = h.id === active;
         const depth = h.level - base;
@@ -65,12 +65,12 @@ function List({
                 e.preventDefault();
                 onNavigate(h.id);
               }}
-              className={`-ml-px block border-l py-1.5 pr-2 text-sm leading-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
+              className={`-ml-px block border-l py-1.5 pr-2 text-sm leading-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                 depth === 0 ? "pl-4" : depth === 1 ? "pl-7" : "pl-10"
               } ${
                 isActive
-                  ? "border-cyan-300 font-medium text-cyan-200"
-                  : "border-transparent text-zinc-400 hover:border-white/30 hover:text-white"
+                  ? "border-accent font-medium text-accent"
+                  : "border-transparent text-muted hover:border-line hover:text-ink"
               }`}
             >
               {h.text}
@@ -110,12 +110,12 @@ export default function TableOfContents({
     return (
       <details
         ref={detailsRef}
-        className="group mt-6 rounded-2xl border border-white/10 bg-[#0a0a14] lg:hidden"
+        className="group mt-6 card rounded-3xl lg:hidden"
       >
-        <summary className="flex cursor-pointer list-none items-center justify-between rounded-2xl px-5 py-3.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between rounded-2xl px-5 py-3.5 text-sm font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
           En este post
           <svg
-            className="h-4 w-4 text-zinc-400 transition-transform group-open:rotate-180"
+            className="h-4 w-4 text-muted transition-transform group-open:rotate-180"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -134,9 +134,9 @@ export default function TableOfContents({
   return (
     <nav
       aria-label="Tabla de contenidos"
-      className="hidden rounded-2xl border border-white/10 bg-[#0a0a14] p-5 lg:block"
+      className="hidden card rounded-3xl p-5 lg:block"
     >
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
         En este post
       </h2>
       <List headings={headings} active={active} onNavigate={goTo} />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SectionHeading } from "./home/Reveal";
 import { t, type Lang } from "@/src/lib/i18n";
 
 type EventType = "education" | "work" | "ta" | "project";
@@ -92,188 +93,105 @@ const events: TimelineEvent[] = [
   },
 ];
 
-const TYPE_COLOR: Record<EventType, string> = {
-  education: "text-cyan-400",
-  work:      "text-pink-400",
-  ta:        "text-violet-400",
-  project:   "text-amber-400",
+const TYPE_STYLE: Record<EventType, { label: string; dot: string; chip: string }> = {
+  education: { label: "Educación", dot: "bg-court", chip: "text-court border-court/30 bg-court/10" },
+  work:      { label: "Trabajo",   dot: "bg-ball",  chip: "text-accent border-accent/30 bg-ball/15" },
+  ta:        { label: "Docencia",  dot: "bg-clay",  chip: "text-clay border-clay/30 bg-clay/10" },
+  project:   { label: "Proyecto",  dot: "bg-sky-400", chip: "text-sky-600 dark:text-sky-300 border-sky-400/30 bg-sky-400/10" },
 };
 
-const DOT_COLOR: Record<EventType, string> = {
-  education: "bg-cyan-400   shadow-[0_0_16px_6px_rgba(34,211,238,0.6)]",
-  work:      "bg-pink-400   shadow-[0_0_16px_6px_rgba(244,114,182,0.6)]",
-  ta:        "bg-violet-400 shadow-[0_0_16px_6px_rgba(167,139,250,0.6)]",
-  project:   "bg-amber-400  shadow-[0_0_16px_6px_rgba(251,191,36,0.6)]",
-};
-
-function TimelineItem({ event, lang }: { event: TimelineEvent; lang: Lang }) {
-  const ref = useRef<HTMLDivElement>(null);
+function TimelineItem({ event, index, lang }: { event: TimelineEvent; index: number; lang: Lang }) {
+  const ref = useRef<HTMLLIElement>(null);
   const [active, setActive] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => setActive(entry.isIntersecting),
-      { threshold: 0.5 }
+      { rootMargin: "-35% 0px -35% 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const color = TYPE_COLOR[event.type];
-  const dot   = DOT_COLOR[event.type];
-
-  const ongoingBadge = (
-    <span className="inline-flex items-center gap-1.5 text-xs text-zinc-400">
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-50" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
-      </span>
-      {t("en curso", lang)}
-    </span>
-  );
-
-  const tags = (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {event.focus.map((tag) => (
-        <span
-          key={tag}
-          className="rounded-md border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs font-medium text-zinc-400"
-        >
-          {t(tag, lang)}
-        </span>
-      ))}
-    </div>
-  );
+  const style = TYPE_STYLE[event.type];
 
   return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ${active ? "opacity-100" : "opacity-30"}`}
-    >
-      {/* ───────── Mobile / tablet: left rail ───────── */}
-      <div className="relative py-8 pl-12 md:hidden">
-        {/* Dot on the rail */}
-        <div
-          className={`absolute left-0 top-9 h-3 w-3 rounded-full border-2 border-black transition-all duration-500 ${
-            active ? dot : "bg-zinc-700"
-          }`}
-        />
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span
-            className={`font-black tracking-tight transition-all duration-500 ${
-              active ? "text-white text-2xl" : "text-zinc-700 text-xl"
-            }`}
-          >
-            {t(event.year, lang)}
-          </span>
-          {event.ongoing && active && ongoingBadge}
-        </div>
-        <h3
-          className={`mt-1 text-lg font-bold leading-tight transition-colors duration-500 ${
-            active ? "text-white" : "text-zinc-500"
+    <li ref={ref} className="relative grid gap-4 pl-10 md:grid-cols-[9rem_1fr] md:gap-10 md:pl-0">
+      {/* Ball on the baseline */}
+      <span
+        aria-hidden
+        className={`absolute left-[3px] top-7 h-4 w-4 rounded-full border-2 border-bg transition-all duration-500 md:left-[calc(9rem+1.25rem-8px)] ${
+          active ? "tennis-ball scale-125" : style.dot
+        }`}
+      />
+
+      {/* Set + year */}
+      <div className="md:pt-5 md:text-right">
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-faint">
+          Set {String(index + 1).padStart(2, "0")}
+        </p>
+        <p
+          className={`font-display text-4xl font-extrabold tracking-tight transition-colors duration-500 ${
+            active ? "text-ink" : "text-faint"
           }`}
         >
-          {t(event.title, lang)}
-        </h3>
-        <p className={`mt-0.5 text-sm font-medium transition-colors duration-500 ${active ? color : "text-zinc-600"}`}>
-          {t(event.subtitle, lang)}
+          {t(event.year, lang)}
         </p>
-        <p className={`mt-3 text-sm leading-7 transition-colors duration-500 ${active ? "text-zinc-300" : "text-zinc-600"}`}>
-          {t(event.description, lang)}
-        </p>
-        {active && tags}
       </div>
 
-      {/* ───────── Desktop: 3 columns ───────── */}
-      <div className="hidden grid-cols-[1fr_auto_1fr] items-stretch gap-x-8 py-14 md:grid lg:gap-x-12">
-        {/* Left — title + subtitle */}
-        <div className="flex flex-col justify-center pt-2 text-right">
-          <h3
-            className={`text-2xl font-bold leading-tight transition-colors duration-500 lg:text-3xl ${
-              active ? "text-white" : "text-zinc-500"
-            }`}
-          >
-            {t(event.title, lang)}
-          </h3>
-          <p className={`mt-1 text-sm font-medium transition-colors duration-500 ${active ? color : "text-zinc-600"}`}>
-            {t(event.subtitle, lang)}
-          </p>
-          {event.ongoing && active && (
-            <span className="mt-2 flex justify-end">{ongoingBadge}</span>
+      {/* Card */}
+      <div
+        className={`card p-6 transition-all duration-500 ${
+          active ? "-translate-y-0.5 border-ink/25" : "opacity-80"
+        }`}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold ${style.chip}`}>
+            {t(style.label, lang)}
+          </span>
+          {event.ongoing && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-bg">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#ff4d4d]" />
+              {t("En juego", lang)}
+            </span>
           )}
         </div>
-
-        {/* Center — year + dot on line */}
-        <div className="relative flex w-[7.5rem] flex-col items-center lg:w-36">
-          <span
-            className={`relative z-10 whitespace-nowrap text-center font-black tracking-tight transition-all duration-500 ${
-              active ? "text-white text-3xl lg:text-4xl" : "text-zinc-700 text-2xl lg:text-3xl"
-            }`}
-          >
-            {t(event.year, lang)}
-          </span>
-          <div
-            className={`relative z-10 mt-4 h-3.5 w-3.5 rounded-full border-2 border-black transition-all duration-500 ${
-              active ? dot : "bg-zinc-700"
-            }`}
-          />
-        </div>
-
-        {/* Right — description + tags */}
-        <div className="flex flex-col justify-center pt-2">
-          <p
-            className={`text-base leading-7 transition-colors duration-500 ${
-              active ? "text-zinc-300" : "text-zinc-600"
-            }`}
-          >
-            {t(event.description, lang)}
-          </p>
-          {active && tags}
+        <h3 className="mt-3 font-display text-2xl font-extrabold tracking-tight">{t(event.title, lang)}</h3>
+        <p className="mt-0.5 text-sm font-semibold text-muted">{t(event.subtitle, lang)}</p>
+        <p className="mt-4 text-[0.95rem] leading-7 text-muted">{t(event.description, lang)}</p>
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          {event.focus.map((tag) => (
+            <span key={tag} className="chip">{t(tag, lang)}</span>
+          ))}
         </div>
       </div>
-    </div>
+    </li>
   );
 }
 
 export default function ProfessionalStoryTimeline({ lang }: { lang: Lang }) {
   return (
-    <section id="story" className="relative py-24">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <section id="story" className="scroll-mt-24 px-5 py-24 sm:px-8">
+      <div className="mx-auto max-w-5xl">
+        <SectionHeading
+          eyebrow={t("Mi carrera", lang)}
+          title={t("Set por set,", lang)}
+          accent={t("punto por punto.", lang)}
+          intro={t("Educación, trabajo, docencia y proyectos: el partido que vengo jugando desde 2020.", lang)}
+        />
 
-        {/* Header */}
-        <div className="mb-4 text-center">
-          <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-            {t("Mi carrera &", lang)}{" "}
-            <span className="text-violet-400">{t("experiencia", lang)}</span>
-          </h2>
-        </div>
-
-        {/* Legend */}
-        <div className="mb-16 flex flex-wrap justify-center gap-4">
-          {(["education", "work", "ta", "project"] as EventType[]).map((type) => (
-            <div key={type} className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${DOT_COLOR[type].split(" ")[0]}`} />
-              <span className="text-xs text-zinc-500">
-                {t({ education: "Educación", work: "Trabajo", ta: "Docencia", project: "Proyecto" }[type], lang)}
-              </span>
-            </div>
+        <ol className="relative space-y-10">
+          {/* Baseline */}
+          <span
+            aria-hidden
+            className="absolute bottom-0 left-[10px] top-0 w-0.5 bg-line md:left-[calc(9rem+1.25rem-1px)]"
+          />
+          {events.map((event, i) => (
+            <TimelineItem key={event.id} event={event} index={i} lang={lang} />
           ))}
-        </div>
-
-        {/* Timeline */}
-        <div className="relative">
-
-          {/* Vertical line — left on mobile, centered on desktop */}
-          <div className="pointer-events-none absolute inset-y-0 left-1.5 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent md:left-1/2 md:-translate-x-1/2" />
-
-          {events.map((event) => (
-            <TimelineItem key={event.id} event={event} lang={lang} />
-          ))}
-        </div>
-
+        </ol>
       </div>
     </section>
   );

@@ -1,33 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProjectBySlug } from "../../lib/projects";
-import type { ProjectStatus } from "../../lib/projects";
+import { statusStyle } from "../../lib/status";
 import { t, localizedHref, type Lang } from "../../lib/i18n";
-
-const statusConfig: Record<ProjectStatus, { color: string; dot: string }> = {
-  "En progreso": {
-    color: "text-cyan-200 bg-cyan-400/10 border-cyan-400/30",
-    dot: "bg-cyan-400 shadow-[0_0_8px_rgba(103,232,249,0.8)]",
-  },
-  Iterando: {
-    color: "text-pink-200 bg-pink-400/10 border-pink-400/30",
-    dot: "bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.8)]",
-  },
-  Completado: {
-    color: "text-emerald-200 bg-emerald-400/10 border-emerald-400/30",
-    dot: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]",
-  },
-  Pausado: {
-    color: "text-zinc-400 bg-zinc-400/10 border-zinc-400/30",
-    dot: "bg-zinc-500",
-  },
-};
 
 function ProgressBar({ value }: { value: number }) {
   return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+    <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
       <div
-        className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-pink-400"
+        className="h-full rounded-full bg-ball"
         style={{ width: `${value}%` }}
       />
     </div>
@@ -38,27 +19,18 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
-  const status = statusConfig[project.status];
+  const status = statusStyle[project.status];
   const projectsHref = localizedHref("/projects", lang);
 
   return (
-    <main className="relative z-10 min-h-screen overflow-hidden px-4 pb-20 pt-24 sm:px-6 lg:px-8">
-      {/* Nebula blobs */}
-      <div
-        className="nebula-blob animate-nebula -z-10"
-        style={{ top: "-2rem", right: 0, width: "32rem", height: "32rem", background: "radial-gradient(closest-side, rgba(139,92,246,0.13), transparent 78%)" }}
-      />
-      <div
-        className="nebula-blob animate-nebula -z-10"
-        style={{ top: "40rem", left: "-4rem", width: "28rem", height: "28rem", background: "radial-gradient(closest-side, rgba(6,182,212,0.10), transparent 78%)", animationDelay: "5s" }}
-      />
+    <main className="relative min-h-screen px-5 pb-20 pt-32 sm:px-8">
 
       <div className="mx-auto max-w-3xl">
 
         {/* Back */}
         <Link
           href={projectsHref}
-          className="mb-8 inline-flex items-center gap-1.5 text-sm text-zinc-400 transition hover:text-white"
+          className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-ink"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -69,39 +41,39 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
         {/* Header */}
         <div className="animate-fade-in-up">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${status.color}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${status.chip}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
               {t(project.status, lang)}
             </span>
             {project.context && (
-              <span className="text-xs text-zinc-500">{t(project.context, lang)}</span>
+              <span className="text-xs text-faint">{t(project.context, lang)}</span>
             )}
-            <span className="text-xs text-zinc-500">{t(project.period, lang)}</span>
+            <span className="text-xs text-faint">{t(project.period, lang)}</span>
           </div>
 
-          <h1 className="text-shimmer mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+          <h1 className="mt-5 font-display text-5xl font-extrabold leading-[0.95] tracking-[-0.03em] sm:text-6xl">
             {t(project.title, lang)}
           </h1>
-          <p className="mt-3 text-lg text-zinc-300">{t(project.tagline, lang)}</p>
+          <p className="mt-3 text-lg text-muted">{t(project.tagline, lang)}</p>
         </div>
 
         {/* Progress */}
-        <div className="mt-6 rounded-xl border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
+        <div className="mt-6 card rounded-3xl p-6 ">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-semibold text-zinc-300">{t("Progreso", lang)}</span>
-            <span className="text-sm font-bold text-white">{project.progress}%</span>
+            <span className="text-sm font-semibold text-muted">{t("Progreso", lang)}</span>
+            <span className="text-sm font-bold text-ink">{project.progress}%</span>
           </div>
           <ProgressBar value={project.progress} />
         </div>
 
         {/* Stack */}
         <div className="mt-6">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">Stack</p>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-faint">Stack</p>
           <div className="flex flex-wrap gap-2">
             {project.stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-1.5 text-sm font-medium text-zinc-200"
+                className="chip text-sm"
               >
                 {tech}
               </span>
@@ -110,14 +82,14 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
         </div>
 
         {/* Highlights */}
-        <div className="mt-8 rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-cyan-400">
+        <div className="mt-8 rounded-xl border border-line bg-ball/15 p-5">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-accent">
             Highlights
           </p>
           <ul className="grid gap-2 sm:grid-cols-2">
             {project.highlights.map((h) => (
-              <li key={h} className="flex items-start gap-2 text-sm text-zinc-300">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
+              <li key={h} className="flex items-start gap-2 text-sm text-muted">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ball" />
                 {t(h, lang)}
               </li>
             ))}
@@ -128,16 +100,16 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
         <div className="mt-10 space-y-8">
           {project.sections.map((section) => (
             <div key={section.title}>
-              <h2 className="mb-3 text-lg font-bold text-white">{t(section.title, lang)}</h2>
-              <p className="text-base leading-8 text-zinc-300">{t(section.content, lang)}</p>
+              <h2 className="mb-3 font-display text-2xl font-extrabold text-ink">{t(section.title, lang)}</h2>
+              <p className="text-base leading-8 text-ink/80">{t(section.content, lang)}</p>
             </div>
           ))}
         </div>
 
         {/* Links */}
         {project.links && project.links.length > 0 && (
-          <div className="mt-10 rounded-xl border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <div className="mt-10 card rounded-3xl p-6 ">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-faint">
               Links
             </p>
             <div className="flex flex-wrap gap-3">
@@ -147,7 +119,7 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:-translate-y-0.5 hover:border-cyan-300/50 hover:text-cyan-100"
+                  className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface-2 px-4 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-ink/25 hover:text-accent"
                 >
                   {t(link.label, lang)}
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,10 +132,10 @@ export default function ProjectDetailView({ slug, lang }: { slug: string; lang: 
         )}
 
         {/* Footer nav */}
-        <div className="mt-12 border-t border-white/10 pt-8">
+        <div className="mt-12 border-t border-line pt-8">
           <Link
             href={projectsHref}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-400 transition hover:text-white"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted transition hover:text-ink"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

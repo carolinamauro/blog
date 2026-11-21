@@ -24,7 +24,7 @@ export function Comparison({
   return (
     <div
       style={{ "--rows": rows, "--span": rows + 1 } as CSSProperties}
-      className="mdx-comparison my-8 grid grid-cols-1 overflow-hidden rounded-2xl border border-cyan-400/30 bg-black/30 md:auto-cols-[minmax(0,1fr)] md:grid-flow-col md:grid-cols-none md:grid-rows-[auto_repeat(var(--rows),auto)]"
+      className="mdx-comparison my-8 grid grid-cols-1 overflow-hidden rounded-2xl border border-line bg-surface md:auto-cols-[minmax(0,1fr)] md:grid-flow-col md:grid-cols-none md:grid-rows-[auto_repeat(var(--rows),auto)]"
     >
       {children}
     </div>
@@ -45,9 +45,9 @@ export function ComparisonColumn({
   return (
     <section
       aria-label={title}
-      className="[grid-row:span_var(--span)] grid min-w-0 grid-rows-subgrid border-white/10 not-first:border-t md:not-first:border-t-0 md:not-first:border-l"
+      className="[grid-row:span_var(--span)] grid min-w-0 grid-rows-subgrid border-line not-first:border-t md:not-first:border-t-0 md:not-first:border-l"
     >
-      <p className="not-prose m-0 border-b border-cyan-400/30 bg-white/[0.06] px-5 py-4 text-base font-semibold text-white sm:px-6">
+      <p className="not-prose m-0 border-b border-line bg-surface-2 px-5 py-4 text-base font-semibold text-ink sm:px-6">
         {title}
       </p>
       {hasItems ? (
@@ -65,7 +65,7 @@ export function ComparisonColumn({
 /** One row of a column; must be a direct child of `ComparisonColumn`. */
 export function ComparisonItem({ children }: { children: ReactNode }) {
   return (
-    <div className="min-w-0 border-t border-white/10 px-5 py-4 [overflow-wrap:anywhere] first-of-type:border-t-0 sm:px-6 [&>:first-child]:mt-0 [&>:last-child]:mb-0">
+    <div className="min-w-0 border-t border-line px-5 py-4 [overflow-wrap:anywhere] first-of-type:border-t-0 sm:px-6 [&>:first-child]:mt-0 [&>:last-child]:mb-0">
       {children}
     </div>
   );
